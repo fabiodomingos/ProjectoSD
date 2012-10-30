@@ -3,8 +3,7 @@ package sdstore.businesserver.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-import anacom.businessserver.domain.Operator;
-import anacom.businessserver.exception.OperatorPrefixException;
+import sdstore.businesserver.exception.ProdutoIdException;
 
 public class Produto {
 	

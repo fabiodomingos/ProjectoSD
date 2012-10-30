@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sdstore.businesserver.exception.FornecedorProdutoListException;
 import sdstore.businesserver.exception.ProdutoIdException;
 
 public class CatalogoFornecedor {
@@ -18,7 +19,7 @@ public class CatalogoFornecedor {
 	
 	public List<Produto> getProdutoList() throws FornecedorProdutoListException {
 		if (produtoMap.isEmpty()) {
-			throw new FornecedorProdutoListException(this.nome);
+			throw new FornecedorProdutoListException();
 		}
 		return new ArrayList<Produto>(produtoMap.values());
 	}
