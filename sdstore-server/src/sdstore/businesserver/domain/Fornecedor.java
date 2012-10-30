@@ -50,11 +50,12 @@ public class Fornecedor {
 		return this.nome;
 	}
 	
-	public void registerProduto(Produto novo) throws FornecedorProdutoExistsException {
-		if (produtoMap.get(nome) != null) {
-			throw new FornecedorProdutoExistException(nome);
+	public void registerProduto(Produto novo, Integer valorProduto) throws FornecedorProdutoExistsException {
+		if (produtoMap.get(novo.id) != null) {
+			throw new FornecedorProdutoExistException(novo.id);
 		}
 		Produto prod = new Produto(novo.id, novo.descricao, novo.categoria);
+		prod.preco = valorProduto;
 		produtoMap.put(novo.id, prod);
 	}
 	
