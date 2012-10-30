@@ -8,7 +8,9 @@ import sdstore.presentationserver.service.bridge.ApplicationServerBridge;
 import sdstore.presentationserver.service.bridge.RemoteApplicationServer;
 
 public class SdStoreApplication {
-	
+	/**
+	 * Caralhoooo
+	 */
 	private static ApplicationServerBridge serviceBridge = null;
 	
 	public static void main(String[] args){
