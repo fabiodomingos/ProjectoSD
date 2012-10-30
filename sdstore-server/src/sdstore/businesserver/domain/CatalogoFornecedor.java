@@ -23,6 +23,9 @@ public class CatalogoFornecedor {
 		return new ArrayList<Produto>(produtoMap.values());
 	}
 	
+	
+	
+	// duvida a perguntar aos profs, sobre pelo que se conta os produtos
 	public Integer numeroProduto(Produto prod) throws ProdutoIdException{
 		
 		Integer resultado=0;
@@ -31,12 +34,13 @@ public class CatalogoFornecedor {
 			throw new ProdutoIdException(prod.getId());
 		}
 		else{
-			for(Produto aux : produtoMap){
+			for(Produto aux : produtoMap.values()){
 				if(aux.getId().equals(prod.getId())){
 					resultado++;
 				}
 			}
 		}
+		return resultado;
 	}
 
 }
