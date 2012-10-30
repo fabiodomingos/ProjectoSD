@@ -5,12 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import anacom.businessserver.domain.Mobile;
-import anacom.businessserver.domain.Operator;
-import anacom.businessserver.exception.MobileNumberException;
-import anacom.businessserver.exception.OperatorMobileExistsException;
-import anacom.businessserver.exception.OperatorMobileListException;
-import anacom.businessserver.exception.OperatorPrefixException;
+import sdstore.businesserver.exception.FornecedorNameException;
+import sdstore.businesserver.exception.FornecedorProdutoExistsException;
+import sdstore.businesserver.exception.FornecedorProdutoListException;
+import sdstore.businesserver.exception.ProdutoIdException;
 
 public class Fornecedor {
 	
@@ -52,7 +50,7 @@ public class Fornecedor {
 	
 	public void registerProduto(Produto novo, Integer valorProduto) throws FornecedorProdutoExistsException {
 		if (produtoMap.get(novo.id) != null) {
-			throw new FornecedorProdutoExistException(novo.id);
+			throw new FornecedorProdutoExistsException(novo.id);
 		}
 		Produto prod = new Produto(novo.id, novo.descricao, novo.categoria);
 		prod.preco = valorProduto;
@@ -61,7 +59,7 @@ public class Fornecedor {
 	
 	public void unregisterProduto(String nome) throws ProdutoIdException {
 		if (!produtoMap.containsKey(nome)) {
-			throw new ProdutoIdException(number);
+			throw new ProdutoIdException(nome);
 		}
 		produtoMap.remove(nome);
 	}
