@@ -1,5 +1,11 @@
 package sdstore.businesserver.service;
 
-public class PortalService {
+public abstract class PortalService {
 
+public abstract void dispatch();
+	
+	//@Atomic
+	public void execute() {
+		dispatch();
+	}
 }
