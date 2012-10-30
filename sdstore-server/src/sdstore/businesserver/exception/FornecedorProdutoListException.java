@@ -20,4 +20,7 @@ public class FornecedorProdutoListException extends Exception{
 	public FornecedorProdutoListException(String nome) {
 		this.nome = nome;
 	}
+	public FornecedorProdutoListException(){
+		super();
+	}
 }
