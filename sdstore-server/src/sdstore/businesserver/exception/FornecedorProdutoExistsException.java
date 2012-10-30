@@ -1,15 +1,15 @@
 package sdstore.businesserver.exception;
 
-public class FornecedorNameException extends Exception{
+public class FornecedorProdutoExistsException extends Exception {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private String nome;
-	
-	public FornecedorNameException(String nome) {
+
+	public FornecedorProdutoExistsException(String nome) {
 		this.nome = nome;
 	}
 
@@ -21,6 +21,4 @@ public class FornecedorNameException extends Exception{
 		this.nome = nome;
 	}
 	
-	
-
 }
