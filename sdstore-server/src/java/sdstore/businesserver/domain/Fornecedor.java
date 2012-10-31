@@ -10,6 +10,7 @@ import sdstore.businesserver.exception.FornecedorNameException;
 import sdstore.businesserver.exception.FornecedorProdutoExistsException;
 import sdstore.businesserver.exception.FornecedorProdutoListException;
 import sdstore.businesserver.exception.ProdutoIdException;
+import sdstore.businesserver.service.dto.ProdutoListDto;
 
 public class Fornecedor {
 	
@@ -54,8 +55,8 @@ public class Fornecedor {
 			throw new FornecedorProdutoExistsException(novo.id);
 		}
 		Produto prod = new Produto(novo.id, novo.descricao, novo.categoria);
-		prod.preco = valorProduto;
-		prod.quantidade = totProduto;
+		prod.setPreco(valorProduto);
+		prod.setQuantidade(totProduto);
 		produtoMap.put(novo.id, prod);
 	}
 	
@@ -85,6 +86,19 @@ public class Fornecedor {
 			throw new FornecedorListException();
 		}
 		return new ArrayList<Fornecedor>(fornecedorMap.values());
+	}
+	
+	public Integer getNumeroProdutos(Produto p) throws FornecedorProdutoListException{
+		Integer total;
+		Produto aux;
+		if(produtoMap.isEmpty()){
+			throw new FornecedorProdutoListException();
+		}
+		else{
+			aux = produtoMap.get(p);
+			total = aux.getQuantidade();
+		}
+		return total;
 	}
 	
 
