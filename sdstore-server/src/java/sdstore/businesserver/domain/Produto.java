@@ -66,4 +66,19 @@ public class Produto {
 		this.categoria = categoria;
 	}
 	
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+	
+	public void setQuantidade(Integer quant) {
+		this.quantidade = quant;
+	}
+	
+	public Integer getPreco() {
+		return preco;
+	}
+	
+	public void setPreco(Integer prize) {
+		this.preco = prize;
+	}
 }
