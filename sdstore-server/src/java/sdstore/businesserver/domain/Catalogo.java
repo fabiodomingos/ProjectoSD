@@ -55,4 +55,9 @@ public class Catalogo {
 			return f.getProdutoList();
 		}
 	}
+	
+	public Integer getProdutoTotal(Produto prod){
+		
+		
+	}
 }
