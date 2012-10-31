@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sdstore.businesserver.exception.FornecedorListException;
 import sdstore.businesserver.exception.FornecedorProdutoListException;
 import sdstore.businesserver.exception.ProdutoIdException;
 
@@ -46,5 +47,12 @@ public class Catalogo {
 		return produtoMap.get(nome);
 	}
 	
-	
+	public List<Produto> getProdutoListFornecedor(Fornecedor f) throws FornecedorListException, FornecedorProdutoListException {
+		if(f.getFornecedorList().isEmpty()){
+			throw new FornecedorListException();
+		}
+		else{
+			return f.getProdutoList();
+		}
+	}
 }
