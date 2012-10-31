@@ -1,8 +1,19 @@
 package sdstore.businesserver.domain;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import sdstore.businesserver.exception.FornecedorProdutoListException;
+import sdstore.businesserver.exception.ProdutoIdException;
+
 public class Catalogo {
 	
-	Double preco_portal;
+	private Double preco_portal;
+	private Map<String, Produto> produtoMap;
+	private Integer quantidade_total;
+	
 	
 	public Double getPreco_portal() {
 		return preco_portal;
@@ -24,8 +35,16 @@ public class Catalogo {
 		super();
 		this.preco_portal = preco_portal;
 		this.quantidade_total = quantidade_total;
+		produtoMap = new HashMap<String, Produto>();
 	}
 	
+	
+	public Produto getProduto(String nome) throws ProdutoIdException {
+		if (!produtoMap.containsKey(nome)) {
+			throw new ProdutoIdException(nome);
+		}
+		return produtoMap.get(nome);
+	}
 	
 	
 }
