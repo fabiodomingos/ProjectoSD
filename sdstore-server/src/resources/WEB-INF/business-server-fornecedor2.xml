@@ -1,0 +1,40 @@
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+  version="2.4">
+
+  <context-param>
+    <param-name>operatorName</param-name>
+    <param-value>Optimus</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>operatorPrefix</param-name>
+    <param-value>93</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>smsUnitCost</param-name>
+    <param-value>10.0</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>smsInterOperatorTax</param-name>
+    <param-value>0.10</param-value>
+  </context-param>
+
+  <listener>
+    <description>Manage resource reservation and release upon webapp deployment.</description>
+    <listener-class>anacom.businessserver.BusinessServerInitListener</listener-class>
+ </listener>
+
+  <servlet>
+    <servlet-name>BusinessServerOptimus</servlet-name>
+    <servlet-class>anacom.businessserver.service.AnaComWebService</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>BusinessServerOptimus</servlet-name>
+    <url-pattern>/BusinessServerOptimus</url-pattern>
+  </servlet-mapping>
+</web-app>
