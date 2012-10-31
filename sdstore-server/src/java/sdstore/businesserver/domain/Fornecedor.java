@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sdstore.businesserver.exception.FornecedorListException;
 import sdstore.businesserver.exception.FornecedorNameException;
 import sdstore.businesserver.exception.FornecedorProdutoExistsException;
 import sdstore.businesserver.exception.FornecedorProdutoListException;
