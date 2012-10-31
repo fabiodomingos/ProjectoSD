@@ -17,6 +17,7 @@ public class Produto {
 	String descricao;
 	String categoria;
 	Integer preco;
+	Integer quantidade;
 	
 	public static void createProduto(String id, String descricao, String categoria) throws ProdutoIdException {
 		Produto produto = Produto.produtoMap.get(id);
