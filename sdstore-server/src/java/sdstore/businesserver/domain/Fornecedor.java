@@ -48,12 +48,13 @@ public class Fornecedor {
 		return this.nome;
 	}
 	
-	public void registerProduto(Produto novo, Integer valorProduto) throws FornecedorProdutoExistsException {
+	public void registerProduto(Produto novo, Integer valorProduto, Integer totProduto) throws FornecedorProdutoExistsException {
 		if (produtoMap.get(novo.id) != null) {
 			throw new FornecedorProdutoExistsException(novo.id);
 		}
 		Produto prod = new Produto(novo.id, novo.descricao, novo.categoria);
 		prod.preco = valorProduto;
+		prod.quantidade = totProduto;
 		produtoMap.put(novo.id, prod);
 	}
 	
@@ -64,7 +65,7 @@ public class Fornecedor {
 		produtoMap.remove(nome);
 	}
 	
-	public Produto getMobile(String nome) throws ProdutoIdException {
+	public Produto getProduto(String nome) throws ProdutoIdException {
 		if (!produtoMap.containsKey(nome)) {
 			throw new ProdutoIdException(nome);
 		}
