@@ -79,5 +79,14 @@ public class Fornecedor {
 		return new ArrayList<Produto>(produtoMap.values());
 	}
 	
+	public List<Fornecedor> getFornecedorList() throws FornecedorListException {
+		if (fornecedorMap.isEmpty()) {
+			throw new FornecedorListException();
+		}
+		return new ArrayList<Fornecedor>(fornecedorMap.values());
+	}
+	
+
+	
 	
 }
