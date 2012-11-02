@@ -1,0 +1,2 @@
+0001 bananas fruta 2 5
+0002 coca-cola sumos 4 10
