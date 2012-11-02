@@ -3,6 +3,7 @@ package sdstore.businesserver.service;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import sdstore.businesserver.exception.FornecedorNameException;
 import sdstore.businesserver.service.dto.CategoriaListDto;
 import sdstore.businesserver.service.dto.CategoriaSelectionDto;
 import sdstore.businesserver.service.dto.ClienteSelectionDto;
@@ -15,7 +16,7 @@ import sdstore.businesserver.service.dto.ProdutoSelectionDto;
 public class PortalWebService {
 	
 	@WebMethod
-	public FornecedorProdutoRegisterDto AddProdutoWebService(FornecedorProdutoRegisterDto dto){
+	public FornecedorProdutoRegisterDto AddProdutoWebService(FornecedorProdutoRegisterDto dto) throws FornecedorNameException{
 		AddProdutoService service = new AddProdutoService(dto);
 		service.execute();
 		FornecedorProdutoRegisterDto result = service.getProduto();

@@ -1,15 +1,19 @@
 package sdstore.businesserver.service.dto;
 
+import anacom.businessserver.service.dto.OperatorSelectionDto;
+
 public class ProdutoSelectionDto {
 
+	private FornecedorSelectionDto fornecedorDto;
 	private String categoria;
 	private String codigo;
 	private String descricao;
 	
-	public ProdutoSelectionDto(String categoria, String codigo, String descricao) {
+	public ProdutoSelectionDto(FornecedorSelectionDto dto, String categoria, String codigo, String descricao) {
 		this.categoria = categoria;
 		this.codigo = codigo;
 		this.descricao = descricao;
+		this.fornecedorDto = dto;
 	}
 
 	public String getCategoria() {
@@ -34,6 +38,14 @@ public class ProdutoSelectionDto {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	
+	public FornecedorSelectionDto getFornecedor() {
+		return fornecedorDto;;
+	}
+
+	public void setFornecedor(FornecedorSelectionDto forn) {
+		this.fornecedorDto = forn;
 	}
 	
 	
