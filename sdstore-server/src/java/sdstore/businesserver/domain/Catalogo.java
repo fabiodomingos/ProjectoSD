@@ -58,6 +58,6 @@ public class Catalogo {
 	
 	public Integer getProdutoTotal(Produto prod){
 		
-		
+		return null;
 	}
 }
