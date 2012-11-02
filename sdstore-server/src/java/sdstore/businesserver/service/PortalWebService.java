@@ -23,20 +23,20 @@ public class PortalWebService {
 		return result;
 	}
 	
-	@WebMethod
-	public ProdutoDto RemoveProdutoWebService(ProdutoSelectionDto dto){
-		RemoveProdutoService service = new RemoveProdutoService(dto);
-		service.execute();
-		ProdutoDto result = service.getProduto();
-		return result;
-	}
+//	@WebMethod
+//	public ProdutoDto RemoveProdutoWebService(ProdutoSelectionDto dto){
+//		RemoveProdutoService service = new RemoveProdutoService(dto);
+//		service.execute();
+//		ProdutoDto result = service.getProduto();
+//		return result;
+//	}
 	
 	@WebMethod
-	public ProdutoDto JuntaWebService(ProdutoSelectionDto dto){
-		JuntaService service = new JuntaService(dto);
+	public void JuntaWebService(ProdutoDto dto, Integer quantidade, ClienteSelectionDto cliente){
+		JuntaService service = new JuntaService(dto,quantidade,cliente);
 		service.execute();
-		ProdutoDto result = service.getProduto();
-		return result;
+//		ProdutoDto result = service.getProduto();
+//		return result;
 	}
 	
 	@WebMethod

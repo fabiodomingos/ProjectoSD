@@ -1,6 +1,6 @@
 package sdstore.businesserver.exception;
 
-public class FornecedorNameException extends Exception{
+public class FornecedorNameException extends PortalException{
 
 	/**
 	 * 

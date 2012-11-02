@@ -1,6 +1,6 @@
 package sdstore.businesserver.exception;
 
-public class ClienteNomeException extends Exception{
+public class ClienteNomeException extends PortalException{
 	
 private static final long serialVersionUID = 1L;
 	

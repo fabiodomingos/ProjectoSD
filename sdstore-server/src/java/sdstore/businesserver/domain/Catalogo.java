@@ -8,13 +8,13 @@ import java.util.Map;
 import sdstore.businesserver.exception.FornecedorListException;
 import sdstore.businesserver.exception.FornecedorProdutoListException;
 import sdstore.businesserver.exception.ProdutoIdException;
+import sdstore.businesserver.exception.ProdutoListException;
 
 public class Catalogo {
-	
+
 	private Double preco_portal;
-	private Map<String, Produto> produtoMap;
+	private static List<Produto> produtoMap;
 	private Integer quantidade_total;
-	
 	
 	public Double getPreco_portal() {
 		return preco_portal;
@@ -36,15 +36,24 @@ public class Catalogo {
 		super();
 		this.preco_portal = preco_portal;
 		this.quantidade_total = quantidade_total;
-		produtoMap = new HashMap<String, Produto>();
+		produtoMap = new ArrayList<Produto>();
 	}
 	
 	
-	public Produto getProduto(String nome) throws ProdutoIdException {
-		if (!produtoMap.containsKey(nome)) {
-			throw new ProdutoIdException(nome);
+	public static Produto getProduto(String nome) throws ProdutoIdException {
+		for(Produto p : produtoMap){
+			if(p.getId().equals(nome))
+				return p;
 		}
-		return produtoMap.get(nome);
+		throw new ProdutoIdException(nome);
+	}
+	
+	public List<Produto> getProdutoList() throws ProdutoListException{
+		if(produtoMap.isEmpty()){
+			throw new ProdutoListException(null);
+		}
+		return produtoMap;
+
 	}
 	
 	public List<Produto> getProdutoListFornecedor(Fornecedor f) throws FornecedorListException, FornecedorProdutoListException {
@@ -60,4 +69,5 @@ public class Catalogo {
 		
 		return null;
 	}
+	
 }
