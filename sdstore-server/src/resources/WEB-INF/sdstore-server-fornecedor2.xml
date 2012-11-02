@@ -7,6 +7,11 @@
     <param-name>fornecedorName</param-name>
     <param-value>fornecedor2</param-value>
   </context-param>
+  
+   <context-param>
+  	<param-name>listaProdutos</param-name>
+  	<param-value>/ficheiroFornecedor1.txt</param-value>
+  </context-param>
 
   <listener>
     <description>Manage resource reservation and release upon webapp deployment.</description>
