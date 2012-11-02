@@ -6,6 +6,7 @@ import javax.jws.WebService;
 import sdstore.businesserver.service.dto.CategoriaListDto;
 import sdstore.businesserver.service.dto.CategoriaSelectionDto;
 import sdstore.businesserver.service.dto.ClienteSelectionDto;
+import sdstore.businesserver.service.dto.FornecedorProdutoRegisterDto;
 import sdstore.businesserver.service.dto.ProdutoDto;
 import sdstore.businesserver.service.dto.ProdutoListDto;
 import sdstore.businesserver.service.dto.ProdutoSelectionDto;
@@ -14,10 +15,10 @@ import sdstore.businesserver.service.dto.ProdutoSelectionDto;
 public class PortalWebService {
 	
 	@WebMethod
-	public ProdutoDto AddProdutoWebService(ProdutoSelectionDto dto){
+	public FornecedorProdutoRegisterDto AddProdutoWebService(FornecedorProdutoRegisterDto dto){
 		AddProdutoService service = new AddProdutoService(dto);
 		service.execute();
-		ProdutoDto result = service.getProduto();
+		FornecedorProdutoRegisterDto result = service.getProduto();
 		return result;
 	}
 	
