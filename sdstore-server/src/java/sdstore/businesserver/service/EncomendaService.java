@@ -25,6 +25,9 @@ public class EncomendaService extends PortalService {
 	public final void dispatch() throws ProdutoIdException {
 		try {			
 			String nomeFornecedor = fornecedor.getNome();
+			
+			
+			
 		} catch (ProdutoIdException exception) {
 			throw exception;
 		}

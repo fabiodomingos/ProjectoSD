@@ -11,7 +11,7 @@ import sdstore.businesserver.service.dto.CategoriaDto;
 import sdstore.businesserver.service.dto.CategoriaListDto;
 import sdstore.businesserver.service.dto.FornecedorSelectionDto;
 
-public class ListaCategoriaService {
+public class ListaCategoriaService extends PortalService {
 	
 	CategoriaListDto result;
 	FornecedorSelectionDto dto;

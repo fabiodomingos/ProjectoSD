@@ -47,6 +47,14 @@ public class Carrinho {
 		produtoMap.remove(velho);
 	}
 	
+	public void limpa(String cliente) throws ClienteNomeException{
+		Carrinho carrinho = Carrinho.carrinhoMap.get(cliente);
+		if(carrinho == null){
+			throw new ClienteNomeException(cliente);
+		}
+		Carrinho.carrinhoMap.clear();
+	}
+	
 	public static Carrinho getCarrinho(String cliente) throws ClienteNomeException{
 		Carrinho carrinho = Carrinho.carrinhoMap.get(cliente);
 		if (carrinho == null){
