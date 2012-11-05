@@ -1,6 +1,6 @@
 package sdstore.businesserver.exception;
 
-public class ProdutoChangePriceException extends Exception {
+public class ProdutoChangePriceException extends PortalException {
 
 	/**
 	 * 

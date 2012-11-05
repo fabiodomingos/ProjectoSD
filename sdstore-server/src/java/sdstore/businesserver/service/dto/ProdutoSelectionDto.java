@@ -1,7 +1,5 @@
 package sdstore.businesserver.service.dto;
 
-import anacom.businessserver.service.dto.OperatorSelectionDto;
-
 public class ProdutoSelectionDto {
 
 	private FornecedorSelectionDto fornecedorDto;
@@ -41,7 +39,7 @@ public class ProdutoSelectionDto {
 	}
 	
 	public FornecedorSelectionDto getFornecedor() {
-		return fornecedorDto;;
+		return fornecedorDto;
 	}
 
 	public void setFornecedor(FornecedorSelectionDto forn) {

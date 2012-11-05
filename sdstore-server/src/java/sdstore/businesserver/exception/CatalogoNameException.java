@@ -1,12 +1,10 @@
 package sdstore.businesserver.exception;
 
-public class ClienteNomeException extends PortalException{
+public class CatalogoNameException extends PortalException {
+
+private String nome;
 	
-private static final long serialVersionUID = 1L;
-	
-	private String nome;
-	
-	public ClienteNomeException(String nome) {
+	public CatalogoNameException(String nome) {
 		this.nome = nome;
 	}
 
@@ -17,5 +15,5 @@ private static final long serialVersionUID = 1L;
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
+	
 }

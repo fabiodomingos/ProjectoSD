@@ -17,13 +17,13 @@ public class AddProdutoService extends PortalService{
 	
 	public final void dispatch() throws FornecedorNameException{
 		try {			
-			String codigo = produtoDto.getNewProduto().getCodigo();
-			String categoria = produtoDto.getNewProduto().getCategoria();
-			String descricao = produtoDto.getNewProduto().getDescricao();
-			String nomeFornecedor = produtoDto.getNewProduto().getFornecedor().getNome();
+			String codigo = produtoDto.getProduto().getCodigo();
+			String categoria = produtoDto.getProduto().getCategoria();
+			String descricao = produtoDto.getProduto().getDescricao();
+			String nomeFornecedor = produtoDto.getProduto().getFornecedor().getNome();
 			Fornecedor forn = Fornecedor.getFornecedor(nomeFornecedor);
 			Produto novo = new Produto(codigo, descricao, categoria);
-			forn.registerProduto(novo, produtoDto.getPrizeProduto(), produtoDto.getTotalProduto());
+			forn.registerProduto(novo, produtoDto.getPreco(), produtoDto.getTotal());
 		}catch(FornecedorNameException e){
 			throw e;
 		}

@@ -1,6 +1,6 @@
 package sdstore.businesserver.exception;
 
-public class ProdutoUnvaliableException extends Exception{
+public class ProdutoUnvaliableException extends PortalException{
 
 	/**
 	 * 

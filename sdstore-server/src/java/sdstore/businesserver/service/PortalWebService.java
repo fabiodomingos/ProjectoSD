@@ -8,6 +8,7 @@ import sdstore.businesserver.service.dto.CategoriaListDto;
 import sdstore.businesserver.service.dto.CategoriaSelectionDto;
 import sdstore.businesserver.service.dto.ClienteSelectionDto;
 import sdstore.businesserver.service.dto.FornecedorProdutoRegisterDto;
+import sdstore.businesserver.service.dto.FornecedorSelectionDto;
 import sdstore.businesserver.service.dto.ProdutoDto;
 import sdstore.businesserver.service.dto.ProdutoListDto;
 import sdstore.businesserver.service.dto.ProdutoSelectionDto;
@@ -23,20 +24,20 @@ public class PortalWebService {
 		return result;
 	}
 	
-	@WebMethod
-	public ProdutoDto RemoveProdutoWebService(ProdutoSelectionDto dto){
-		RemoveProdutoService service = new RemoveProdutoService(dto);
-		service.execute();
-		ProdutoDto result = service.getProduto();
-		return result;
-	}
+//	@WebMethod
+//	public ProdutoDto RemoveProdutoWebService(ProdutoSelectionDto dto){
+//		RemoveProdutoService service = new RemoveProdutoService(dto);
+//		service.execute();
+//		ProdutoDto result = service.getProduto();
+//		return result;
+//	}
 	
 	@WebMethod
-	public ProdutoDto JuntaWebService(ProdutoSelectionDto dto){
-		JuntaService service = new JuntaService(dto);
+	public void JuntaWebService(ProdutoDto dto, Integer quantidade, ClienteSelectionDto cliente){
+		JuntaService service = new JuntaService(dto,quantidade,cliente);
 		service.execute();
-		ProdutoDto result = service.getProduto();
-		return result;
+//		ProdutoDto result = service.getProduto();
+//		return result;
 	}
 	
 	@WebMethod
@@ -48,7 +49,7 @@ public class PortalWebService {
 	}
 	
 	@WebMethod
-	public CategoriaListDto ListaCategoriaWebService(CategoriaSelectionDto dto){
+	public CategoriaListDto ListaCategoriaWebService(FornecedorSelectionDto dto){
 		ListaCategoriaService service = new ListaCategoriaService(dto);
 		service.execute();
 		CategoriaListDto result = service.getListCategoria();
@@ -64,11 +65,9 @@ public class PortalWebService {
 	}
 	
 	@WebMethod
-	public ProdutoDto LimpaWebService(ClienteSelectionDto dto){
+	public void LimpaWebService(ClienteSelectionDto dto){
 		LimpaService service = new LimpaService(dto);
 		service.execute();
-		ProdutoDto result = service.getLimpeza();
-		return result;
 	}
 	
 	@WebMethod
