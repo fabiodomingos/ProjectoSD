@@ -107,7 +107,7 @@ public class Catalogo {
 	}
 	
 	// retorna o numero total do produto p no portal, ou seja, somando o numero de produtos p de cada fornecedor
-	public Integer totalProdutosCatalogo(Produto p) throws ProdutoIdException{
+	public Integer getTotalProdutosCatalogo(Produto p) throws ProdutoIdException{
 		
 		Integer total=0;
 		for(Produto prod: produtoMap){
