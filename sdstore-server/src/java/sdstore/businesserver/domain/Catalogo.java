@@ -86,6 +86,14 @@ public class Catalogo {
 		throw new ProdutoIdException(nome);
 	}
 	
+	public List<Produto> getProdutoList() throws ProdutoListException{
+		if(produtoMap.isEmpty()){
+			throw new ProdutoListException(null);
+		}
+		return produtoMap;
+
+	}
+	
 	public List<Produto> getProdutosCategoria(String categoria) throws CategoriaNameException {
 		List<Produto> produtoList = new ArrayList<Produto>();
 		for(Produto p : produtoMap){
@@ -98,27 +106,19 @@ public class Catalogo {
 		return produtoList;
 	}
 	
-	public List<Produto> getProdutoList() throws ProdutoListException{
-		if(produtoMap.isEmpty()){
-			throw new ProdutoListException(null);
-		}
-		return produtoMap;
-
-	}
-	
-	public List<Produto> getProdutoListFornecedor(Fornecedor f) throws FornecedorListException, FornecedorProdutoListException {
-		if(f.getFornecedorList().isEmpty()){
-			throw new FornecedorListException();
-		}
-		else{
-			return f.getProdutoList();
-		}
-	}
-	
-	public Integer getProdutoTotal(Produto prod){
+	// retorna o numero total do produto p no portal, ou seja, somando o numero de produtos p de cada fornecedor
+	public Integer totalProdutosCatalogo(Produto p) throws ProdutoIdException{
 		
-		Integer totalProd=0;
-		return totalProd;
+		Integer total=0;
+		for(Produto prod: produtoMap){
+			if(p.getId().equals(prod.id)){
+				total++;
+			}
+		}
+		return total;
 	}
+	
+	
+	
 	
 }
