@@ -15,20 +15,20 @@ import sdstore.businesserver.service.dto.ProdutoListDto;
 
 public class ListaProdutoService extends PortalService{
 
+	String nomeCatalogo;
 	CategoriaDto categoriaDto;
-	CatalogoDto catalogoDto;
 	ProdutoListDto result;
 	
-	public ListaProdutoService(CategoriaDto categoria, CatalogoDto dto) {
+	public ListaProdutoService(CategoriaDto categoria, String catalogo) {
 		this.categoriaDto = categoria;
-		this.catalogoDto = dto;
+		this.nomeCatalogo = catalogo;
 	}
 
 	@Override
 	public final void dispatch() throws ProdutoListException, CatalogoNameException {
 		try{
 			String categoria = categoriaDto.getNome();
-			String nomeCatalogo = catalogoDto.getNome();
+			//String nomeCatalogo = catalogoDto.getNome();
 			Catalogo cata = Catalogo.getCatalogo(nomeCatalogo);
 			List<Produto> listaProdutosCategoria = cata.getProdutosCategoria(categoria);
 			List<ProdutoDto> listaDto = new ArrayList<ProdutoDto>();
