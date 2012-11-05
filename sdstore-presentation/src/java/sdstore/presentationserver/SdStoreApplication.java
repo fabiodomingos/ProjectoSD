@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import sdstore.presentationserver.exception.PresenterArgumentCountException;
+import sdstore.presentationserver.exception.PresenterArgumentException;
 import sdstore.presentationserver.exception.PresenterCommandException;
+import sdstore.presentationserver.presenter.AjudaPresenter;
 import sdstore.presentationserver.presenter.ExceptionPresenter;
 import sdstore.presentationserver.service.bridge.ApplicationServerBridge;
 import sdstore.presentationserver.service.bridge.RemoteApplicationServer;
@@ -25,13 +27,31 @@ public class SdStoreApplication {
 			String input = readInputFromConsole();
 			try {
 				processCommand(input);
-			} catch (Exception e) {
+			} catch (PresenterCommandException e) {
+				ExceptionPresenter.present(e);
+			}catch(PresenterArgumentCountException e){
+				ExceptionPresenter.present(e);
+			}catch(PresenterArgumentException e){
 				ExceptionPresenter.present(e);
 			}
 		}
 	}
+	
+//	nao faz nada
+//	private static String readFromConsole(){
+//		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+//		String input = null;
+//		try {
+//			input = buffer.readLine();
+//		} catch (IOException e) {
+//			System.out.println("Erro de leitura");
+//			System.out.println(e.getMessage());
+//			System.exit(1);
+//		}
+//		return input;
+//	}
 
-	private static void processCommand(String input) throws PresenterArgumentCountException, PresenterCommandException {
+	private static void processCommand(String input) throws PresenterArgumentCountException, PresenterCommandException,PresenterArgumentException {
 		String[] token = input.split(" ");
 		String command = token[0];
 		Integer argCount = token.length - 1;
@@ -40,7 +60,8 @@ public class SdStoreApplication {
 //			falta algo
 			Integer validArg = 1;
 			checkCommandArg(command,argCount,validArg);
-			listCategoriaCommand();
+			String categoria = token[1];
+			listCategoriaCommand(categoria);
 		}else if (command.equals("lista-produtos")) {
 			Integer validArg = 2;
 			checkCommandArg(command,argCount,validArg);
@@ -69,6 +90,8 @@ public class SdStoreApplication {
 			checkCommandArg(command,argCount,validArg);
 			encomendaCommand();
 //			faz algo
+		}else if(command.equals("ajuda")){
+			ajudaCommand();
 		}else if(command.equals("sair")){
 			exit();
 		}else{
@@ -77,37 +100,71 @@ public class SdStoreApplication {
 		
 	}
 
+	private static void ajudaCommand() {
+		AjudaPresenter.present();
+	}
+
 	private static void exit() {
+		System.out.println("A sair do programa");
 		System.exit(0);
 	}
 
 	private static void encomendaCommand() {
-		// TODO Auto-generated method stub
+//		Cria o dto
+//		
 		
 	}
 
 	private static void limpaCommand() {
-		// TODO Auto-generated method stub
+//		cria o dto
+//		ClienteSelectionDto dto = DtoConstructor.createLimpaDto(cliente);
+		try {
+//			serviceBridge.Limpa(dto);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
 	}
 
 	private static void juntaCommand(Integer codigo, Integer quantidade) {
-		// TODO Auto-generated method stub
+//		cria o dto
+//		
 		
 	}
 
 	private static void carrinhoCommand() {
-		// TODO Auto-generated method stub
+//		cria o dto
+//		ClienteSelectionDto dto = DtoConstructor.createCarrinhoDto(cliente);
+		try {
+//			ProdutoListDto resultado = serviceBridge.Carrinho(dto);
+//			Carrinho.present(resultado);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
 	}
 
 	private static void listProdutosByCategoriaCommand(String categoria) {
-		// TODO Auto-generated method stub
+//		cria o dto
+//		CategoriaDto dto = DtoConstructor.createCategoriaDto(categoria);
+		try {
+//			ProdutoListDto resultado = serviceBridge.ListaProdutosCategoria(dto);
+//			CategoriaListaProdutos.present(resultado);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
 	}
 
-	private static void listCategoriaCommand() {
-		// TODO Auto-generated method stub
+	private static void listCategoriaCommand(String categoria) {
+//		cria o dto
+//		CategoriaDto dto = DtoConstructor.createCategoriaDto(categoria);
+		try {
+//			CategoriaListDto resultado = serviceBridge.ListaCategoria(dto);
+//			CategoriaListPresenter.present(resultado);
+		} catch (Exception e) {
+//			ExceptionPresenter.present(e);
+		}
 		
 	}
 
