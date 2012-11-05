@@ -1,10 +1,14 @@
 package sdstore.businesserver.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import sdstore.businesserver.exception.CarrinhoProdutoListException;
 import sdstore.businesserver.exception.ClienteNomeException;
 import sdstore.businesserver.exception.FornecedorProdutoExistsException;
+import sdstore.businesserver.exception.FornecedorProdutoListException;
 import sdstore.businesserver.exception.ProdutoIdException;
 
 public class Carrinho {
@@ -61,6 +65,13 @@ public class Carrinho {
 			throw new ClienteNomeException(cliente);
 		}
 		return Carrinho.carrinhoMap.get(cliente);
+	}
+	
+	public List<Produto> getCarrinhoProdList() throws CarrinhoProdutoListException {
+		if (produtoMap.isEmpty()) {
+			throw new CarrinhoProdutoListException(this.id_cliente);
+		}
+		return new ArrayList<Produto>(produtoMap.values());
 	}
 	
 	public Carrinho(String cliente) {
