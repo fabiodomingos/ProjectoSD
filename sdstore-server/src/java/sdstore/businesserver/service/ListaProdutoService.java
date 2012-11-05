@@ -11,13 +11,15 @@ import sdstore.businesserver.service.dto.CatalogoDto;
 import sdstore.businesserver.service.dto.CategoriaDto;
 import sdstore.businesserver.service.dto.ProdutoDto;
 import sdstore.businesserver.service.dto.ProdutoListDto;
+import sdstore.businesserver.service.dto.ProdutoTotalDto;
+import sdstore.businesserver.service.dto.ProdutoTotalListDto;
 
 
 public class ListaProdutoService extends PortalService{
 
 	String nomeCatalogo;
 	CategoriaDto categoriaDto;
-	ProdutoListDto result;
+	ProdutoTotalListDto result;
 	
 	public ListaProdutoService(CategoriaDto categoria, String catalogo) {
 		this.categoriaDto = categoria;
@@ -31,12 +33,13 @@ public class ListaProdutoService extends PortalService{
 			//String nomeCatalogo = catalogoDto.getNome();
 			Catalogo cata = Catalogo.getCatalogo(nomeCatalogo);
 			List<Produto> listaProdutosCategoria = cata.getProdutosCategoria(categoria);
-			List<ProdutoDto> listaDto = new ArrayList<ProdutoDto>();
+			List<ProdutoTotalDto> listaDto = new ArrayList<ProdutoTotalDto>();
 			for(Produto prod : listaProdutosCategoria){
-				ProdutoDto aux = new ProdutoDto(prod.getCategoria(), prod.getId(), prod.getDescricao());
+				Integer totalProd = cata.getTotalProdutosCatalogo(prod);
+				ProdutoTotalDto aux = new ProdutoTotalDto(prod.getCategoria(), prod.getId(), prod.getDescricao(), totalProd);
 				listaDto.add(aux);
 			}
-			result = new ProdutoListDto(listaDto);
+			result = new ProdutoTotalListDto(listaDto);
 			
 		}catch(ProdutoListException exception){
 			throw exception;
@@ -46,7 +49,7 @@ public class ListaProdutoService extends PortalService{
 		
 	}
 	
-	public ProdutoListDto getListProduto() {
+	public ProdutoTotalListDto getListProduto() {
 		return this.result;
 	}
 
