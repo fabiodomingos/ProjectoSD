@@ -34,6 +34,9 @@ public class BusinessServerInitListener implements ServletContextListener{
 			FileInputStream in = new FileInputStream(file);
 			Scanner scanner = new Scanner(in);
 			
+//			cria o catalogo
+			Catalogo.createCatalogo(catalogoName);
+			
 			while(scanner.hasNext()){
 //				String
 				String readLine = scanner.next();
@@ -42,8 +45,7 @@ public class BusinessServerInitListener implements ServletContextListener{
 				System.out.println(splited);
 //				crio o produto 
 				Produto.createProduto(splited[0], splited[1], splited[2]);
-//				cria o catalogo
-				Catalogo.createCatalogo(catalogoName);
+
 				Catalogo catalogo = Catalogo.getCatalogo(catalogoName);
 //				vai buscar um produto e regista no catalogo
 				Produto p = Produto.getProduto(splited[0]);
