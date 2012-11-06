@@ -42,7 +42,7 @@ public class PortalWebService {
 //	}
 	
 	@WebMethod
-	public CategoriaListDto ListaCategoriaWebService() throws ProdutoListException{
+	public CategoriaListDto ListaCategoriaWebService() {
 		ListaCategoriaService service = new ListaCategoriaService();
 		service.execute();
 		CategoriaListDto result = service.getListCategoria();
