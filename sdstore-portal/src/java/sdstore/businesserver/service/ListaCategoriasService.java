@@ -1,4 +1,4 @@
-package sdstrore.businesserver.service;
+package sdstore.businesserver.service;
 
 public class ListaCategoriasService extends PortalService {
 
