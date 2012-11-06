@@ -1,5 +1,11 @@
 package sdstore.businesserver.service.bridge;
 
-public class ApplicationServerBridge {
+import sdstore.stubs.CategoriaListDto;
+import sdstore.stubs.ProdutoListDto;
 
+public interface ApplicationServerBridge {
+
+	public CategoriaListDto ListaCategoria(); 
+	
+	public ProdutoListDto ListaProduto(String categoria);
 }

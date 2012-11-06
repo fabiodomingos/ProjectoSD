@@ -19,14 +19,14 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	
 	static{
 		RemoteApplicationServer.endpointUrlMap = new HashMap<String, String>();
-		RemoteApplicationServer.endpointUrlMap.put("fornecedor1", "url");
+		RemoteApplicationServer.endpointUrlMap.put("fornecedor1", "http://localhost:8080/sdstore-server-fornecedor1/BusinessServerFornecedor1");
 	}
 	
-	FornecedorWebService webService;
+	PortalWebService webService;
 	
 	{
-		FornecedorWebServiceService service = new FornecedorWebServiceService();
-		webService = service.getFornecedorWebServicePort();
+		PortalWebServiceService service = new PortalWebServiceService();
+		webService = service.getPortalWebServicePort();
 	}
 	
 	private void updateEndpointUrl(String fornecedorName){
@@ -37,25 +37,19 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 		BindingProvider bp = (BindingProvider)webService;
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);
 	}
-	
-	public CategoriaListDto CategoriaList( ) throws ServiceBridgeFornecedorException{
-		
-		updateEndpointUrl("fornecedor1");
-		CategoriaListDto result = null;
-		try{
-			result=webService.ListaCategoriaService();
-		}catch(WebServiceException ex){
-			throw new ServiceBridgeFornecedorException("CategoriaList");
-		}
-		return result;
-		
-//		CategoriaListDto result = null;
-//		try{
-//			result = webService.ListaCategoriaWebService(dto);
-//		}catch(WebServiceException ex){
-//			throw new ServiceBridgeFornecedorException("PortalCategoriaList");
-//		}
-		
-	}
 
+	@Override
+	public sdstore.stubs.CategoriaListDto ListaCategoria() {
+		updateEndpointUrl("fornecedor1");
+//		sdstore.stubs.CategoriaListDto result = null;
+		return webService.ListaCategoriaWebService();
+	}
+	
+	@Override 
+	public sdstore.stubs.ProdutoListDto ListaProduto(String categoria){
+		updateEndpointUrl("fornecedor1");
+		return webService.ListaProdutoWebService(categoria);
+	}
+	
+	
 }
