@@ -1,0 +1,30 @@
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+  version="2.4">
+
+  <context-param>
+    <param-name>fornecedorName</param-name>
+    <param-value>fornecedor1</param-value>
+  </context-param>
+  
+  <context-param>
+  	<param-name>listaProdutos</param-name>
+  	<param-value>/ficheiroFornecedor1.txt</param-value>
+  </context-param>
+  
+  <listener>
+    <description>Manage resource reservation and release upon webapp deployment.</description>
+    <listener-class>sdstore.businessserver.BusinessServerInitListener</listener-class>
+ </listener>
+
+  <servlet>
+    <servlet-name>BusinessServerFornecedor1</servlet-name>
+    <servlet-class>sdstore.businessserver.service.PortalWebService</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>BusinessServerFornecedor1</servlet-name>
+    <url-pattern>/BusinessServerFornecedor1</url-pattern>
+  </servlet-mapping>
+</web-app>
