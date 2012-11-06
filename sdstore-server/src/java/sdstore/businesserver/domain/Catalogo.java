@@ -5,15 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import sdstore.businesserver.exception.CatalogoNameException;
-import sdstore.businesserver.exception.CategoriaNameException;
-import sdstore.businesserver.exception.FornecedorListException;
-import sdstore.businesserver.exception.FornecedorNameException;
-import sdstore.businesserver.exception.FornecedorProdutoExistsException;
-import sdstore.businesserver.exception.FornecedorProdutoListException;
-import sdstore.businesserver.exception.ProdutoIdException;
+
 import sdstore.businesserver.exception.ProdutoListException;
-import sdstore.businesserver.service.dto.CategoriaDto;
+
 
 public class Catalogo {
 	
@@ -61,33 +55,33 @@ public class Catalogo {
 		produtoMap = new ArrayList<Produto>();
 	}
 	
-	public static void createCatalogo(String name) throws CatalogoNameException {
+	public static void createCatalogo(String name){
 		Catalogo catalogo = Catalogo.catalogoMap.get(name);
 		if (catalogo != null) {
-			throw new CatalogoNameException(name);
+//			throw new CatalogoNameException(name);
 		}
 		Catalogo newCatalogo = new Catalogo(name, 0.1, 0);
 		Catalogo.catalogoMap.put(name, newCatalogo);
 	}
-	
-	public static Catalogo getCatalogo(String name) throws CatalogoNameException {
+//	
+	public static Catalogo getCatalogo(String name)  {
 		Catalogo catalogo = Catalogo.catalogoMap.get(name);
 		if (catalogo == null) {
-			throw new CatalogoNameException(name);
+//			throw new CatalogoNameException(name);
 		}
 		return Catalogo.catalogoMap.get(name);
 	}
 	
 	
-	public static Produto getProduto(String nome) throws ProdutoIdException {
-		for(Produto p : produtoMap){
-			if(p.getId().equals(nome))
-				return p;
-		}
-		throw new ProdutoIdException(nome);
-	}
+//	public static Produto getProduto(String nome) throws ProdutoIdException {
+//		for(Produto p : produtoMap){
+//			if(p.getId().equals(nome))
+//				return p;
+//		}
+//		throw new ProdutoIdException(nome);
+//	}
 	
-	public List<Produto> getProdutoList() throws ProdutoListException{
+	public static List<Produto> getProdutoList() throws ProdutoListException{
 		if(produtoMap.isEmpty()){
 			throw new ProdutoListException(null);
 		}
@@ -95,35 +89,35 @@ public class Catalogo {
 
 	}
 	
-	public List<Produto> getProdutosCategoria(String categoria) throws CategoriaNameException {
-		List<Produto> produtoList = new ArrayList<Produto>();
-		for(Produto p : produtoMap){
-			if(p.getCategoria().equals(categoria)){
-				produtoList.add(p);
-			}else{
-				throw new CategoriaNameException(categoria);
-			}
-		}
-		return produtoList;
-	}
+//	public List<Produto> getProdutosCategoria(String categoria) throws CategoriaNameException {
+//		List<Produto> produtoList = new ArrayList<Produto>();
+//		for(Produto p : produtoMap){
+//			if(p.getCategoria().equals(categoria)){
+//				produtoList.add(p);
+//			}else{
+//				throw new CategoriaNameException(categoria);
+//			}
+//		}
+//		return produtoList;
+//	}
 	
 	// retorna o numero total do produto p no portal, ou seja, somando o numero de produtos p de cada fornecedor
-	public Integer getTotalProdutosCatalogo(Produto p) throws ProdutoIdException{
-		
-		Integer total=0;
-		for(Produto prod: produtoMap){
-			if(p.getId().equals(prod.id)){
-				total++;
-			}
-		}
-		return total;
-	}
+//	public Integer getTotalProdutosCatalogo(Produto p) throws ProdutoIdException{
+//		
+//		Integer total=0;
+//		for(Produto prod: produtoMap){
+//			if(p.getId().equals(prod.id)){
+//				total++;
+//			}
+//		}
+//		return total;
+//	}
 	
 //	regista um produto no catalogo
-	public void registaProduto(Produto p,Double preco,Integer quantidade) throws FornecedorProdutoExistsException{
+	public void registaProduto(Produto p,Double preco,Integer quantidade) {
 		for(Produto prod : produtoMap){
 			if(prod.getId().equals(p.getId())){
-				throw new FornecedorProdutoExistsException(p.getId());
+//				throw new FornecedorProdutoExistsException(p.getId());
 			}
 		}
 		p.setPreco(preco);

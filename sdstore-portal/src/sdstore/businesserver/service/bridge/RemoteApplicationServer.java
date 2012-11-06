@@ -22,32 +22,39 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 		RemoteApplicationServer.endpointUrlMap.put("fornecedor1", "url");
 	}
 	
-	PortalWebService webService;
+	FornecedorWebService webService;
 	
 	{
-		PortalWebServiceService service = new PortalWebServiceService();
-		webService = service.getPortalWebServicePort();
+		FornecedorWebServiceService service = new FornecedorWebServiceService();
+		webService = service.getFornecedorWebServicePort();
 	}
 	
-	private void updateEndpointUrl(String fornecedorName) throws FornecedorNameExcetion_Exception{
+	private void updateEndpointUrl(String fornecedorName){
 		String endpointUrl = RemoteApplicationServer.endpointUrlMap.get(fornecedorName);
-		if(endpointUrl==null){
-			throw new FornecedorNameException_Exception();
-		}
+//		if(endpointUrl==null){
+//			throw new FornecedorNameException_Exception();
+//		}
 		BindingProvider bp = (BindingProvider)webService;
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);
 	}
 	
-	public CategoriaListDto PortalCategoriaList(FornecedorSelectionDto dto) throws ServiceBridgeFornecedorException, FornecedorNameException, CategoriaNameException{
+	public CategoriaListDto CategoriaList( ) throws ServiceBridgeFornecedorException{
 		
-		String fornecedorName = dto.getNome();
-		updateEndpointUrl(fornecedorName);
+		updateEndpointUrl("fornecedor1");
 		CategoriaListDto result = null;
 		try{
-			result = webService.ListaCategoriaWebService(dto);
+			result=webService.ListaCategoriaService();
 		}catch(WebServiceException ex){
-			throw new ServiceBridgeFornecedorException("PortalCategoriaList");
+			throw new ServiceBridgeFornecedorException("CategoriaList");
 		}
+		return result;
+		
+//		CategoriaListDto result = null;
+//		try{
+//			result = webService.ListaCategoriaWebService(dto);
+//		}catch(WebServiceException ex){
+//			throw new ServiceBridgeFornecedorException("PortalCategoriaList");
+//		}
 		
 	}
 

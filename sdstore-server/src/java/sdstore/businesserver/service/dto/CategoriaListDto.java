@@ -3,23 +3,21 @@ package sdstore.businesserver.service.dto;
 import java.util.List;
 
 public class CategoriaListDto {
-	
-	private List<CategoriaDto> categoriaList;
 
-	public CategoriaListDto(List<CategoriaDto> categoriaList) {
+	private List<String> categoriaList;
+
+	public CategoriaListDto(List<String> categoriaList) {
 		this.categoriaList = categoriaList;
 	}
 
-	public List<CategoriaDto> getCategoriaList() {
+	public List<String> getCategoriaList() {
 		return categoriaList;
 	}
 
-	public void setCategoriaList(List<CategoriaDto> categoriaList) {
+	public void setCategoriaList(List<String> categoriaList) {
 		this.categoriaList = categoriaList;
 	}
 	
 	
 	
-	
-
 }

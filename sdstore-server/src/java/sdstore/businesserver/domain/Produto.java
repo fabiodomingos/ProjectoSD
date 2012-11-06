@@ -3,7 +3,6 @@ package sdstore.businesserver.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-import sdstore.businesserver.exception.ProdutoIdException;
 
 public class Produto {
 	
@@ -19,19 +18,19 @@ public class Produto {
 	Double preco;
 	Integer quantidade;
 	
-	public static void createProduto(String id, String descricao, String categoria) throws ProdutoIdException {
+	public static void createProduto(String id, String descricao, String categoria) {
 		Produto produto = Produto.produtoMap.get(id);
 		if (produto != null) {
-			throw new ProdutoIdException(id);
+//			throw new ProdutoIdException(id);
 		}
 		Produto newProduto = new Produto(id, descricao, categoria);
 		Produto.produtoMap.put(id, newProduto);
 	}
 	
-	public static Produto getProduto(String id) throws ProdutoIdException {
+	public static Produto getProduto(String id){
 		Produto produto = Produto.produtoMap.get(id);
 		if (produto == null) {
-			throw new ProdutoIdException(id);
+//			throw new ProdutoIdException(id);
 		}
 		return Produto.produtoMap.get(id);
 	}
