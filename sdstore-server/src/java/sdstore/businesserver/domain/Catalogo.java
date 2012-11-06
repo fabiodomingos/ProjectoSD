@@ -73,13 +73,14 @@ public class Catalogo {
 	}
 	
 	
-//	public static Produto getProduto(String nome) throws ProdutoIdException {
-//		for(Produto p : produtoMap){
-//			if(p.getId().equals(nome))
-//				return p;
-//		}
+	public static Produto getProduto(String nome){
+		for(Produto p : produtoMap){
+			if(p.getId().equals(nome))
+				return p;
+		}
 //		throw new ProdutoIdException(nome);
-//	}
+		return null;
+	}
 	
 	public static List<Produto> getProdutoList() throws ProdutoListException{
 		if(produtoMap.isEmpty()){
@@ -88,31 +89,7 @@ public class Catalogo {
 		return produtoMap;
 
 	}
-	
-//	public List<Produto> getProdutosCategoria(String categoria) throws CategoriaNameException {
-//		List<Produto> produtoList = new ArrayList<Produto>();
-//		for(Produto p : produtoMap){
-//			if(p.getCategoria().equals(categoria)){
-//				produtoList.add(p);
-//			}else{
-//				throw new CategoriaNameException(categoria);
-//			}
-//		}
-//		return produtoList;
-//	}
-	
-	// retorna o numero total do produto p no portal, ou seja, somando o numero de produtos p de cada fornecedor
-//	public Integer getTotalProdutosCatalogo(Produto p) throws ProdutoIdException{
-//		
-//		Integer total=0;
-//		for(Produto prod: produtoMap){
-//			if(p.getId().equals(prod.id)){
-//				total++;
-//			}
-//		}
-//		return total;
-//	}
-	
+
 //	regista um produto no catalogo
 	public void registaProduto(Produto p,Double preco,Integer quantidade) {
 		for(Produto prod : produtoMap){
@@ -123,6 +100,21 @@ public class Catalogo {
 		p.setPreco(preco);
 		p.setQuantidade(quantidade);
 		produtoMap.add(p);
+	}
+
+	public static String retiraProduto(String _codigo,Integer _quantidade) {
+		String resultado = " ";
+		for(Produto prod : produtoMap){
+			if(prod.getId().equals(_codigo)){
+				if(prod.getQuantidade()==0){
+					resultado="KO";
+				}else{
+					prod.setQuantidade(prod.getQuantidade()-_quantidade);
+					resultado="OK";
+				}
+			}
+		}
+		return resultado;
 	}
 	
 	
