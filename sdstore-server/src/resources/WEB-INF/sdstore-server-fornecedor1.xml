@@ -4,13 +4,13 @@
   version="2.4">
 
   <context-param>
-    <param-name>fornecedorName</param-name>
-    <param-value>fornecedor1</param-value>
+  	<param-name>nomeCatalogo</param-name>
+  	<param-value>catalogo1</param-value>
   </context-param>
   
   <context-param>
   	<param-name>listaProdutos</param-name>
-  	<param-value>/ficheiroFornecedor1.txt</param-value>
+  	<param-value>C:\Users\Mimoso\workspace\ProjectoSD\sdstore-server\src\resources\WEB-INF\fornecedor1.txt</param-value>
   </context-param>
   
   <listener>
