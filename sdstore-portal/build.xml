@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<project name="sdstore-server" default="deployall" basedir="." >
+
+	<property file="${basedir}/build.properties" />
+	<property environment="env"/>
+	<property name="project.jboss.home" value="${env.JBOSS_HOME}" />
+	<import file="libraries.xml" />
+
+	<!-- set global properties for this build -->
+	<property name="dist.dir" value="dist" />
+	<property name="deploy.dir" value="${project.jboss.home}/${project.jboss.conf}/deployments" />
+	<property name="build.dir" value="build" />
+	<property name="src.dir" value="src/java" />
+	<property name="resources.dir" value="src/resources" />
+	<property name="javac.debug" value="true" />
+	<property name="javac.deprecation" value="false" />
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+		<delete dir="${dist.dir}" />
+		<delete file="${resources.dir}/WEB-INF/web.xml" />
+	</target>
+
+	<target name="init">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<target name="compile" depends="init" description="Compile the Java source code" unless="eclipse.running">
+		<tstamp/>
+		<javac destdir="${build.dir}" classpathref="project.classpath" debug="${javac.debug}" deprecation="${javac.deprecation}" nowarn="on" includeantruntime="false">
+			<src path="${src.dir}" />
+		</javac>
+	</target>
+
+	<target name="copyclasses" depends="init" description="Copy the classes that were compiled by Eclipse" if="eclipse.running">
+		<copy todir="${build.dir}">
+			<fileset dir="${classes}">
+				<include name="**/*.class"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<!-- this is new -->
+	<target name="copy-web-xml" depends="" description="copy web.xml to its location">
+	  <copy overwrite="true" tofile="${resources.dir}/WEB-INF/web.xml" file="${resources.dir}/WEB-INF/${project.name}.xml" />
+	</target>
+	
+	<target name="dist" depends="copy-web-xml" description="Create the application distribution archive">
+		<fail unless="project.type">project.type not set</fail>
+		<war warfile="${dist.dir}/${project.name}.${project.type}" webxml="${resources.dir}/WEB-INF/web.xml">
+			  <classes dir="${build.dir}" />
+			</war>
+		
+	</target>
+
+	<!-- this is new: Deploy the Vodafone web service -->
+	<target name="deploy-sdstore-server-fornecedor1" depends="">
+      <antcall target="deploy" >
+      	<param name="project.name" value="sdstore-server-forncecedor1"/>
+      </antcall>
+	</target>
+
+	<!-- this is new: Deploy the Optimus web service -->
+	<target name="deploy-sdstore-server-fornecedor2" depends="">
+      <antcall target="deploy" >
+      	<param name="project.name" value="sdstore-server-fornecedor2"/>
+      </antcall>
+	</target>
+
+	<!-- this is new: Deploy all the web services -->
+	<target name="deployall" depends="clean,compile,copyclasses,deploy-sdstore-server-fornecedor1,deploy-sdstore-server-fornecedor2" description="Deploy all web services">
+	</target>
+	
+	<target name="deploy" depends="dist" description="Deploy to JBoss AS">
+		<fail unless="project.jboss.home">project.jboss.home not set</fail>
+		<copy todir="${deploy.dir}" file="${dist.dir}/${project.name}.${project.type}" />
+	</target>
+
+	<!-- this is new: Undeploy the Vodafone web service -->
+	<target name="undeploy-business-server-vodafone" depends="">
+      <antcall target="undeploy" >
+      	<param name="project.name" value="business-server-vodafone"/>
+      </antcall>
+	</target>
+
+	<!-- this is new: Undeploy the Optimus web service -->
+	<target name="undeploy-business-server-optimus" depends="">
+      <antcall target="undeploy" >
+      	<param name="project.name" value="business-server-optimus"/>
+      </antcall>
+	</target>
+
+	<!-- this is new: Undeploy the TMN web service -->
+	<target name="undeploy-business-server-tmn" depends="">
+      <antcall target="undeploy" >
+      	<param name="project.name" value="business-server-tmn"/>
+      </antcall>
+	</target>
+
+	<!-- this is new: Undeploy all the web services -->
+	<target name="undeployall" depends="undeploy-business-server-vodafone,undeploy-business-server-optimus,undeploy-business-server-tmn" description="Deploy all web services">
+	</target>
+
+	<target name="undeploy" description="Undeploy from JBoss AS">
+		<!-- TO DO: this is left to be completed by the students -->
+		<fail unless="project.jboss.home">project.jboss.home not set</fail>
+		<fail unless="project.jboss.conf">project.jboss.conf not set</fail>
+		<delete file="${deploy.dir}/${project.name}.${project.type}" />
+	</target>
+
+</project>
