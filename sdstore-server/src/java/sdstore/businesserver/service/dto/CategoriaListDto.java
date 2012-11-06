@@ -9,6 +9,10 @@ public class CategoriaListDto {
 	public CategoriaListDto(List<String> categoriaList) {
 		this.categoriaList = categoriaList;
 	}
+	
+	public CategoriaListDto(){
+		
+	}
 
 	public List<String> getCategoriaList() {
 		return categoriaList;
