@@ -60,8 +60,8 @@ public class SdStoreApplication {
 //			falta algo
 			Integer validArg = 1;
 			checkCommandArg(command,argCount,validArg);
-			String categoria = token[1];
-			listCategoriaCommand(categoria);
+//			String categoria = token[1];
+			listCategoriaCommand();
 		}else if (command.equals("lista-produtos")) {
 			Integer validArg = 2;
 			checkCommandArg(command,argCount,validArg);
@@ -111,7 +111,12 @@ public class SdStoreApplication {
 
 	private static void encomendaCommand() {
 //		Cria o dto
-//		
+//		ClienteSelectionDto = DtoConstructor.createEncomendaDto(cliente);
+		try {
+//			serviceBridge.Encomenda(dto);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
 	}
 
@@ -128,8 +133,12 @@ public class SdStoreApplication {
 
 	private static void juntaCommand(Integer codigo, Integer quantidade) {
 //		cria o dto
-//		
-		
+//		ProdutoSelectDto dto = DtoConstructor.createProdutoSelectDto(codigo,quantidade);
+		try {
+//			serviceBridge.Junta(dto);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 	private static void carrinhoCommand() {
@@ -149,19 +158,19 @@ public class SdStoreApplication {
 //		CategoriaDto dto = DtoConstructor.createCategoriaDto(categoria);
 		try {
 //			ProdutoListDto resultado = serviceBridge.ListaProdutosCategoria(dto);
-//			CategoriaListaProdutos.present(resultado);
+//			ListaProdutosPresenter.present(resultado);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		
 	}
 
-	private static void listCategoriaCommand(String categoria) {
+	private static void listCategoriaCommand() {
 //		cria o dto
-//		CategoriaDto dto = DtoConstructor.createCategoriaDto(categoria);
+//		ClienteSelectionDto dto = DtoConstructor.createCategoriaDto(cliente);
 		try {
 //			CategoriaListDto resultado = serviceBridge.ListaCategoria(dto);
-//			CategoriaListPresenter.present(resultado);
+//			ListaCategoriasPresenter.present(resultado);
 		} catch (Exception e) {
 //			ExceptionPresenter.present(e);
 		}
