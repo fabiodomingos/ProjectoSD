@@ -57,7 +57,7 @@
 	<!-- this is new: Deploy the Vodafone web service -->
 	<target name="deploy-sdstore-server-fornecedor1" depends="">
       <antcall target="deploy" >
-      	<param name="project.name" value="sdstore-server-forncecedor1"/>
+      	<param name="project.name" value="sdstore-server-fornecedor1"/>
       </antcall>
 	</target>
 

@@ -16,7 +16,7 @@ public class Produto {
 	String id;
 	String descricao;
 	String categoria;
-	Integer preco;
+	Double preco;
 	Integer quantidade;
 	
 	public static void createProduto(String id, String descricao, String categoria) throws ProdutoIdException {
@@ -74,11 +74,11 @@ public class Produto {
 		this.quantidade = quant;
 	}
 	
-	public Integer getPreco() {
+	public Double getPreco() {
 		return preco;
 	}
 	
-	public void setPreco(Integer prize) {
+	public void setPreco(Double prize) {
 		this.preco = prize;
 	}
 }

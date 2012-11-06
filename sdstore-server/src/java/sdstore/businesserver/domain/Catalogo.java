@@ -9,6 +9,7 @@ import sdstore.businesserver.exception.CatalogoNameException;
 import sdstore.businesserver.exception.CategoriaNameException;
 import sdstore.businesserver.exception.FornecedorListException;
 import sdstore.businesserver.exception.FornecedorNameException;
+import sdstore.businesserver.exception.FornecedorProdutoExistsException;
 import sdstore.businesserver.exception.FornecedorProdutoListException;
 import sdstore.businesserver.exception.ProdutoIdException;
 import sdstore.businesserver.exception.ProdutoListException;
@@ -118,7 +119,17 @@ public class Catalogo {
 		return total;
 	}
 	
-	
+//	regista um produto no catalogo
+	public void registaProduto(Produto p,Double preco,Integer quantidade) throws FornecedorProdutoExistsException{
+		for(Produto prod : produtoMap){
+			if(prod.getId().equals(p.getId())){
+				throw new FornecedorProdutoExistsException(p.getId());
+			}
+		}
+		p.setPreco(preco);
+		p.setQuantidade(quantidade);
+		produtoMap.add(p);
+	}
 	
 	
 }
