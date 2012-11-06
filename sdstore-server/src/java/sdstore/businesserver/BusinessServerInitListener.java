@@ -8,7 +8,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import sdstore.businesserver.domain.Catalogo;
-import sdstore.businesserver.domain.Fornecedor;
+
 import sdstore.businesserver.domain.Produto;
 
 
@@ -39,10 +39,12 @@ public class BusinessServerInitListener implements ServletContextListener{
 			
 			while(scanner.hasNext()){
 //				String
-				String readLine = scanner.next();
-				System.out.println(readLine);
+				String readLine = scanner.nextLine();
+				System.out.println("linha lida"+readLine);
 				String[] splited = readLine.split(" ");
-				System.out.println(splited);
+				System.out.println(splited[0]);
+				System.out.println("plas");
+				System.out.println(splited[1]);
 //				crio o produto 
 				Produto.createProduto(splited[0], splited[1], splited[2]);
 
