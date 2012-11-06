@@ -7,20 +7,20 @@
   	<param-name>nomeCatalogo</param-name>
   	<param-value>catalogo1</param-value>
   </context-param>
-  
+
   <context-param>
   	<param-name>listaProdutos</param-name>
   	<param-value>C:\Users\Mimoso\workspace\ProjectoSD\sdstore-server\src\resources\WEB-INF\fornecedor1.txt</param-value>
   </context-param>
-  
+
   <listener>
     <description>Manage resource reservation and release upon webapp deployment.</description>
-    <listener-class>sdstore.businessserver.BusinessServerInitListener</listener-class>
+    <listener-class>sdstore.businesserver.BusinessServerInitListener</listener-class>
  </listener>
 
   <servlet>
     <servlet-name>BusinessServerFornecedor1</servlet-name>
-    <servlet-class>sdstore.businessserver.service.PortalWebService</servlet-class>
+    <servlet-class>sdstore.businesserver.service.PortalWebService</servlet-class>
   </servlet>
 
   <servlet-mapping>
