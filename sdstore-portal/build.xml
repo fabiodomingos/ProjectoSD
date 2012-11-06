@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="sdstore-server" default="deployall" basedir="." >
+<project name="sdstore-portal" default="deployall" basedir="." >
 
 	<property file="${basedir}/build.properties" />
 	<property environment="env"/>
@@ -14,6 +14,9 @@
 	<property name="resources.dir" value="src/resources" />
 	<property name="javac.debug" value="true" />
 	<property name="javac.deprecation" value="false" />
+	
+	<!-- Wsdlconsume properties --> 
+	<property name="stubs.package" value="sdstore.stubs" />
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
@@ -108,5 +111,28 @@
 		<fail unless="project.jboss.conf">project.jboss.conf not set</fail>
 		<delete file="${deploy.dir}/${project.name}.${project.type}" />
 	</target>
+	
+	
+	<!-- novo consume -->
+    <target name="wsconsume" depends="init" description="Generate Web Service client-side Java code from WSDL">
+    	<taskdef name="wsconsume" classname="org.jboss.ws.tools.ant.WSConsumeTask">
+    		<classpath>
+    		<path refid="project.classpath" />
+   	        </classpath>
+    	</taskdef>
 
+        <echo message="Executing wsconsume to generate client-side code..." />
+        <echo message="WSDL: ${project.wsdlurl}" />
+    	<wsconsume 
+    	  fork="true"
+    	  verbose="true"
+    	  destdir="${build.dir}"
+    	  sourcedestdir="${src.dir}"
+    	  package="${stubs.package}"
+    	  keep="true"
+    	  wsdllocation="${project.wsdlurl}" 
+    	  wsdl="${project.wsdlurl}" />
+    </target>
+	
+	
 </project>
