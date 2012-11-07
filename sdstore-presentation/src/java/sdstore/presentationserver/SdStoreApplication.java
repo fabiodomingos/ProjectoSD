@@ -74,7 +74,7 @@ public class SdStoreApplication {
 			juntaCommand(codigo,quantidade);
 //			faz algo
 		}else if(command.equals("limpa")){
-			Integer validArg = 1;
+			Integer validArg = 0;
 			checkCommandArg(command,argCount,validArg);
 			limpaCommand();
 //			faz algo
@@ -117,7 +117,7 @@ public class SdStoreApplication {
 //		cria o dto
 //		ClienteSelectionDto dto = DtoConstructor.createLimpaDto(cliente);
 		try {
-//			serviceBridge.Limpa(dto);
+			serviceBridge.Limpa();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
