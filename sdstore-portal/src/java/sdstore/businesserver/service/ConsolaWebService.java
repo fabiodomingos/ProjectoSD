@@ -15,7 +15,6 @@ import sdstore.businesserver.service.dto.ProdListDto;
 import sdstore.businesserver.service.dto.ProdutoDto;
 import sdstore.stubs.PortalWebService;
 import sdstore.stubs.PortalWebServiceService;
-import sdstore.stubs.ProdutoListDto;
 
 @WebService
 public class ConsolaWebService {
