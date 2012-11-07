@@ -3,7 +3,6 @@ package sdstore.presentationserver.service.bridge;
 import sdstore.presentationserver.service.stubs.CarrinhoDto;
 import sdstore.presentationserver.service.stubs.CategoriaListDto;
 import sdstore.presentationserver.service.stubs.ProdListDto;
-import sdstore.presentationserver.service.stubs.ProdutoDto;
 
 public interface ApplicationServerBridge{
 
