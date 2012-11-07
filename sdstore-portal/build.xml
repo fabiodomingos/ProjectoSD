@@ -57,17 +57,10 @@
 		
 	</target>
 
-	<!-- this is new: Deploy the Vodafone web service -->
+	<!-- this is new: Deploy the portal web service -->
 	<target name="deploy-sdstore-portal" depends="">
       <antcall target="deploy" >
       	<param name="project.name" value="sdstore-portal"/>
-      </antcall>
-	</target>
-
-	<!-- this is new: Deploy the Optimus web service -->
-	<target name="deploy-sdstore-server-fornecedor2" depends="">
-      <antcall target="deploy" >
-      	<param name="project.name" value="sdstore-server-fornecedor2"/>
       </antcall>
 	</target>
 
@@ -80,29 +73,15 @@
 		<copy todir="${deploy.dir}" file="${dist.dir}/${project.name}.${project.type}" />
 	</target>
 
-	<!-- this is new: Undeploy the Vodafone web service -->
-	<target name="undeploy-business-server-vodafone" depends="">
+	<!-- this is new: Undeploy the portal web service -->
+	<target name="undeploy-sdstore-portal" depends="">
       <antcall target="undeploy" >
       	<param name="project.name" value="business-server-vodafone"/>
       </antcall>
 	</target>
 
-	<!-- this is new: Undeploy the Optimus web service -->
-	<target name="undeploy-business-server-optimus" depends="">
-      <antcall target="undeploy" >
-      	<param name="project.name" value="business-server-optimus"/>
-      </antcall>
-	</target>
-
-	<!-- this is new: Undeploy the TMN web service -->
-	<target name="undeploy-business-server-tmn" depends="">
-      <antcall target="undeploy" >
-      	<param name="project.name" value="business-server-tmn"/>
-      </antcall>
-	</target>
-
 	<!-- this is new: Undeploy all the web services -->
-	<target name="undeployall" depends="undeploy-business-server-vodafone,undeploy-business-server-optimus,undeploy-business-server-tmn" description="Deploy all web services">
+	<target name="undeployall" depends="undeploy-sdstore-portal" description="Deploy all web services">
 	</target>
 
 	<target name="undeploy" description="Undeploy from JBoss AS">
@@ -111,7 +90,6 @@
 		<fail unless="project.jboss.conf">project.jboss.conf not set</fail>
 		<delete file="${deploy.dir}/${project.name}.${project.type}" />
 	</target>
-	
 	
 	<!-- novo consume -->
     <target name="wsconsume" depends="init" description="Generate Web Service client-side Java code from WSDL">
