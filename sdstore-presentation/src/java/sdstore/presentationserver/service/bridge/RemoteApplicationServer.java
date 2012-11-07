@@ -5,10 +5,12 @@ import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
 
+import sdstore.presentationserver.service.stubs.CarrinhoDto;
 import sdstore.presentationserver.service.stubs.CategoriaListDto;
 import sdstore.presentationserver.service.stubs.ConsolaWebService;
 import sdstore.presentationserver.service.stubs.ConsolaWebServiceService;
 import sdstore.presentationserver.service.stubs.ProdListDto;
+import sdstore.presentationserver.service.stubs.ProdutoDto;
 
 public class RemoteApplicationServer implements ApplicationServerBridge{
 
@@ -46,6 +48,19 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 		updateEndpointUrl();
 		ProdListDto resultado = webService.listaProduto(categoria);
 		return resultado;
+	}
+
+	@Override
+	public void Junta(String codigo,Integer quantidade) {
+		updateEndpointUrl();
+		webService.juntaCarrinho(codigo, quantidade);
+	}
+
+	@Override
+	public CarrinhoDto Carrinho() {
+		updateEndpointUrl();
+		CarrinhoDto dtoCarrinho = webService.listaCarrinho();
+		return dtoCarrinho;
 	}
 	
 	

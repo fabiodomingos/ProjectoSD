@@ -1,5 +1,7 @@
 package sdstore.presentationserver;
 
+import sdstore.presentationserver.service.stubs.ProdutoDto;
+
 public class DtoConstructor {
 
 //	public static ClienteSelectionDto createEncomendaDto(String cliente){
@@ -14,9 +16,10 @@ public class DtoConstructor {
 //		return clienteDto;
 //	}
 //	
-//	public static ProdutoSelectDto createProdutoSelectDto(Integer codigo,Integer quantidade){
-//		ProdutoSelectDto produtoDto = new ProdutoSelectDto();
-//		produtoDto.setCodigo(codigo);
+//	public static ProdutoDto createProdutoSelectDto(String codigo,Integer quantidade){
+//		ProdutoDto produtoDto = new ProdutoDto();
+//		produtoDto.setId(codigo);
+////		produtoDto.setCodigo(codigo);
 //		produtoDto.setQuantidade(quantidade);
 //		return produtoDto;
 //	}

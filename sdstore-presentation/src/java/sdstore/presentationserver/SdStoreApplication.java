@@ -7,13 +7,16 @@ import sdstore.presentationserver.exception.PresenterArgumentCountException;
 import sdstore.presentationserver.exception.PresenterArgumentException;
 import sdstore.presentationserver.exception.PresenterCommandException;
 import sdstore.presentationserver.presenter.AjudaPresenter;
+import sdstore.presentationserver.presenter.CarrinhoPresenter;
 import sdstore.presentationserver.presenter.ExceptionPresenter;
 import sdstore.presentationserver.presenter.ListaCategoriasPresenter;
 import sdstore.presentationserver.presenter.ListaProdutosPresenter;
 import sdstore.presentationserver.service.bridge.ApplicationServerBridge;
 import sdstore.presentationserver.service.bridge.RemoteApplicationServer;
+import sdstore.presentationserver.service.stubs.CarrinhoDto;
 import sdstore.presentationserver.service.stubs.CategoriaListDto;
 import sdstore.presentationserver.service.stubs.ProdListDto;
+import sdstore.presentationserver.service.stubs.ProdutoDto;
 
 public class SdStoreApplication {
 	
@@ -59,14 +62,14 @@ public class SdStoreApplication {
 			listProdutosByCategoriaCommand(categoria);
 //			falta algo
 		}else if(command.equals("carrinho")){
-			Integer validArg = 1;
+			Integer validArg = 0;
 			checkCommandArg(command,argCount,validArg);
 			carrinhoCommand();
 //			faz algo
 		}else if(command.equals("junta")){
-			Integer validArg = 3;
+			Integer validArg = 2;
 			checkCommandArg(command,argCount,validArg);
-			Integer codigo = Integer.parseInt(token[1]);
+			String codigo = token[1];
 			Integer quantidade = Integer.parseInt(token[2]);
 			juntaCommand(codigo,quantidade);
 //			faz algo
@@ -121,10 +124,11 @@ public class SdStoreApplication {
 		
 	}
 
-	private static void juntaCommand(Integer codigo, Integer quantidade) {
+	private static void juntaCommand(String codigo, Integer quantidade) {
 //		cria o dto
-//		ProdutoSelectDto dto = DtoConstructor.createProdutoSelectDto(codigo,quantidade);
+//		ProdutoDto dto = DtoConstructor.createProdutoSelectDto(codigo,quantidade);
 		try {
+			serviceBridge.Junta(codigo,quantidade);
 //			serviceBridge.Junta(dto);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -133,10 +137,9 @@ public class SdStoreApplication {
 
 	private static void carrinhoCommand() {
 //		cria o dto
-//		ClienteSelectionDto dto = DtoConstructor.createCarrinhoDto(cliente);
 		try {
-//			ProdutoListDto resultado = serviceBridge.Carrinho(dto);
-//			Carrinho.present(resultado);
+			CarrinhoDto result = serviceBridge.Carrinho();
+			CarrinhoPresenter.present(result);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

@@ -9,6 +9,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.xml.ws.BindingProvider;
 
+import sdstore.businesserver.service.dto.CarrinhoDto;
 import sdstore.businesserver.service.dto.CategoriaListDto;
 import sdstore.businesserver.service.dto.ProdListDto;
 import sdstore.businesserver.service.dto.ProdutoDto;
@@ -19,7 +20,9 @@ import sdstore.stubs.ProdutoListDto;
 @WebService
 public class ConsolaWebService {
 	
-private static Map<String, String> endpointUrlMap;
+	private static Map<String, String> endpointUrlMap;
+//	carrinho de compras do cliente
+	private static List<ProdutoDto> carrinhoCompras;
 	
 	static{
 		ConsolaWebService.endpointUrlMap = new HashMap<String, String>();
@@ -67,6 +70,33 @@ private static Map<String, String> endpointUrlMap;
 		}
 		ProdListDto dto = new ProdListDto(lista);
 		return dto;
+	}
+	
+	@WebMethod
+	public CarrinhoDto listaCarrinho(){
+		updateEndpointUrl("fornecedor1");
+		Double precoTotal = 0.0;
+		CarrinhoDto dto = new CarrinhoDto(carrinhoCompras);
+		for(ProdutoDto prod : carrinhoCompras){
+			precoTotal = precoTotal + prod.getPreco();
+		}
+		dto.setTotalPreco(precoTotal);
+		return dto;
+	}
+	
+	@WebMethod
+	public void juntaCarrinho(String codigo,Integer quantidade){
+		updateEndpointUrl("fornecedor1");
+		sdstore.stubs.ProdutoDto dtoRecebido = webService.pedeProduto(codigo,quantidade);
+		ProdutoDto prodEnviar = new ProdutoDto();
+		
+		prodEnviar.setId(dtoRecebido.getId());
+		prodEnviar.setQuantidade(dtoRecebido.getQuantidade());
+		prodEnviar.setPreco(dtoRecebido.getPreco());
+		prodEnviar.setCategoria(dtoRecebido.getCategoria());
+		prodEnviar.setDescricao(dtoRecebido.getDescricao());
+		
+		carrinhoCompras.add(prodEnviar);
 	}
 	
 }
