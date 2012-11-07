@@ -22,7 +22,7 @@ public class ConsolaWebService {
 	
 	private static Map<String, String> endpointUrlMap;
 //	carrinho de compras do cliente
-	private static List<ProdutoDto> carrinhoCompras;
+	private List<ProdutoDto> carrinhoCompras = new ArrayList<ProdutoDto>();
 	
 	static{
 		ConsolaWebService.endpointUrlMap = new HashMap<String, String>();
@@ -89,14 +89,17 @@ public class ConsolaWebService {
 		updateEndpointUrl("fornecedor1");
 		sdstore.stubs.ProdutoDto dtoRecebido = webService.pedeProduto(codigo,quantidade);
 		ProdutoDto prodEnviar = new ProdutoDto();
-		
+		System.out.println("aki passeiiiiiiii");
 		prodEnviar.setId(dtoRecebido.getId());
 		prodEnviar.setQuantidade(dtoRecebido.getQuantidade());
 		prodEnviar.setPreco(dtoRecebido.getPreco());
 		prodEnviar.setCategoria(dtoRecebido.getCategoria());
 		prodEnviar.setDescricao(dtoRecebido.getDescricao());
-		
+		System.out.println(prodEnviar);
+		System.out.println("vou meter no carrinho");
 		carrinhoCompras.add(prodEnviar);
+		System.out.println("meti no carrinho");
+		
 	}
 	
 }
