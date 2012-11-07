@@ -56,6 +56,9 @@ private static Map<String, String> endpointUrlMap;
 		updateEndpointUrl("fornecedor1");
 		List<sdstore.stubs.ProdutoDto> listaProduto = webService.listaProdutoWebService(categoria).getListaDto();
 		List<ProdutoDto> lista = new ArrayList<ProdutoDto>();
+//		teste - listaProduto está vazia
+		System.out.println(listaProduto);
+		
 		for(sdstore.stubs.ProdutoDto prod : listaProduto){
 			ProdutoDto novo = new ProdutoDto();
 			novo.setCategoria(prod.getCategoria());
@@ -65,8 +68,8 @@ private static Map<String, String> endpointUrlMap;
 			novo.setQuantidade(prod.getQuantidade());
 			lista.add(novo);
 		}
-		ProdListDto dto = new ProdListDto();
-		dto.setListaDto(lista);
+		ProdListDto dto = new ProdListDto(lista);
+//		dto.setListaDto(lista);
 		return dto;
 	}
 	
