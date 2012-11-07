@@ -10,7 +10,6 @@ import sdstore.presentationserver.service.stubs.CategoriaListDto;
 import sdstore.presentationserver.service.stubs.ConsolaWebService;
 import sdstore.presentationserver.service.stubs.ConsolaWebServiceService;
 import sdstore.presentationserver.service.stubs.ProdListDto;
-import sdstore.presentationserver.service.stubs.ProdutoDto;
 
 public class RemoteApplicationServer implements ApplicationServerBridge{
 
