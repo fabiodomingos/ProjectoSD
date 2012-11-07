@@ -10,12 +10,16 @@ private List<ProdutoDto> listaDto;
 		
 	}
 
-	public ProdListDto(List<ProdutoDto> listaNovaProdutos) {
-		// TODO Auto-generated constructor stub
-	}
+//	public ProdListDto(List<ProdutoDto> listaNovaProdutos) {
+//		
+//	}
 
 	public List<ProdutoDto> getListaDto() {
 		return listaDto;
+	}
+
+	public ProdListDto(List<ProdutoDto> listaDto) {
+		this.listaDto = listaDto;
 	}
 
 	public void setListaDto(List<ProdutoDto> listaDto) {
