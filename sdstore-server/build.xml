@@ -54,14 +54,14 @@
 		
 	</target>
 
-	<!-- this is new: Deploy the Vodafone web service -->
+	<!-- this is new: Deploy the fornecedor1 web service -->
 	<target name="deploy-sdstore-server-fornecedor1" depends="">
       <antcall target="deploy" >
       	<param name="project.name" value="sdstore-server-fornecedor1"/>
       </antcall>
 	</target>
 
-	<!-- this is new: Deploy the Optimus web service -->
+	<!-- this is new: Deploy the fornecedor2 web service -->
 	<target name="deploy-sdstore-server-fornecedor2" depends="">
       <antcall target="deploy" >
       	<param name="project.name" value="sdstore-server-fornecedor2"/>
@@ -77,29 +77,23 @@
 		<copy todir="${deploy.dir}" file="${dist.dir}/${project.name}.${project.type}" />
 	</target>
 
-	<!-- this is new: Undeploy the Vodafone web service -->
-	<target name="undeploy-business-server-vodafone" depends="">
+	<!-- this is new: Undeploy the fornecedor1 web service -->
+	<target name="undeploy-sdstore-server-fornecedor1" depends="">
       <antcall target="undeploy" >
-      	<param name="project.name" value="business-server-vodafone"/>
+      	<param name="project.name" value="sdstore-server-fornecedor1"/>
+      </antcall>
+	</target>
+	
+	<!-- this is new: Undeploy the fornecedor2 web service -->
+	<target name="undeploy-sdstore-server-fornecedor2" depends="">
+      <antcall target="undeploy" >
+      	<param name="project.name" value="sdstore-server-fornecedor2"/>
       </antcall>
 	</target>
 
-	<!-- this is new: Undeploy the Optimus web service -->
-	<target name="undeploy-business-server-optimus" depends="">
-      <antcall target="undeploy" >
-      	<param name="project.name" value="business-server-optimus"/>
-      </antcall>
-	</target>
-
-	<!-- this is new: Undeploy the TMN web service -->
-	<target name="undeploy-business-server-tmn" depends="">
-      <antcall target="undeploy" >
-      	<param name="project.name" value="business-server-tmn"/>
-      </antcall>
-	</target>
 
 	<!-- this is new: Undeploy all the web services -->
-	<target name="undeployall" depends="undeploy-business-server-vodafone,undeploy-business-server-optimus,undeploy-business-server-tmn" description="Deploy all web services">
+	<target name="undeployall" depends="undeploy-sdstore-server-fornecedor1" description="Deploy all web services">
 	</target>
 
 	<target name="undeploy" description="Undeploy from JBoss AS">
