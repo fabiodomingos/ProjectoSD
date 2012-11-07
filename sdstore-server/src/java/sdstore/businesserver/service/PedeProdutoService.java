@@ -9,12 +9,10 @@ import sdstore.businesserver.service.dto.ProdutoDto;
 public class PedeProdutoService extends PortalService{
 
 	private String _codigo;
-	private Integer _quantidade;
 	private ProdutoDto result;
 	
-	public PedeProdutoService(String codigo,Integer quantidade){
+	public PedeProdutoService(String codigo){
 		_codigo=codigo;
-		_quantidade=quantidade;
 	}
 	
 	@Override
