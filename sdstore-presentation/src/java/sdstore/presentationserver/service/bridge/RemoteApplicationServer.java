@@ -63,5 +63,11 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 		return dtoCarrinho;
 	}
 	
+	@Override
+	public void Limpa(){
+		updateEndpointUrl();
+		webService.limpaCarrinho();
+	}
+	
 	
 }
