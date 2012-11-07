@@ -21,8 +21,8 @@ public class PortalWebService {
 	
 	
 	@WebMethod
-	public ProdutoDto PedeProduto(String codigo,Integer quantidade){
-		PedeProdutoService service = new PedeProdutoService(codigo,quantidade);
+	public ProdutoDto PedeProduto(String codigo){
+		PedeProdutoService service = new PedeProdutoService(codigo);
 		service.execute();
 		ProdutoDto result = service.getProdutoDto();
 		return result;
