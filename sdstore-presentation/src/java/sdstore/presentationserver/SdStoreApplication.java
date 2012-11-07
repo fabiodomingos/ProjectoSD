@@ -106,7 +106,7 @@ public class SdStoreApplication {
 //		Cria o dto
 //		ClienteSelectionDto = DtoConstructor.createEncomendaDto(cliente);
 		try {
-//			serviceBridge.Encomenda(dto);
+			serviceBridge.Encomenda();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
