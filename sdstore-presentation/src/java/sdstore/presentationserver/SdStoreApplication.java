@@ -41,20 +41,6 @@ public class SdStoreApplication {
 		}
 	}
 	
-//	nao faz nada
-//	private static String readFromConsole(){
-//		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-//		String input = null;
-//		try {
-//			input = buffer.readLine();
-//		} catch (IOException e) {
-//			System.out.println("Erro de leitura");
-//			System.out.println(e.getMessage());
-//			System.exit(1);
-//		}
-//		return input;
-//	}
-
 	private static void processCommand(String input) throws PresenterArgumentCountException, PresenterCommandException,PresenterArgumentException {
 		String[] token = input.split(" ");
 		String command = token[0];
