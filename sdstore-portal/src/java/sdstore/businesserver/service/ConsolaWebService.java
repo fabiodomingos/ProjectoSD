@@ -93,7 +93,7 @@ public class ConsolaWebService {
 		if(carrinhoCompras.isEmpty()){			
 			prodEnviar.setId(dtoRecebido.getId());
 			prodEnviar.setQuantidade(quantidade);
-			prodEnviar.setPreco(dtoRecebido.getPreco());
+			prodEnviar.setPreco(dtoRecebido.getPreco()+dtoRecebido.getPreco()*0.1);
 			prodEnviar.setCategoria(dtoRecebido.getCategoria());
 			prodEnviar.setDescricao(dtoRecebido.getDescricao());
 			carrinhoCompras.add(prodEnviar);
@@ -108,7 +108,7 @@ public class ConsolaWebService {
 			if(controlo==0){
 			prodEnviar.setId(dtoRecebido.getId());
 			prodEnviar.setQuantidade(quantidade);
-			prodEnviar.setPreco(dtoRecebido.getPreco());
+			prodEnviar.setPreco(dtoRecebido.getPreco()+dtoRecebido.getPreco()*0.1);
 			prodEnviar.setCategoria(dtoRecebido.getCategoria());
 			prodEnviar.setDescricao(dtoRecebido.getDescricao());
 			carrinhoCompras.add(prodEnviar);

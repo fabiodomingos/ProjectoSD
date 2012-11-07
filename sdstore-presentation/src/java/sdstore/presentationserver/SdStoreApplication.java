@@ -132,18 +132,14 @@ public class SdStoreApplication {
 	}
 
 	private static void listProdutosByCategoriaCommand(String categoria) {
-		System.out.println(categoria);
 		ProdListDto result = serviceBridge.listaProdutosCategoria(categoria);
-		System.out.println("estou aki");
 		ListaProdutosPresenter.present(result);
 		
 	}
 
 	private static void listCategoriaCommand() {
-		
 		CategoriaListDto result = serviceBridge.listaCategoria();
 		ListaCategoriasPresenter.present(result);
-		
 	}
 
 	private static void checkCommandArg(String command, Integer argCount,

@@ -10,10 +10,9 @@ public class CarrinhoPresenter {
 	public static void present(CarrinhoDto result) {
 		List<ProdutoDto> lista = result.getListaDto();
 		
-		System.out.println("imprimir carrinho");
+		System.out.println("Imprimir carrinho");
 		
 		for(ProdutoDto produto : lista){
-			System.out.println("Aquiiii");
 			System.out.println(produto.getId() + " "+produto.getCategoria()+" "+produto.getDescricao()+" "+produto.getQuantidade()+" "+produto.getPreco()*produto.getQuantidade());
 		}
 		
