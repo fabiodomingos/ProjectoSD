@@ -76,6 +76,7 @@ public class Catalogo {
 	public static Produto getProduto(String nome){
 		for(Produto p : produtoMap){
 			if(p.getId().equals(nome))
+				System.out.println("estouuuuuuuuuu");
 				return p;
 		}
 //		throw new ProdutoIdException(nome);
