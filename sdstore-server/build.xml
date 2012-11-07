@@ -69,7 +69,7 @@
 	</target>
 
 	<!-- this is new: Deploy all the web services -->
-	<target name="deployall" depends="clean,compile,copyclasses,deploy-sdstore-server-fornecedor1" description="Deploy all web services">
+	<target name="deployall" depends="clean,compile,copyclasses,deploy-sdstore-server-fornecedor1,deploy-sdstore-server-fornecedor2" description="Deploy all web services">
 	</target>
 	
 	<target name="deploy" depends="dist" description="Deploy to JBoss AS">

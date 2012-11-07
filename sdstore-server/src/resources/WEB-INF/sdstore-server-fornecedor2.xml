@@ -3,29 +3,28 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
   version="2.4">
 
-   <context-param>
+  <context-param>
   	<param-name>nomeCatalogo</param-name>
   	<param-value>catalogo2</param-value>
-   </context-param>
-   
-   
-   <context-param>
+  </context-param>
+
+  <context-param>
   	<param-name>listaProdutos</param-name>
   	<param-value>C:\Users\Mimoso\workspace\ProjectoSD\sdstore-server\src\resources\WEB-INF\fornecedor2.txt</param-value>
   </context-param>
 
   <listener>
     <description>Manage resource reservation and release upon webapp deployment.</description>
-    <listener-class>sdstore.businessserver.BusinessServerInitListener</listener-class>
+    <listener-class>sdstore.businesserver.BusinessServerInitListener</listener-class>
  </listener>
 
   <servlet>
-    <servlet-name>BusinessServerfornecedor2</servlet-name>
-    <servlet-class>sdstore.businessserver.service.PortalWebService</servlet-class>
+    <servlet-name>BusinessServerFornecedor</servlet-name>
+    <servlet-class>sdstore.businesserver.service.PortalWebService</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>BusinessServerFornecedor2</servlet-name>
+    <servlet-name>BusinessServerFornecedor</servlet-name>
     <url-pattern>/BusinessServerFornecedor2</url-pattern>
   </servlet-mapping>
 </web-app>
