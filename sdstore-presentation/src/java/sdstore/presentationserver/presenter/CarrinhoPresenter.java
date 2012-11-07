@@ -14,7 +14,7 @@ public class CarrinhoPresenter {
 		
 		for(ProdutoDto produto : lista){
 			System.out.println("Aquiiii");
-			System.out.println(produto.getId() + " "+produto.getCategoria()+" "+produto.getDescricao()+" "+produto.getQuantidade()+" "+produto.getPreco());
+			System.out.println(produto.getId() + " "+produto.getCategoria()+" "+produto.getDescricao()+" "+produto.getQuantidade()+" "+produto.getPreco()*produto.getQuantidade());
 		}
 		
 		System.out.println("Preco Total: "+result.getTotalPreco());
