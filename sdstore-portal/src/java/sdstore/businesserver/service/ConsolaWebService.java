@@ -64,7 +64,7 @@ public class ConsolaWebService {
 			novo.setCategoria(prod.getCategoria());
 			novo.setDescricao(prod.getDescricao());
 			novo.setId(prod.getId());
-			novo.setPreco(prod.getPreco());
+			novo.setPreco(prod.getPreco()+0.1*prod.getPreco());
 			novo.setQuantidade(prod.getQuantidade());
 			lista.add(novo);
 		}
@@ -78,6 +78,7 @@ public class ConsolaWebService {
 		Double precoTotal = 0.0;
 		CarrinhoDto dto = new CarrinhoDto(carrinhoCompras);
 		for(ProdutoDto prod : carrinhoCompras){
+			System.out.println(prod);
 			precoTotal = precoTotal + prod.getPreco()*prod.getQuantidade();
 		}
 		dto.setTotalPreco(precoTotal);
@@ -88,18 +89,33 @@ public class ConsolaWebService {
 	public void juntaCarrinho(String codigo,Integer quantidade){
 		updateEndpointUrl("fornecedor1");
 		sdstore.stubs.ProdutoDto dtoRecebido = webService.pedeProduto(codigo);
+		Integer controlo = 0;
 		ProdutoDto prodEnviar = new ProdutoDto();
-		System.out.println("aki passeiiiiiiii");
-		prodEnviar.setId(dtoRecebido.getId());
-		prodEnviar.setQuantidade(quantidade);
-		prodEnviar.setPreco(dtoRecebido.getPreco());
-		prodEnviar.setCategoria(dtoRecebido.getCategoria());
-		prodEnviar.setDescricao(dtoRecebido.getDescricao());
-		System.out.println(prodEnviar);
-		System.out.println("vou meter no carrinho");
-		carrinhoCompras.add(prodEnviar);
-		System.out.println("meti no carrinho");
-		
+		if(carrinhoCompras.isEmpty()){			
+			prodEnviar.setId(dtoRecebido.getId());
+			prodEnviar.setQuantidade(quantidade);
+			prodEnviar.setPreco(dtoRecebido.getPreco());
+			prodEnviar.setCategoria(dtoRecebido.getCategoria());
+			prodEnviar.setDescricao(dtoRecebido.getDescricao());
+			carrinhoCompras.add(prodEnviar);
+		}
+		else{
+			for(ProdutoDto dto: carrinhoCompras){
+				if(dto.getId().equals(codigo)){
+					dto.setQuantidade(quantidade+dto.getQuantidade());
+					controlo=1;
+				}
+			}
+			if(controlo==0){
+			prodEnviar.setId(dtoRecebido.getId());
+			prodEnviar.setQuantidade(quantidade);
+			prodEnviar.setPreco(dtoRecebido.getPreco());
+			prodEnviar.setCategoria(dtoRecebido.getCategoria());
+			prodEnviar.setDescricao(dtoRecebido.getDescricao());
+			carrinhoCompras.add(prodEnviar);
+			}
+		}
+
 	}
 	
 	@WebMethod
