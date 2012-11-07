@@ -11,7 +11,7 @@ public class ProdutoListDto {
 	}
 
 	public ProdutoListDto(List<ProdutoDto> listaNovaProdutos) {
-		// TODO Auto-generated constructor stub
+		listaDto=listaNovaProdutos;
 	}
 
 	public List<ProdutoDto> getListaDto() {
