@@ -78,7 +78,7 @@ public class ConsolaWebService {
 		Double precoTotal = 0.0;
 		CarrinhoDto dto = new CarrinhoDto(carrinhoCompras);
 		for(ProdutoDto prod : carrinhoCompras){
-			precoTotal = precoTotal + prod.getPreco();
+			precoTotal = precoTotal + prod.getPreco()*prod.getQuantidade();
 		}
 		dto.setTotalPreco(precoTotal);
 		return dto;
@@ -87,11 +87,11 @@ public class ConsolaWebService {
 	@WebMethod
 	public void juntaCarrinho(String codigo,Integer quantidade){
 		updateEndpointUrl("fornecedor1");
-		sdstore.stubs.ProdutoDto dtoRecebido = webService.pedeProduto(codigo,quantidade);
+		sdstore.stubs.ProdutoDto dtoRecebido = webService.pedeProduto(codigo);
 		ProdutoDto prodEnviar = new ProdutoDto();
 		System.out.println("aki passeiiiiiiii");
 		prodEnviar.setId(dtoRecebido.getId());
-		prodEnviar.setQuantidade(dtoRecebido.getQuantidade());
+		prodEnviar.setQuantidade(quantidade);
 		prodEnviar.setPreco(dtoRecebido.getPreco());
 		prodEnviar.setCategoria(dtoRecebido.getCategoria());
 		prodEnviar.setDescricao(dtoRecebido.getDescricao());
