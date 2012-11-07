@@ -9,7 +9,7 @@ public interface ApplicationServerBridge{
 
 //	public void Encomenda(ClienteSelectionDto dto);
 	
-//	public void Limpa(ClienteSelectionDto dto);
+	public void Limpa();
 	
 	public void Junta(String codigo,Integer quantidade);
 	
