@@ -8,8 +8,12 @@ import sdstore.presentationserver.exception.PresenterArgumentException;
 import sdstore.presentationserver.exception.PresenterCommandException;
 import sdstore.presentationserver.presenter.AjudaPresenter;
 import sdstore.presentationserver.presenter.ExceptionPresenter;
+import sdstore.presentationserver.presenter.ListaCategoriasPresenter;
+import sdstore.presentationserver.presenter.ListaProdutosPresenter;
 import sdstore.presentationserver.service.bridge.ApplicationServerBridge;
 import sdstore.presentationserver.service.bridge.RemoteApplicationServer;
+import sdstore.presentationserver.service.stubs.CategoriaListDto;
+import sdstore.presentationserver.service.stubs.ProdListDto;
 
 public class SdStoreApplication {
 	
@@ -58,12 +62,12 @@ public class SdStoreApplication {
 		
 		if(command.equals("lista-categorias")){
 //			falta algo
-			Integer validArg = 1;
+			Integer validArg = 0;
 			checkCommandArg(command,argCount,validArg);
 //			String categoria = token[1];
 			listCategoriaCommand();
 		}else if (command.equals("lista-produtos")) {
-			Integer validArg = 2;
+			Integer validArg = 1;
 			checkCommandArg(command,argCount,validArg);
 			String categoria = token[1];
 			listProdutosByCategoriaCommand(categoria);
@@ -154,26 +158,17 @@ public class SdStoreApplication {
 	}
 
 	private static void listProdutosByCategoriaCommand(String categoria) {
-//		cria o dto
-//		CategoriaDto dto = DtoConstructor.createCategoriaDto(categoria);
-		try {
-//			ProdutoListDto resultado = serviceBridge.ListaProdutosCategoria(dto);
-//			ListaProdutosPresenter.present(resultado);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		System.out.println(categoria);
+		ProdListDto result = serviceBridge.listaProdutosCategoria(categoria);
+		System.out.println("estou aki");
+		ListaProdutosPresenter.present(result);
 		
 	}
 
 	private static void listCategoriaCommand() {
-//		cria o dto
-//		ClienteSelectionDto dto = DtoConstructor.createCategoriaDto(cliente);
-		try {
-//			CategoriaListDto resultado = serviceBridge.ListaCategoria(dto);
-//			ListaCategoriasPresenter.present(resultado);
-		} catch (Exception e) {
-//			ExceptionPresenter.present(e);
-		}
+		
+		CategoriaListDto result = serviceBridge.listaCategoria();
+		ListaCategoriasPresenter.present(result);
 		
 	}
 
