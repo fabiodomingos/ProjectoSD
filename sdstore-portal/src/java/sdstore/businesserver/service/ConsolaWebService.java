@@ -102,4 +102,11 @@ public class ConsolaWebService {
 		
 	}
 	
+	@WebMethod
+	public void limpaCarrinho(){
+		updateEndpointUrl("fornecedor1");
+		carrinhoCompras.clear();
+		
+	}
+	
 }
