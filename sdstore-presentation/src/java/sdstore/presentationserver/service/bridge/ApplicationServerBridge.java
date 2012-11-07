@@ -7,7 +7,7 @@ import sdstore.presentationserver.service.stubs.ProdutoDto;
 
 public interface ApplicationServerBridge{
 
-//	public void Encomenda(ClienteSelectionDto dto);
+	public void Encomenda();
 	
 	public void Limpa();
 	

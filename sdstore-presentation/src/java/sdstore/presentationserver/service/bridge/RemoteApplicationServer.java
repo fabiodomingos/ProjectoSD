@@ -69,5 +69,12 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 		webService.limpaCarrinho();
 	}
 	
+	@Override
+	public void Encomenda() {
+		updateEndpointUrl();
+		webService.encomenda();
+		
+	}
+	
 	
 }

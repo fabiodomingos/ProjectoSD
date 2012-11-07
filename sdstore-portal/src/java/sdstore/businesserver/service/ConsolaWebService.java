@@ -109,4 +109,12 @@ public class ConsolaWebService {
 		
 	}
 	
+	@WebMethod
+	public void encomenda(){
+		updateEndpointUrl("fornecedor1");
+		for(ProdutoDto prod: carrinhoCompras){
+			String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade());
+		}
+		carrinhoCompras.clear();
+	}
 }

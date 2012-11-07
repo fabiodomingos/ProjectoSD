@@ -79,7 +79,7 @@ public class SdStoreApplication {
 			limpaCommand();
 //			faz algo
 		}else if(command.equals("encomenda")){
-			Integer validArg = 1;
+			Integer validArg = 0;
 			checkCommandArg(command,argCount,validArg);
 			encomendaCommand();
 //			faz algo
