@@ -20,10 +20,9 @@ public class ListaProdutoService extends PortalService{
 	@Override
 	public final void dispatch() {
 		List<Produto> listaProdutos = Catalogo.getProdutoList();
-		List<ProdutoDto> listaNovaProdutos = new ArrayList<ProdutoDto>();
-		
+		List<ProdutoDto> listaNovaProdutos = new ArrayList<ProdutoDto>();		
 		for(Produto prod : listaProdutos){
-			if(prod.getId().equals(_categoria)){
+			if(prod.getCategoria().equals(_categoria)){
 				ProdutoDto dto = new ProdutoDto();
 				dto.setId(prod.getId());
 				dto.setPreco(prod.getPreco());
@@ -31,7 +30,6 @@ public class ListaProdutoService extends PortalService{
 				dto.setDescricao(prod.getDescricao());
 				dto.setCategoria(prod.getCategoria());
 				listaNovaProdutos.add(dto);
-//				listaNovaProdutos.add(prod);
 			}
 		}
 		result = new ProdutoListDto(listaNovaProdutos);
