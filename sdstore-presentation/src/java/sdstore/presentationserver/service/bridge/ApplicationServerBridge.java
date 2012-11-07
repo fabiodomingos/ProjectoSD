@@ -1,5 +1,8 @@
 package sdstore.presentationserver.service.bridge;
 
+import sdstore.presentationserver.service.stubs.CategoriaListDto;
+import sdstore.presentationserver.service.stubs.ProdListDto;
+
 public interface ApplicationServerBridge{
 
 //	public void Encomenda(ClienteSelectionDto dto);
@@ -10,7 +13,7 @@ public interface ApplicationServerBridge{
 	
 //	public ProdutoListDto Carrinho(ClienteSelectionDto dto);
 	
-//	public ProdutoListDto ListaProdutosCategoria(CategoriaDto dto);
+	public ProdListDto listaProdutosCategoria(String categoria);
 	
-//	public CategoriaListDto ListaCategoria(ClienteSelectionDto dto);
+	public CategoriaListDto listaCategoria();
 }
