@@ -5,10 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import sdstore.businesserver.exception.ProdutoListException;
-import sdstore.businesserver.service.dto.ProdutoDto;
-
 
 public class Catalogo {
 	
