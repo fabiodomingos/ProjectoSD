@@ -1,11 +1,15 @@
 package sdstore.presentationserver.presenter;
 
+import java.util.List;
+
+import sdstore.presentationserver.service.stubs.CategoriaListDto;
+
 public class ListaCategoriasPresenter {
 
 	public static void present(CategoriaListDto dto){
-		List<CategoriaDto> categoriaList = dto.getCategoriaList();
-		for(CategoriaDto categoriaDto : categoriaList){
-//			System.out.println(categoriaDto);
+		List<String> categoriaList = dto.getCategoriaList();
+		for(String categoriaDto : categoriaList){
+			System.out.println(categoriaDto);
 		}
 	}
 }
