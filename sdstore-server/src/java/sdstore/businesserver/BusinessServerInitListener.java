@@ -23,12 +23,9 @@ public class BusinessServerInitListener implements ServletContextListener{
 	public void contextInitialized(ServletContextEvent arg0){
 		//codigo para executar apos o deploy da aplicacao no jboss
 		try {
-//			String fornecedorName = arg0.getServletContext().getInitParameter("fornecedorName");
 			String catalogoName = arg0.getServletContext().getInitParameter("nomeCatalogo");
 			String listaProdutosTxt = arg0.getServletContext().getInitParameter("listaProdutos");
-//			Fornecedor.createFornecedor(fornecedorName);
-//			Fornecedor f  = Fornecedor.getFornecedor(fornecedorName);
-			
+
 //			le a linha do ficheiro
 			File file = new File(listaProdutosTxt);
 			FileInputStream in = new FileInputStream(file);
@@ -38,7 +35,6 @@ public class BusinessServerInitListener implements ServletContextListener{
 			Catalogo.createCatalogo(catalogoName);
 			
 			while(scanner.hasNext()){
-//				String
 				String readLine = scanner.nextLine();
 				System.out.println("linha lida"+readLine);
 				String[] splited = readLine.split(" ");
@@ -51,13 +47,7 @@ public class BusinessServerInitListener implements ServletContextListener{
 				Catalogo catalogo = Catalogo.getCatalogo(catalogoName);
 //				vai buscar um produto e regista no catalogo
 				Produto p = Produto.getProduto(splited[0]);
-				catalogo.registaProduto(p,Double.parseDouble(splited[3]), Integer.parseInt(splited[4]));
-				
-//				Produto p = Produto.getProduto(splited[0]);
-//				registo esse produto no fornecedor correspondente dando o preco,quantidade
-//				f.registerProduto(p,  Integer.parseInt(splited[3]), Integer.parseInt(splited[4]));
-//				readLine.concat(" "); vai dividir por espacos
-				
+				catalogo.registaProduto(p,Double.parseDouble(splited[3]), Integer.parseInt(splited[4]));				
 			}
 			
 		} catch (Exception e) {
