@@ -19,7 +19,6 @@
 	<property name="stubs.package" value="sdstore.stubs" />
 
 	<target name="clean">
-		<delete dir="${src.dir}/sdstore/stubs" />
 		<delete dir="${build.dir}" />
 		<delete dir="${dist.dir}" />
 		<delete file="${resources.dir}/WEB-INF/web.xml" />
