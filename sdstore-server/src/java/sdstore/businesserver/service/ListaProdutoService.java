@@ -5,6 +5,8 @@ import java.util.List;
 
 import sdstore.businesserver.domain.Catalogo;
 import sdstore.businesserver.domain.Produto;
+import sdstore.businesserver.exception.CategoriaNameException;
+import sdstore.businesserver.exception.ProdutoListException;
 import sdstore.businesserver.service.dto.ProdutoDto;
 import sdstore.businesserver.service.dto.ProdutoListDto;
 
@@ -18,21 +20,25 @@ public class ListaProdutoService extends PortalService{
 	}
 	
 	@Override
-	public final void dispatch() {
-		List<Produto> listaProdutos = Catalogo.getProdutoList();
-		List<ProdutoDto> listaNovaProdutos = new ArrayList<ProdutoDto>();		
-		for(Produto prod : listaProdutos){
-			if(prod.getCategoria().equals(_categoria)){
-				ProdutoDto dto = new ProdutoDto();
-				dto.setId(prod.getId());
-				dto.setPreco(prod.getPreco());
-				dto.setQuantidade(prod.getQuantidade());
-				dto.setDescricao(prod.getDescricao());
-				dto.setCategoria(prod.getCategoria());
-				listaNovaProdutos.add(dto);
+	public final void dispatch() throws ProdutoListException{
+		try{
+			List<Produto> listaProdutos = Catalogo.getProdutoList();
+			List<ProdutoDto> listaNovaProdutos = new ArrayList<ProdutoDto>();		
+			for(Produto prod : listaProdutos){
+				if(prod.getCategoria().equals(_categoria)){
+					ProdutoDto dto = new ProdutoDto();
+					dto.setId(prod.getId());
+					dto.setPreco(prod.getPreco());
+					dto.setQuantidade(prod.getQuantidade());
+					dto.setDescricao(prod.getDescricao());
+					dto.setCategoria(prod.getCategoria());
+					listaNovaProdutos.add(dto);
+				}
 			}
+			result = new ProdutoListDto(listaNovaProdutos);
+		}catch(ProdutoListException e){
+			throw e;
 		}
-		result = new ProdutoListDto(listaNovaProdutos);
 	}
 	
 	public ProdutoListDto getListProdutos(){
