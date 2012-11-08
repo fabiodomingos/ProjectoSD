@@ -82,7 +82,7 @@ public class Catalogo {
 	
 	public static List<Produto> getProdutoList() throws ProdutoListException{
 		if(produtoMap.isEmpty()){
-			throw new ProdutoListException(null);
+			throw new ProdutoListException();
 		}
 		return produtoMap;
 
