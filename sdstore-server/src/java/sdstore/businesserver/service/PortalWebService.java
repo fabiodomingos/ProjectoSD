@@ -3,6 +3,7 @@ package sdstore.businesserver.service;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import sdstore.businesserver.exception.ProdutoListException;
 import sdstore.businesserver.service.dto.CategoriaListDto;
 import sdstore.businesserver.service.dto.ProdutoDto;
 import sdstore.businesserver.service.dto.ProdutoListDto;
@@ -37,7 +38,7 @@ public class PortalWebService {
 	}
 	
 	@WebMethod
-	public CategoriaListDto ListaCategoriaWebService() {
+	public CategoriaListDto ListaCategoriaWebService() throws ProdutoListException{
 		ListaCategoriaService service = new ListaCategoriaService();
 		service.execute();
 		CategoriaListDto result = service.getListCategoria();
