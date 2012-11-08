@@ -6,6 +6,7 @@ import java.util.List;
 import sdstore.businesserver.domain.Catalogo;
 
 import sdstore.businesserver.domain.Produto;
+import sdstore.businesserver.exception.CategoriaNameException;
 import sdstore.businesserver.exception.ProdutoListException;
 import sdstore.businesserver.service.dto.CategoriaListDto;
 
