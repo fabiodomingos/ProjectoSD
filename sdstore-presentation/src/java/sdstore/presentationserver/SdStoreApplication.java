@@ -6,16 +6,19 @@ import java.io.InputStreamReader;
 import sdstore.presentationserver.exception.PresenterArgumentCountException;
 import sdstore.presentationserver.exception.PresenterArgumentException;
 import sdstore.presentationserver.exception.PresenterCommandException;
+import sdstore.presentationserver.exception.ProdutoListException;
 import sdstore.presentationserver.presenter.AjudaPresenter;
 import sdstore.presentationserver.presenter.CarrinhoPresenter;
 import sdstore.presentationserver.presenter.ExceptionPresenter;
 import sdstore.presentationserver.presenter.ListaCategoriasPresenter;
 import sdstore.presentationserver.presenter.ListaProdutosPresenter;
+import sdstore.presentationserver.presenter.ProdutoListExceptionPresenter;
 import sdstore.presentationserver.service.bridge.ApplicationServerBridge;
 import sdstore.presentationserver.service.bridge.RemoteApplicationServer;
 import sdstore.presentationserver.service.stubs.CarrinhoDto;
 import sdstore.presentationserver.service.stubs.CategoriaListDto;
 import sdstore.presentationserver.service.stubs.ProdListDto;
+
 
 public class SdStoreApplication {
 	
@@ -138,8 +141,12 @@ public class SdStoreApplication {
 	}
 
 	private static void listCategoriaCommand() {
+		try{
 		CategoriaListDto result = serviceBridge.listaCategoria();
 		ListaCategoriasPresenter.present(result);
+		}catch (ProdutoListException e) {
+			ProdutoListExceptionPresenter.present(e);
+		}
 	}
 
 	private static void checkCommandArg(String command, Integer argCount,
