@@ -9,12 +9,14 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.xml.ws.BindingProvider;
 
+import sdstore.businesserver.exception.ProdutoListException;
 import sdstore.businesserver.service.dto.CarrinhoDto;
 import sdstore.businesserver.service.dto.CategoriaListDto;
 import sdstore.businesserver.service.dto.ProdListDto;
 import sdstore.businesserver.service.dto.ProdutoDto;
 import sdstore.stubs.PortalWebService;
 import sdstore.stubs.PortalWebServiceService;
+import sdstore.stubs.ProdutoListException_Exception;
 
 @WebService
 public class ConsolaWebService {
@@ -45,12 +47,16 @@ public class ConsolaWebService {
 	}
 	
 	@WebMethod
-	public CategoriaListDto listaCategoriaWebService(){
+	public CategoriaListDto listaCategoriaWebService() throws ProdutoListException{
+		try{
 		updateEndpointUrl("fornecedor1");
 		List<String> listaCategoria =  webService.listaCategoriaWebService().getCategoriaList();
 		CategoriaListDto dto = new CategoriaListDto();
 		dto.setCategoriaList(listaCategoria);
 		return dto;
+		}catch(ProdutoListException_Exception e){
+			throw new ProdutoListException();
+		}
 	}
 	
 	@WebMethod
