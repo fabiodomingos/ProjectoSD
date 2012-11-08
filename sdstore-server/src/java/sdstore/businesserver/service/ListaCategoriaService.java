@@ -18,8 +18,7 @@ public class ListaCategoriaService extends PortalService {
 	}
 
 	@Override
-	public final void dispatch() throws ProdutoListException{
-		try{
+	public final void dispatch(){
 			List<Produto> listaProdutos = Catalogo.getProdutoList();
 			List<String> listaCategoria = new ArrayList<String>();
 			
@@ -27,10 +26,6 @@ public class ListaCategoriaService extends PortalService {
 				listaCategoria.add(p.getCategoria());
 			}
 			result = new CategoriaListDto(listaCategoria);
-		
-		}catch(ProdutoListException e){
-			throw e;
-		}
 	}
 	
 	public CategoriaListDto getListCategoria(){
