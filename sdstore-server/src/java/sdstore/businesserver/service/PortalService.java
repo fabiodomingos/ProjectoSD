@@ -1,11 +1,13 @@
 package sdstore.businesserver.service;
 
+import sdstore.businesserver.exception.PortalException;
+
 public abstract class PortalService {
 
-public abstract void dispatch();
+public abstract void dispatch() throws PortalException;
 	
 	//@Atomic
-	public void execute() {
+	public void execute() throws PortalException {
 		dispatch();
 	}
 }
