@@ -19,12 +19,12 @@
  </listener>
 
   <servlet>
-    <servlet-name>BusinessServerFornecedor</servlet-name>
+    <servlet-name>BusinessServerFornecedor2</servlet-name>
     <servlet-class>sdstore.businesserver.service.PortalWebService</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>BusinessServerFornecedor</servlet-name>
+    <servlet-name>BusinessServerFornecedor2</servlet-name>
     <url-pattern>/BusinessServerFornecedor2</url-pattern>
   </servlet-mapping>
 </web-app>
