@@ -5,11 +5,13 @@ import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
 
+import sdstore.presentationserver.exception.ProdutoListException;
 import sdstore.presentationserver.service.stubs.CarrinhoDto;
 import sdstore.presentationserver.service.stubs.CategoriaListDto;
 import sdstore.presentationserver.service.stubs.ConsolaWebService;
 import sdstore.presentationserver.service.stubs.ConsolaWebServiceService;
 import sdstore.presentationserver.service.stubs.ProdListDto;
+import sdstore.presentationserver.service.stubs.ProdutoListException_Exception;
 
 public class RemoteApplicationServer implements ApplicationServerBridge{
 
@@ -36,10 +38,14 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	}
 
 	@Override
-	public CategoriaListDto listaCategoria() {
+	public CategoriaListDto listaCategoria() throws ProdutoListException {
+		try{
 		updateEndpointUrl();
 		CategoriaListDto resultado = webService.listaCategoriaWebService();
 		return resultado;
+		}catch(ProdutoListException_Exception e){
+			throw new ProdutoListException();
+		}
 	}
 
 	@Override
