@@ -9,14 +9,20 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.xml.ws.BindingProvider;
 
+import sdstore.businesserver.exception.CategoriaNameException;
+import sdstore.businesserver.exception.ProdutoExistException;
 import sdstore.businesserver.exception.ProdutoListException;
+import sdstore.businesserver.exception.QuantidadeException;
 import sdstore.businesserver.service.dto.CarrinhoDto;
 import sdstore.businesserver.service.dto.CategoriaListDto;
 import sdstore.businesserver.service.dto.ProdListDto;
 import sdstore.businesserver.service.dto.ProdutoDto;
+import sdstore.stubs.CategoriaNameException_Exception;
 import sdstore.stubs.PortalWebService;
 import sdstore.stubs.PortalWebServiceService;
+import sdstore.stubs.ProdutoExistException_Exception;
 import sdstore.stubs.ProdutoListException_Exception;
+import sdstore.stubs.QuantidadeException_Exception;
 
 @WebService
 public class ConsolaWebService {
@@ -60,8 +66,10 @@ public class ConsolaWebService {
 	}
 	
 	@WebMethod
-	public ProdListDto listaProduto(String categoria){
+	public ProdListDto listaProduto(String categoria) throws ProdutoListException, CategoriaNameException{
+		
 		updateEndpointUrl("fornecedor1");
+		try{
 		List<sdstore.stubs.ProdutoDto> listaProduto = webService.listaProdutoWebService(categoria).getListaDto();
 		List<ProdutoDto> lista = new ArrayList<ProdutoDto>();		
 		for(sdstore.stubs.ProdutoDto prod : listaProduto){
@@ -75,6 +83,11 @@ public class ConsolaWebService {
 		}
 		ProdListDto dto = new ProdListDto(lista);
 		return dto;
+		}catch(ProdutoListException_Exception e){
+			throw new ProdutoListException();
+		}catch(CategoriaNameException_Exception e){
+			throw new CategoriaNameException(categoria);
+		}
 	}
 	
 	@WebMethod
@@ -91,8 +104,9 @@ public class ConsolaWebService {
 	}
 	
 	@WebMethod
-	public void juntaCarrinho(String codigo,Integer quantidade){
+	public void juntaCarrinho(String codigo,Integer quantidade) throws ProdutoExistException{
 		updateEndpointUrl("fornecedor1");
+		try{
 		sdstore.stubs.ProdutoDto dtoRecebido = webService.pedeProduto(codigo);
 		Integer controlo = 0;
 		ProdutoDto prodEnviar = new ProdutoDto();
@@ -120,6 +134,9 @@ public class ConsolaWebService {
 			carrinhoCompras.add(prodEnviar);
 			}
 		}
+		}catch(ProdutoExistException_Exception e){
+			throw new ProdutoExistException(codigo);
+		}
 
 	}
 	
@@ -131,11 +148,22 @@ public class ConsolaWebService {
 	}
 	
 	@WebMethod
-	public void encomenda(){
+	public void encomenda() throws ProdutoExistException, QuantidadeException{
+		String nome = null;
+		Integer quantidade = 0;
+		try{		
 		updateEndpointUrl("fornecedor1");
 		for(ProdutoDto prod: carrinhoCompras){
 			String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade());
+			nome = prod.getId();
+			quantidade = prod.getQuantidade();
 		}
 		carrinhoCompras.clear();
+		}catch(ProdutoExistException_Exception e){
+			throw new ProdutoExistException(nome);
+		}catch(QuantidadeException_Exception e){
+			carrinhoCompras.clear();
+			throw new QuantidadeException(quantidade);
+		}
 	}
 }

@@ -23,6 +23,10 @@
 		<delete dir="${dist.dir}" />
 		<delete file="${resources.dir}/WEB-INF/web.xml" />
 	</target>
+	
+	<target name="clean-stubs">
+		<delete dir="${src.dir}/sdstore/stubs" />
+		</target>
 
 	<target name="init">
 		<mkdir dir="${build.dir}" />
