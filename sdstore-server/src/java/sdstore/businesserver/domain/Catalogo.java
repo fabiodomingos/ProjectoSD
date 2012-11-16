@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sdstore.businesserver.exception.ProdutoExistException;
 import sdstore.businesserver.exception.ProdutoListException;
+import sdstore.businesserver.exception.QuantidadeException;
 
 public class Catalogo {
 	
@@ -71,10 +73,16 @@ public class Catalogo {
 	}
 	
 	
-	public static Produto getProduto(String nome){
+	public static Produto getProduto(String nome) throws ProdutoExistException{
+		Integer controlo = 0;
 		for(Produto p : produtoMap){
-			if(p.getId().equals(nome))
+			if(p.getId().equals(nome)){
+				controlo = 1;
 				return p;
+			}			
+		}
+		if(controlo==0){
+			throw new ProdutoExistException(nome);
 		}
 //		throw new ProdutoIdException(nome);
 		return null;
@@ -100,17 +108,25 @@ public class Catalogo {
 		produtoMap.add(p);
 	}
 
-	public static String retiraProduto(String _codigo,Integer _quantidade) {
+	public static String retiraProduto(String _codigo,Integer _quantidade) throws ProdutoExistException, QuantidadeException {
 		String resultado = " ";
+		Integer controlo = 0;
 		for(Produto prod : produtoMap){
 			if(prod.getId().equals(_codigo)){
-				if(prod.getQuantidade()==0){
+				controlo = 1;
+				if(prod.getQuantidade()<_quantidade){
 					resultado="KO";
 				}else{
 					prod.setQuantidade(prod.getQuantidade()-_quantidade);
 					resultado="OK";
 				}
 			}
+		}
+		if(resultado.equals("KO")){
+			throw new QuantidadeException(_quantidade);
+		}
+		if(controlo==0){
+			throw new ProdutoExistException(_codigo);
 		}
 		return resultado;
 	}

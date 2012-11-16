@@ -1,5 +1,6 @@
 package sdstore.presentationserver.presenter;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import sdstore.presentationserver.service.stubs.CarrinhoDto;
@@ -13,10 +14,14 @@ public class CarrinhoPresenter {
 		System.out.println("Imprimir carrinho");
 		
 		for(ProdutoDto produto : lista){
-			System.out.println(produto.getId() + " "+produto.getCategoria()+" "+produto.getDescricao()+" "+produto.getQuantidade()+" "+produto.getPreco()*produto.getQuantidade());
+			DecimalFormat precoTotal = new DecimalFormat("0.00");
+			String str = precoTotal.format(produto.getPreco()*produto.getQuantidade());
+			System.out.println(produto.getId() + " "+produto.getCategoria()+" "+produto.getDescricao()+" "+produto.getQuantidade()+" "+str);
 		}
 		
-		System.out.println("Preco Total: "+result.getTotalPreco());
+		DecimalFormat precoCarrinho = new DecimalFormat("0.00");
+		String str2 = precoCarrinho.format(result.getTotalPreco());
+		System.out.println("Preco Total: "+str2);
 		
 	}
 

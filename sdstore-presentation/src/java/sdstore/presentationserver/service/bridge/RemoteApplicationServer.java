@@ -5,13 +5,19 @@ import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
 
+import sdstore.presentationserver.exception.CategoriaNameException;
+import sdstore.presentationserver.exception.ProdutoExistException;
 import sdstore.presentationserver.exception.ProdutoListException;
+import sdstore.presentationserver.exception.QuantidadeException;
 import sdstore.presentationserver.service.stubs.CarrinhoDto;
 import sdstore.presentationserver.service.stubs.CategoriaListDto;
+import sdstore.presentationserver.service.stubs.CategoriaNameException_Exception;
 import sdstore.presentationserver.service.stubs.ConsolaWebService;
 import sdstore.presentationserver.service.stubs.ConsolaWebServiceService;
 import sdstore.presentationserver.service.stubs.ProdListDto;
+import sdstore.presentationserver.service.stubs.ProdutoExistException_Exception;
 import sdstore.presentationserver.service.stubs.ProdutoListException_Exception;
+import sdstore.presentationserver.service.stubs.QuantidadeException_Exception;
 
 public class RemoteApplicationServer implements ApplicationServerBridge{
 
@@ -49,20 +55,30 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	}
 
 	@Override
-	public ProdListDto listaProdutosCategoria(String categoria) {
+	public ProdListDto listaProdutosCategoria(String categoria) throws ProdutoListException, CategoriaNameException {
+		try{
 		updateEndpointUrl();
 		ProdListDto resultado = webService.listaProduto(categoria);
 		return resultado;
+		}catch(ProdutoListException_Exception e){
+			throw new ProdutoListException();
+		}catch(CategoriaNameException_Exception e){
+			throw new CategoriaNameException(categoria);
+		}
 	}
 
 	@Override
-	public void Junta(String codigo,Integer quantidade) {
+	public void Junta(String codigo,Integer quantidade) throws ProdutoExistException {
+		try{
 		updateEndpointUrl();
 		webService.juntaCarrinho(codigo, quantidade);
+		}catch(ProdutoExistException_Exception e){
+			throw new ProdutoExistException(codigo);
+		}
 	}
 
 	@Override
-	public CarrinhoDto Carrinho() {
+	public CarrinhoDto Carrinho(){
 		updateEndpointUrl();
 		CarrinhoDto dtoCarrinho = webService.listaCarrinho();
 		return dtoCarrinho;
@@ -75,9 +91,15 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	}
 	
 	@Override
-	public void Encomenda() {
+	public void Encomenda() throws ProdutoExistException, QuantidadeException {
+		try{
 		updateEndpointUrl();
 		webService.encomenda();
+		}catch(ProdutoExistException_Exception e){
+			throw new ProdutoExistException(null);
+		}catch(QuantidadeException_Exception e){
+			throw new QuantidadeException(null);
+		}
 		
 	}
 	

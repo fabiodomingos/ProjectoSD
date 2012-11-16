@@ -1,7 +1,9 @@
 package sdstore.businesserver.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import sdstore.businesserver.domain.Catalogo;
 
@@ -22,7 +24,7 @@ public class ListaCategoriaService extends PortalService {
 	public final void dispatch() throws ProdutoListException{
 		try{
 			List<Produto> listaProdutos = Catalogo.getProdutoList();
-			List<String> listaCategoria = new ArrayList<String>();
+			Set<String> listaCategoria = new HashSet<String>();
 			
 			for(Produto p : listaProdutos){
 				listaCategoria.add(p.getCategoria());

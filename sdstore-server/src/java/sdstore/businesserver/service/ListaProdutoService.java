@@ -20,8 +20,9 @@ public class ListaProdutoService extends PortalService{
 	}
 	
 	@Override
-	public final void dispatch() throws ProdutoListException{
+	public final void dispatch() throws ProdutoListException, CategoriaNameException{
 		try{
+			Integer controlo=0;
 			List<Produto> listaProdutos = Catalogo.getProdutoList();
 			List<ProdutoDto> listaNovaProdutos = new ArrayList<ProdutoDto>();		
 			for(Produto prod : listaProdutos){
@@ -33,7 +34,11 @@ public class ListaProdutoService extends PortalService{
 					dto.setDescricao(prod.getDescricao());
 					dto.setCategoria(prod.getCategoria());
 					listaNovaProdutos.add(dto);
+					controlo = 1;
 				}
+			}
+			if(controlo==0){
+				throw new CategoriaNameException(_categoria);
 			}
 			result = new ProdutoListDto(listaNovaProdutos);
 		}catch(ProdutoListException e){

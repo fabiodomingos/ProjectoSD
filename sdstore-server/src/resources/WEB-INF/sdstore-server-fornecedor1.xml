@@ -10,7 +10,7 @@
 
   <context-param>
   	<param-name>listaProdutos</param-name>
-  	<param-value>C:\Users\Mimoso\workspace\ProjectoSD\sdstore-server\src\resources\WEB-INF\fornecedor1.txt</param-value>
+  	<param-value>/Users/fabiodomingos/Desktop/projecto versao actual- co excepcoes 2/ProjectoSD/sdstore-server/src/resources/WEB-INF/fornecedor1.txt</param-value>
   </context-param>
 
   <listener>

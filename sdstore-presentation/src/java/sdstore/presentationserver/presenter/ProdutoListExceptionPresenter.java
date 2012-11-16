@@ -5,8 +5,12 @@ import sdstore.presentationserver.exception.ProdutoListException;
 public class ProdutoListExceptionPresenter {
 
 	public static void present(ProdutoListException e) {
-		System.out.println("Nao existem produtos");
+		output("nao existe lista de produtos!");
 		
+	}
+	
+	private static void output(String msg){
+		System.out.println("[SDStore]> " + msg);
 	}
 
 }

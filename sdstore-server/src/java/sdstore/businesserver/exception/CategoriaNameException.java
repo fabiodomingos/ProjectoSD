@@ -1,6 +1,6 @@
 package sdstore.businesserver.exception;
 
-public class CategoriaNameException extends Exception {
+public class CategoriaNameException extends PortalException {
 
 	/**
 	 * 
@@ -25,9 +25,8 @@ public class CategoriaNameException extends Exception {
 		this.nome = nome;
 	}
 	
+	public CategoriaNameException(){
+		
+	}
 	
-	
-	
-	
-
 }

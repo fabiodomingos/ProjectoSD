@@ -3,21 +3,29 @@ package sdstore.presentationserver;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import sdstore.presentationserver.exception.CategoriaNameException;
 import sdstore.presentationserver.exception.PresenterArgumentCountException;
 import sdstore.presentationserver.exception.PresenterArgumentException;
 import sdstore.presentationserver.exception.PresenterCommandException;
+import sdstore.presentationserver.exception.ProdutoExistException;
 import sdstore.presentationserver.exception.ProdutoListException;
+import sdstore.presentationserver.exception.QuantidadeException;
 import sdstore.presentationserver.presenter.AjudaPresenter;
+import sdstore.presentationserver.presenter.CarrinhoExceptionPresenter;
 import sdstore.presentationserver.presenter.CarrinhoPresenter;
+import sdstore.presentationserver.presenter.CategoriaNameExceptionPresenter;
 import sdstore.presentationserver.presenter.ExceptionPresenter;
 import sdstore.presentationserver.presenter.ListaCategoriasPresenter;
 import sdstore.presentationserver.presenter.ListaProdutosPresenter;
+import sdstore.presentationserver.presenter.ProdutoExistExceptionPresenter;
 import sdstore.presentationserver.presenter.ProdutoListExceptionPresenter;
+import sdstore.presentationserver.presenter.QuantidadeExceptionPresenter;
 import sdstore.presentationserver.service.bridge.ApplicationServerBridge;
 import sdstore.presentationserver.service.bridge.RemoteApplicationServer;
 import sdstore.presentationserver.service.stubs.CarrinhoDto;
 import sdstore.presentationserver.service.stubs.CategoriaListDto;
 import sdstore.presentationserver.service.stubs.ProdListDto;
+import sdstore.presentationserver.service.stubs.ProdutoListException_Exception;
 
 
 public class SdStoreApplication {
@@ -99,8 +107,10 @@ public class SdStoreApplication {
 	private static void encomendaCommand() {
 		try {
 			serviceBridge.Encomenda();
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (ProdutoExistException e) {
+			ProdutoExistExceptionPresenter.present(e);
+		}catch(QuantidadeException e){
+			QuantidadeExceptionPresenter.present(e);
 		}
 		
 	}
@@ -118,8 +128,8 @@ public class SdStoreApplication {
 		try {
 			serviceBridge.Junta(codigo,quantidade);
 //			serviceBridge.Junta(dto);
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (ProdutoExistException e) {
+			ProdutoExistExceptionPresenter.present(e);
 		}
 	}
 
@@ -129,14 +139,20 @@ public class SdStoreApplication {
 			CarrinhoDto result = serviceBridge.Carrinho();
 			CarrinhoPresenter.present(result);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 		
 	}
 
 	private static void listProdutosByCategoriaCommand(String categoria) {
+		try{
 		ProdListDto result = serviceBridge.listaProdutosCategoria(categoria);
 		ListaProdutosPresenter.present(result);
+		}catch(ProdutoListException e){
+			ProdutoListExceptionPresenter.present(e);
+		}catch(CategoriaNameException e){
+			CategoriaNameExceptionPresenter.present(e);
+		}
 		
 	}
 
