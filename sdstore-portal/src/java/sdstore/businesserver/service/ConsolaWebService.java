@@ -83,9 +83,10 @@ public class ConsolaWebService {
 		
 		
 		try{
+			int i;
+			listaProdutosPortal.clear();
 			updateEndpointUrl("fornecedor1");
 			List<sdstore.stubs.ProdutoDto> listaProduto = webService.listaProdutoWebService(categoria).getListaDto();
-			//List<ProdutoDto> lista = new ArrayList<ProdutoDto>();		
 			for(sdstore.stubs.ProdutoDto prod : listaProduto){
 				ProdutoDto novo = new ProdutoDto();
 				novo.setCategoria(prod.getCategoria());
@@ -94,11 +95,9 @@ public class ConsolaWebService {
 				novo.setPreco(prod.getPreco()+0.1*prod.getPreco());
 				novo.setQuantidade(prod.getQuantidade());
 				juntaProdutos(novo);
-				//lista.add(novo);
 			}
 			updateEndpointUrl("fornecedor2");
 			List<sdstore.stubs.ProdutoDto> listaProduto2 = webService.listaProdutoWebService(categoria).getListaDto();
-			//List<ProdutoDto> lista = new ArrayList<ProdutoDto>();		
 			for(sdstore.stubs.ProdutoDto prod : listaProduto2){
 				ProdutoDto novo = new ProdutoDto();
 				novo.setCategoria(prod.getCategoria());
@@ -107,7 +106,6 @@ public class ConsolaWebService {
 				novo.setPreco(prod.getPreco()+0.1*prod.getPreco());
 				novo.setQuantidade(prod.getQuantidade());
 				juntaProdutos(novo);
-				//lista.add(novo);
 			}	
 			ProdListDto dto = new ProdListDto(listaProdutosPortal);
 			return dto;
@@ -205,19 +203,23 @@ public class ConsolaWebService {
 		Double preco = dto.getPreco();
 		Integer stock = dto.getQuantidade();
 		String codigo = dto.getId();
-		for(ProdutoDto aux: listaProdutosPortal){
-			if(aux.getId().equals(codigo)){
-				listaProdutosPortal.remove(aux);
-				dto.setQuantidade(stock+aux.getQuantidade());
-				if(preco<aux.getPreco()){
-					dto.setPreco(preco);
+		Integer controlo=0;
+		if(listaProdutosPortal.isEmpty()){
+			listaProdutosPortal.add(dto);
+		}
+		else{
+			for(ProdutoDto aux: listaProdutosPortal){
+				if(aux.getId().equals(codigo)){
+					aux.setQuantidade(stock+aux.getQuantidade());
+					if(aux.getPreco()>preco){
+						aux.setPreco(preco);
+					}
+					controlo = 1;
 				}
-				else{
-					dto.setPreco(aux.getPreco());
-				}
+			}
+			if(controlo == 0){
 				listaProdutosPortal.add(dto);
 			}
-			listaProdutosPortal.add(dto);
 		}
 	}
 	
