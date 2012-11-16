@@ -33,6 +33,7 @@ public class ConsolaWebService {
 //	carrinho de compras do cliente
 	private List<ProdutoDto> carrinhoCompras = new ArrayList<ProdutoDto>();
 	private Set<String> listaCategoriasPortal = new HashSet<String>();
+	private Set<ProdutoDto> listaProdutosPortal = new HashSet<ProdutoDto>();
 	
 	static{
 		ConsolaWebService.endpointUrlMap = new HashMap<String, String>();
@@ -62,14 +63,11 @@ public class ConsolaWebService {
 				updateEndpointUrl("fornecedor1");
 				List<String> listaCategoria =  webService.listaCategoriaWebService().getCategoriaList();
 				CategoriaListDto dto = new CategoriaListDto();
-//				dto.setCategoriaList(listaCategoria);
 				for(String cate: listaCategoria){
 					juntaCategorias(cate);
 				}
 				updateEndpointUrl("fornecedor2");
 				List<String> listaCategoria2 =  webService.listaCategoriaWebService().getCategoriaList();
-//				CategoriaListDto dto2 = new CategoriaListDto();
-//				dto2.setCategoriaList(listaCategoria2);
 				for(String cate: listaCategoria2){
 					juntaCategorias(cate);
 				}
@@ -83,21 +81,36 @@ public class ConsolaWebService {
 	@WebMethod
 	public ProdListDto listaProduto(String categoria) throws ProdutoListException, CategoriaNameException{
 		
-		updateEndpointUrl("fornecedor1");
+		
 		try{
-		List<sdstore.stubs.ProdutoDto> listaProduto = webService.listaProdutoWebService(categoria).getListaDto();
-		List<ProdutoDto> lista = new ArrayList<ProdutoDto>();		
-		for(sdstore.stubs.ProdutoDto prod : listaProduto){
-			ProdutoDto novo = new ProdutoDto();
-			novo.setCategoria(prod.getCategoria());
-			novo.setDescricao(prod.getDescricao());
-			novo.setId(prod.getId());
-			novo.setPreco(prod.getPreco()+0.1*prod.getPreco());
-			novo.setQuantidade(prod.getQuantidade());
-			lista.add(novo);
-		}
-		ProdListDto dto = new ProdListDto(lista);
-		return dto;
+			updateEndpointUrl("fornecedor1");
+			List<sdstore.stubs.ProdutoDto> listaProduto = webService.listaProdutoWebService(categoria).getListaDto();
+			//List<ProdutoDto> lista = new ArrayList<ProdutoDto>();		
+			for(sdstore.stubs.ProdutoDto prod : listaProduto){
+				ProdutoDto novo = new ProdutoDto();
+				novo.setCategoria(prod.getCategoria());
+				novo.setDescricao(prod.getDescricao());
+				novo.setId(prod.getId());
+				novo.setPreco(prod.getPreco()+0.1*prod.getPreco());
+				novo.setQuantidade(prod.getQuantidade());
+				juntaProdutos(novo);
+				//lista.add(novo);
+			}
+			updateEndpointUrl("fornecedor2");
+			List<sdstore.stubs.ProdutoDto> listaProduto2 = webService.listaProdutoWebService(categoria).getListaDto();
+			//List<ProdutoDto> lista = new ArrayList<ProdutoDto>();		
+			for(sdstore.stubs.ProdutoDto prod : listaProduto2){
+				ProdutoDto novo = new ProdutoDto();
+				novo.setCategoria(prod.getCategoria());
+				novo.setDescricao(prod.getDescricao());
+				novo.setId(prod.getId());
+				novo.setPreco(prod.getPreco()+0.1*prod.getPreco());
+				novo.setQuantidade(prod.getQuantidade());
+				juntaProdutos(novo);
+				//lista.add(novo);
+			}	
+			ProdListDto dto = new ProdListDto(listaProdutosPortal);
+			return dto;
 		}catch(ProdutoListException_Exception e){
 			throw new ProdutoListException();
 		}catch(CategoriaNameException_Exception e){
@@ -187,4 +200,25 @@ public class ConsolaWebService {
 		
 		listaCategoriasPortal.add(categoria);
 	}
+	
+	public void juntaProdutos(ProdutoDto dto){
+		Double preco = dto.getPreco();
+		Integer stock = dto.getQuantidade();
+		String codigo = dto.getId();
+		for(ProdutoDto aux: listaProdutosPortal){
+			if(aux.getId().equals(codigo)){
+				listaProdutosPortal.remove(aux);
+				dto.setQuantidade(stock+aux.getQuantidade());
+				if(preco<aux.getPreco()){
+					dto.setPreco(preco);
+				}
+				else{
+					dto.setPreco(aux.getPreco());
+				}
+				listaProdutosPortal.add(dto);
+			}
+			listaProdutosPortal.add(dto);
+		}
+	}
+	
 }
