@@ -1,12 +1,13 @@
 package sdstore.businesserver.service.dto;
 
 import java.util.List;
+import java.util.Set;
 
 public class CategoriaListDto {
 
-	private List<String> categoriaList;
+	private Set<String> categoriaList;
 
-	public CategoriaListDto(List<String> categoriaList) {
+	public CategoriaListDto(Set<String> categoriaList) {
 		this.categoriaList = categoriaList;
 	}
 	
@@ -14,12 +15,12 @@ public class CategoriaListDto {
 		
 	}
 
-	public List<String> getCategoriaList() {
+	public Set<String> getCategoriaList() {
 		return categoriaList;
 	}
 
-	public void setCategoriaList(List<String> categoriaList) {
-		this.categoriaList = categoriaList;
+	public void setCategoriaList(Set<String> listaCategoriasPortal) {
+		this.categoriaList = listaCategoriasPortal;
 	}
 	
 	
