@@ -2,8 +2,10 @@ package sdstore.businesserver.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -30,10 +32,12 @@ public class ConsolaWebService {
 	private static Map<String, String> endpointUrlMap;
 //	carrinho de compras do cliente
 	private List<ProdutoDto> carrinhoCompras = new ArrayList<ProdutoDto>();
+	private Set<String> listaCategoriasPortal = new HashSet<String>();
 	
 	static{
 		ConsolaWebService.endpointUrlMap = new HashMap<String, String>();
 		ConsolaWebService.endpointUrlMap.put("fornecedor1", "http://localhost:8080/sdstore-server-fornecedor1/BusinessServerFornecedor1");
+		ConsolaWebService.endpointUrlMap.put("fornecedor2", "http://localhost:8080/sdstore-server-fornecedor2/BusinessServerFornecedor2");
 	}
 	
 	PortalWebService webService;
@@ -55,11 +59,22 @@ public class ConsolaWebService {
 	@WebMethod
 	public CategoriaListDto listaCategoriaWebService() throws ProdutoListException{
 		try{
-		updateEndpointUrl("fornecedor1");
-		List<String> listaCategoria =  webService.listaCategoriaWebService().getCategoriaList();
-		CategoriaListDto dto = new CategoriaListDto();
-		dto.setCategoriaList(listaCategoria);
-		return dto;
+				updateEndpointUrl("fornecedor1");
+				List<String> listaCategoria =  webService.listaCategoriaWebService().getCategoriaList();
+				CategoriaListDto dto = new CategoriaListDto();
+//				dto.setCategoriaList(listaCategoria);
+				for(String cate: listaCategoria){
+					juntaCategorias(cate);
+				}
+				updateEndpointUrl("fornecedor2");
+				List<String> listaCategoria2 =  webService.listaCategoriaWebService().getCategoriaList();
+//				CategoriaListDto dto2 = new CategoriaListDto();
+//				dto2.setCategoriaList(listaCategoria2);
+				for(String cate: listaCategoria2){
+					juntaCategorias(cate);
+				}
+				dto.setCategoriaList(listaCategoriasPortal);
+				return dto;
 		}catch(ProdutoListException_Exception e){
 			throw new ProdutoListException();
 		}
@@ -165,5 +180,11 @@ public class ConsolaWebService {
 			carrinhoCompras.clear();
 			throw new QuantidadeException(quantidade);
 		}
+	}
+	
+	
+	public void juntaCategorias(String categoria){
+		
+		listaCategoriasPortal.add(categoria);
 	}
 }
