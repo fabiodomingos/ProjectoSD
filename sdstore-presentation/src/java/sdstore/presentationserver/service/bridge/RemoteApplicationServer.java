@@ -58,7 +58,7 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	public ProdListDto listaProdutosCategoria(String categoria) throws ProdutoListException, CategoriaNameException {
 		try{
 		updateEndpointUrl();
-		ProdListDto resultado = webService.listaProduto(categoria);
+		ProdListDto resultado = webService.getlistaProdutos(categoria);
 		return resultado;
 		}catch(ProdutoListException_Exception e){
 			throw new ProdutoListException();

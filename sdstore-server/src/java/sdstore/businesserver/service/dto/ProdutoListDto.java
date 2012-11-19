@@ -1,24 +1,24 @@
 package sdstore.businesserver.service.dto;
 
-import java.util.List;
+import java.util.Set;
 
 public class ProdutoListDto {
 
-	private List<ProdutoDto> listaDto;
+	private Set<ProdutoDto> listaDto;
 	
 	public ProdutoListDto(){
 		
 	}
 
-	public ProdutoListDto(List<ProdutoDto> listaNovaProdutos) {
+	public ProdutoListDto(Set<ProdutoDto> listaNovaProdutos) {
 		listaDto=listaNovaProdutos;
 	}
 
-	public List<ProdutoDto> getListaDto() {
+	public Set<ProdutoDto> getListaDto() {
 		return listaDto;
 	}
 
-	public void setListaDto(List<ProdutoDto> listaDto) {
+	public void setListaDto(Set<ProdutoDto> listaDto) {
 		this.listaDto = listaDto;
 	}
 	

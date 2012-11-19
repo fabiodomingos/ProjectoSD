@@ -33,10 +33,10 @@ public class PortalWebService {
 
 	
 	@WebMethod
-	public ProdutoListDto ListaProdutoWebService(String categoria) throws ProdutoListException, CategoriaNameException{
-		ListaProdutoService service = new ListaProdutoService(categoria);
+	public ProdutoListDto GetListaProdutoWebService() throws ProdutoListException{
+		GetListaProdutosService service = new GetListaProdutosService();
 		service.execute();
-		ProdutoListDto result = service.getListProdutos();
+		ProdutoListDto result = service.getListaProdutos();
 		return result;
 	}
 	
