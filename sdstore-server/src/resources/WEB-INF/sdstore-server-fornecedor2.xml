@@ -3,6 +3,17 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
   version="2.4">
 
+    
+   <context-param>
+      <param-name>nomeFornecedorGrande</param-name>
+      <param-value>Fornecedor2</param-value>
+  </context-param>
+    
+  <context-param>
+      <param-name>nomeFornecedor</param-name>
+      <param-value>fornecedor2</param-value>
+  </context-param>
+    
   <context-param>
   	<param-name>nomeCatalogo</param-name>
   	<param-value>catalogo2</param-value>
@@ -10,7 +21,7 @@
 
   <context-param>
   	<param-name>listaProdutos</param-name>
-  	<param-value>/Users/fabiodomingos/Desktop/projecto versao actual- co excepcoes 2/ProjectoSD/sdstore-server/src/resources/WEB-INF/fornecedor2.txt</param-value>
+  	<param-value>C:\Users\Diogo\workspace\ProjectoSD\ProjectoSD\sdstore-server\src\resources\WEB-INF\fornecedor2.txt</param-value>
   </context-param>
 
   <listener>
