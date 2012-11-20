@@ -3,6 +3,8 @@ package sdstore.presentationserver;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import javax.xml.ws.soap.SOAPFaultException;
+
 import sdstore.presentationserver.exception.CategoriaNameException;
 import sdstore.presentationserver.exception.PresenterArgumentCountException;
 import sdstore.presentationserver.exception.PresenterArgumentException;
@@ -111,6 +113,8 @@ public class SdStoreApplication {
 			ProdutoExistExceptionPresenter.present(e);
 		}catch(QuantidadeException e){
 			QuantidadeExceptionPresenter.present(e);
+		}catch(SOAPFaultException e){
+			
 		}
 		
 	}
@@ -127,14 +131,14 @@ public class SdStoreApplication {
 	private static void juntaCommand(String codigo, Integer quantidade) {
 		try {
 			serviceBridge.Junta(codigo,quantidade);
-//			serviceBridge.Junta(dto);
 		} catch (ProdutoExistException e) {
 			ProdutoExistExceptionPresenter.present(e);
+		} catch(SOAPFaultException e){
+			
 		}
 	}
 
 	private static void carrinhoCommand() {
-//		cria o dto
 		try {
 			CarrinhoDto result = serviceBridge.Carrinho();
 			CarrinhoPresenter.present(result);
@@ -152,6 +156,8 @@ public class SdStoreApplication {
 			ProdutoListExceptionPresenter.present(e);
 		}catch(CategoriaNameException e){
 			CategoriaNameExceptionPresenter.present(e);
+		}catch(SOAPFaultException e){
+			
 		}
 		
 	}
@@ -162,6 +168,8 @@ public class SdStoreApplication {
 		ListaCategoriasPresenter.present(result);
 		}catch (ProdutoListException e) {
 			ProdutoListExceptionPresenter.present(e);
+		}catch(SOAPFaultException e){
+			
 		}
 	}
 

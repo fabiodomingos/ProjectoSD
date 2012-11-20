@@ -19,7 +19,6 @@ import sdstore.businesserver.service.dto.CarrinhoDto;
 import sdstore.businesserver.service.dto.CategoriaListDto;
 import sdstore.businesserver.service.dto.ProdListDto;
 import sdstore.businesserver.service.dto.ProdutoDto;
-import sdstore.stubs.CategoriaNameException_Exception;
 import sdstore.stubs.PortalWebService;
 import sdstore.stubs.PortalWebServiceService;
 import sdstore.stubs.ProdutoExistException_Exception;

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.soap.SOAPFaultException;
 
 import sdstore.presentationserver.exception.CategoriaNameException;
 import sdstore.presentationserver.exception.ProdutoExistException;
@@ -44,7 +45,7 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	}
 
 	@Override
-	public CategoriaListDto listaCategoria() throws ProdutoListException {
+	public CategoriaListDto listaCategoria() throws ProdutoListException,SOAPFaultException{
 		try{
 		updateEndpointUrl();
 		CategoriaListDto resultado = webService.listaCategoriaWebService();
@@ -55,7 +56,7 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	}
 
 	@Override
-	public ProdListDto listaProdutosCategoria(String categoria) throws ProdutoListException, CategoriaNameException {
+	public ProdListDto listaProdutosCategoria(String categoria) throws ProdutoListException, CategoriaNameException,SOAPFaultException {
 		try{
 		updateEndpointUrl();
 		ProdListDto resultado = webService.getlistaProdutos(categoria);
@@ -68,7 +69,7 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	}
 
 	@Override
-	public void Junta(String codigo,Integer quantidade) throws ProdutoExistException {
+	public void Junta(String codigo,Integer quantidade) throws ProdutoExistException,SOAPFaultException {
 		try{
 		updateEndpointUrl();
 		webService.juntaCarrinho(codigo, quantidade);
@@ -78,7 +79,7 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	}
 
 	@Override
-	public CarrinhoDto Carrinho(){
+	public CarrinhoDto Carrinho() throws SOAPFaultException{
 		updateEndpointUrl();
 		CarrinhoDto dtoCarrinho = webService.listaCarrinho();
 		return dtoCarrinho;
@@ -91,7 +92,7 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	}
 	
 	@Override
-	public void Encomenda() throws ProdutoExistException, QuantidadeException {
+	public void Encomenda() throws ProdutoExistException, QuantidadeException,SOAPFaultException {
 		try{
 		updateEndpointUrl();
 		webService.encomenda();
