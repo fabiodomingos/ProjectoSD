@@ -50,6 +50,9 @@
 		<fail unless="project.type">project.type not set</fail>
 		<war warfile="${dist.dir}/${project.name}.${project.type}" webxml="${resources.dir}/WEB-INF/web.xml">
 			  <classes dir="${build.dir}" />
+			  <tarfileset dir="${resources.dir}" prefix="WEB-INF/classes">
+				<include name="uddi.xml"/>
+			  </tarfileset>
 			</war>
 		
 	</target>
