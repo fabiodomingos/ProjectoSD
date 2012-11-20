@@ -49,6 +49,30 @@ public class BusinessServerInitListener implements ServletContextListener{
 		//codigo para executar apos o deploy da aplicacao no jboss
 		try {
 			
+			String catalogoName = arg0.getServletContext().getInitParameter("nomeCatalogo");
+			String listaProdutosTxt = arg0.getServletContext().getInitParameter("listaProdutos");
+
+			//le a linha do ficheiro
+			File file = new File(listaProdutosTxt);
+			FileInputStream in = new FileInputStream(file);
+			Scanner scanner = new Scanner(in);
+			
+			//cria o catalogo
+		    Catalogo.createCatalogo(catalogoName);
+			
+			while(scanner.hasNext()){
+				String readLine = scanner.nextLine();
+				String[] splited = readLine.split(" ");
+				//crio o produto 
+				Produto.createProduto(splited[0], splited[1], splited[2]);
+
+				Catalogo catalogo = Catalogo.getCatalogo(catalogoName);
+				//vai buscar um produto e regista no catalogo
+				Produto p = Produto.getProduto(splited[0]);
+				catalogo.registaProduto(p,Double.parseDouble(splited[3]), Integer.parseInt(splited[4]));				
+			}
+			
+			
 			InitialContext context = new InitialContext();
 			ConnectionFactory connFactory = (ConnectionFactory) context.lookup("java:jboss/jaxr/ConnectionFactory");
 			
@@ -101,7 +125,6 @@ public class BusinessServerInitListener implements ServletContextListener{
 			String organizationName = "SD-Store";
 			String nomeFornecedor = arg0.getServletContext().getInitParameter("nomeFornecedor");
 			String nomeFornecedorGrande = arg0.getServletContext().getInitParameter("nomeFornecedorGrande");
-			String listaProdutosTxt = arg0.getServletContext().getInitParameter("listaProdutos");
 			String bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
 			
 			Organization org = businessLifeCycleManager.createOrganization(organizationName);				
@@ -135,42 +158,11 @@ public class BusinessServerInitListener implements ServletContextListener{
 		    else
 	            System.out.println("Erro durante o registo no UDDI.");
 		    
-		    ////////////////////////////////////////////////////////
-		    ///// CODIGO QUE TINHAMOS ANTES DE POR O UDDI //////////
-		    ////////////////////////////////////////////////////////
 			
-//			String catalogoName = arg0.getServletContext().getInitParameter("nomeCatalogo");
-//			String listaProdutosTxt = arg0.getServletContext().getInitParameter("listaProdutos");
-//
-//			le a linha do ficheiro
-//			File file = new File(listaProdutosTxt);
-//			FileInputStream in = new FileInputStream(file);
-//			Scanner scanner = new Scanner(in);
-//			
-//			cria o catalogo
-//		    Catalogo.createCatalogo(catalogoName);
-//			
-//			while(scanner.hasNext()){
-//				String readLine = scanner.nextLine();
-//				String[] splited = readLine.split(" ");
-//				crio o produto 
-//				Produto.createProduto(splited[0], splited[1], splited[2]);
-//
-//				Catalogo catalogo = Catalogo.getCatalogo(catalogoName);
-//				vai buscar um produto e regista no catalogo
-//				Produto p = Produto.getProduto(splited[0]);
-//				catalogo.registaProduto(p,Double.parseDouble(splited[3]), Integer.parseInt(splited[4]));				
-//			}
-			
-//		} catch (Exception e) {
-//			System.out.println("Erro ao iniciar a webapp\n");
-//			e.printStackTrace();
-		}catch(JAXRException e){
-			System.err.println("Erro ao contactar o UDDI registry.");
-			e.printStackTrace();
-		}catch(NamingException e){
-			System.err.println("Erro ao obter ConnectionFactory.");
+		} catch (Exception e) {
+			System.out.println("Erro ao iniciar a webapp\n");
 			e.printStackTrace();
 		}
+
 	}
 }
