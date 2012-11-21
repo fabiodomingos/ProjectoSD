@@ -87,58 +87,38 @@ public class ConsolaWebService {
 			// Protocolo de transporte usado para invocações ao UDDI registry
 			props.setProperty("scout.proxy.transportClass", "org.apache.juddi.v3.client.transport.JAXWSTransport");
 			connFactory.setProperties(props);
-
 			// Finalmente, estabelece a ligação ao UDDI registry
 			Connection connection = connFactory.createConnection();
-
 			PasswordAuthentication passwdAuth = new PasswordAuthentication("username", "password".toCharArray());  
 			Set<PasswordAuthentication> creds = new HashSet<PasswordAuthentication>();  
 			creds.add(passwdAuth);
 			connection.setCredentials(creds);
-			
 			// Obter objecto RegistryService
 			RegistryService rs = connection.getRegistryService();
-						
 			// Obter objecto QueryManager da JAXR Business API 
 			// (caso se pretenda fazer pesquisas)
 			BusinessQueryManager businessQueryManager = rs.getBusinessQueryManager();
-			
 			Collection findQualifiers = new ArrayList();
 			Collection namePatterns = new ArrayList();
 			namePatterns.add("%SD-Store%");
-			
 			BulkResponse r = businessQueryManager.findOrganizations(findQualifiers, namePatterns, null, null, null, null);
-			
-			Collection<Organization> orgs = r.getCollection();
-			
-			System.out.println("A IMPRIMIR AS ORGANIZACOES!!!!!!!!!!!!!!!");
-			System.out.println(orgs);
-			System.out.println("ACABEI DE IMPRIMIR ORGANIZACOES");
-			
+			Collection<Organization> orgs = r.getCollection();			
 //			vou passar as organizações e buscar os servicos
 			for(Organization o:orgs){
-				System.out.println(o);
 				Collection<?> servicos = o.getServices();
 				Iterator<?> servIter = servicos.iterator();
-				System.out.println("VOU IMPRIMIR SERVICE BINDINGS!!!!!!!!!!!!!");
 				while(servIter.hasNext()){
-					System.out.println("A IMPRIMIR SERVICE BINDINGS!");
 					Service svc = (Service) servIter.next();
 					Collection<?> serviceBindings = svc.getServiceBindings();
-					System.out.println(serviceBindings);
 					Iterator<?> sbIter = serviceBindings.iterator();
 					while(sbIter.hasNext()){
 						ServiceBinding sb = (ServiceBinding) sbIter.next();
-						System.out.println("A IMPRIIR URL DOS SERVICOS!!!!!!");
-						System.out.println(sb.getAccessURI());
 						enderecos.add(sb.getAccessURI());
 					}
 				}
 			}
 			System.out.println("A IMPRIMIR OS ENDERECOS QUE ESTAO NO PORTAL ACESSIVEIS");
-			System.out.println(enderecos);
-//			System.out.println(endpointUrlMap);
-			
+			System.out.println(enderecos);			
 		}catch(Exception e){
 			
 		}
