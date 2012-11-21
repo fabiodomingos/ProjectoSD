@@ -57,13 +57,13 @@ public class ConsolaWebService {
 	}
 	
 	PortalWebService webService;
-	
+//	
 //	{
 //		PortalWebServiceService service = new PortalWebServiceService();
 //		webService = service.getPortalWebServicePort();
 //	}
 	
-	private void updateEndpointUrl(String fornecedorName){
+	private void updateEndpointUrl(){
 		try{
 //			InitialContext context = new InitialContext();
 //			ConnectionFactory connFactory = (ConnectionFactory) context.lookup("java:jboss/jaxr/ConnectionFactory");
@@ -131,22 +131,51 @@ public class ConsolaWebService {
 //		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);
 	}
 	
+	private PortalWebService getFornecedores(String endereco){
+		PortalWebService webService;
+		PortalWebServiceService service = new PortalWebServiceService();
+		webService = service.getPortalWebServicePort();
+		for(String ende:enderecos){
+			if(ende.equals(endereco)){
+				BindingProvider bp = (BindingProvider)webService;
+				bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, ende);
+			}
+		}
+		return webService;
+	}
+	
 	@WebMethod
 	public CategoriaListDto listaCategoriaWebService() throws ProdutoListException{
 		try{
-				updateEndpointUrl("fornecedor1");
-				List<String> listaCategoria =  webService.listaCategoriaWebService().getCategoriaList();
-				CategoriaListDto dto = new CategoriaListDto();
-				for(String cate: listaCategoria){
+			updateEndpointUrl();
+			CategoriaListDto dto = new CategoriaListDto();
+			System.out.println("listaCategorias!!!!!!");
+			for(String endereco:enderecos){
+//				getFornecedores(endereco);
+//				BindingProvider bp = (BindingProvider)webService;
+//				System.out.println(endereco);
+//				bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endereco);
+				PortalWebService webService = getFornecedores(endereco);
+				List<String> listaCategoria = webService.listaCategoriaWebService().getCategoriaList();
+				for(String cate:listaCategoria){
 					juntaCategorias(cate);
 				}
-				updateEndpointUrl("fornecedor2");
-				List<String> listaCategoria2 =  webService.listaCategoriaWebService().getCategoriaList();
-				for(String cate: listaCategoria2){
-					juntaCategorias(cate);
-				}
-				dto.setCategoriaList(listaCategoriasPortal);
-				return dto;
+			}
+			dto.setCategoriaList(listaCategoriasPortal);
+			return dto;
+//				updateEndpointUrl("fornecedor1");
+//				List<String> listaCategoria =  webService.listaCategoriaWebService().getCategoriaList();
+//				CategoriaListDto dto = new CategoriaListDto();
+//				for(String cate: listaCategoria){
+//					juntaCategorias(cate);
+//				}
+//				updateEndpointUrl("fornecedor2");
+//				List<String> listaCategoria2 =  webService.listaCategoriaWebService().getCategoriaList();
+//				for(String cate: listaCategoria2){
+//					juntaCategorias(cate);
+//				}
+//				dto.setCategoriaList(listaCategoriasPortal);
+//				return dto;
 		}catch(ProdutoListException_Exception e){
 			throw new ProdutoListException();
 		}
@@ -156,7 +185,7 @@ public class ConsolaWebService {
 	public ProdListDto getlistaProdutos(String categoria) throws ProdutoListException, CategoriaNameException{
 		try{
 			listaProdutosPortal.clear();
-			updateEndpointUrl("fornecedor1");
+//			updateEndpointUrl("fornecedor1");
 			List<sdstore.stubs.ProdutoDto> listaProduto = webService.getListaProdutoWebService().getListaDto();
 			for(sdstore.stubs.ProdutoDto prod : listaProduto){
 				ProdutoDto novo = new ProdutoDto();
@@ -167,7 +196,7 @@ public class ConsolaWebService {
 				novo.setQuantidade(prod.getQuantidade());
 				juntaProdutos(novo);
 			}
-			updateEndpointUrl("fornecedor2");
+//			updateEndpointUrl("fornecedor2");
 			List<sdstore.stubs.ProdutoDto> listaProduto2 = webService.getListaProdutoWebService().getListaDto();
 			for(sdstore.stubs.ProdutoDto prod : listaProduto2){
 				ProdutoDto novo = new ProdutoDto();
@@ -192,7 +221,7 @@ public class ConsolaWebService {
 	
 	@WebMethod
 	public CarrinhoDto listaCarrinho(){
-		updateEndpointUrl("fornecedor1");
+//		updateEndpointUrl("fornecedor1");
 		Double precoTotal = 0.0;
 		CarrinhoDto dto = new CarrinhoDto(carrinhoCompras);
 		for(ProdutoDto prod : carrinhoCompras){
@@ -205,7 +234,7 @@ public class ConsolaWebService {
 	
 	@WebMethod
 	public void juntaCarrinho(String codigo,Integer quantidade) throws ProdutoExistException{
-		updateEndpointUrl("fornecedor1");
+//		updateEndpointUrl("fornecedor1");
 		try{
 		sdstore.stubs.ProdutoDto dtoRecebido = webService.pedeProduto(codigo);
 //		List<sdstore.stubs.ProdutoDto> listaProdutos = webService.getListaProdutoWebService().getListaDto();	
@@ -243,7 +272,7 @@ public class ConsolaWebService {
 	
 	@WebMethod
 	public void limpaCarrinho(){
-		updateEndpointUrl("fornecedor1");
+//		updateEndpointUrl("fornecedor1");
 		carrinhoCompras.clear();
 		
 	}
@@ -253,7 +282,7 @@ public class ConsolaWebService {
 		String nome = null;
 		Integer quantidade = 0;
 		try{		
-		updateEndpointUrl("fornecedor1");
+//		updateEndpointUrl("fornecedor1");
 		for(ProdutoDto prod: carrinhoCompras){
 			String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade());
 			nome = prod.getId();
