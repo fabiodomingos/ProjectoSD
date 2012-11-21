@@ -1,14 +1,25 @@
 package sdstore.businesserver.service;
 
+
+import java.net.PasswordAuthentication;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import javax.naming.InitialContext;
+import javax.xml.registry.BulkResponse;
+import javax.xml.registry.BusinessQueryManager;
+import javax.xml.registry.Connection;
+import javax.xml.registry.ConnectionFactory;
+import javax.xml.registry.RegistryService;
+import javax.xml.registry.infomodel.Organization;
 import javax.xml.ws.BindingProvider;
 
 import sdstore.businesserver.exception.CategoriaNameException;
@@ -37,8 +48,8 @@ public class ConsolaWebService {
 	
 	static{
 		ConsolaWebService.endpointUrlMap = new HashMap<String, String>();
-		ConsolaWebService.endpointUrlMap.put("fornecedor1", "http://localhost:8080/sdstore-server-fornecedor1/BusinessServerFornecedor1");
-		ConsolaWebService.endpointUrlMap.put("fornecedor2", "http://localhost:8080/sdstore-server-fornecedor2/BusinessServerFornecedor2");
+//		ConsolaWebService.endpointUrlMap.put("fornecedor1", "http://localhost:8080/sdstore-server-fornecedor1/BusinessServerFornecedor1");
+//		ConsolaWebService.endpointUrlMap.put("fornecedor2", "http://localhost:8080/sdstore-server-fornecedor2/BusinessServerFornecedor2");
 	}
 	
 	PortalWebService webService;
@@ -49,12 +60,67 @@ public class ConsolaWebService {
 	}
 	
 	private void updateEndpointUrl(String fornecedorName){
-		String endpointUrl = ConsolaWebService.endpointUrlMap.get(fornecedorName);
-//		if(endpointUrl==null){
-//			throw new FornecedorNameException_Exception();
-//		}
-		BindingProvider bp = (BindingProvider)webService;
-		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);
+		try{
+			InitialContext context = new InitialContext();
+			ConnectionFactory connFactory = (ConnectionFactory) context.lookup("java:jboss/jaxr/ConnectionFactory");
+			
+			////////////////////////////////////////
+			////// LIGACAO AO UDDI REGISTRY ////////
+			////////////////////////////////////////
+
+			Properties props = new Properties();
+			// Localização do ficheiro de configuração da ligação,
+			// que deve estar na directoria WEB-INF/classes do .war
+			props.setProperty("scout.juddi.client.config.file", "uddi.xml");
+			// URL para pesquisas ao UDDI registry
+			props.setProperty("javax.xml.registry.queryManagerURL", "http://localhost:8081/juddiv3/services/inquiry");
+			// URL para publicar dados no UDDI registry
+			props.setProperty("javax.xml.registry.lifeCycleManagerURL", "http://localhost:8081/juddiv3/services/publish");
+			// URL do gestor de segurança do UDDI registry
+			props.setProperty("javax.xml.registry.securityManagerURL", "http://localhost:8081/juddiv3/services/security");
+			// Versão UDDI que o registry usa
+			props.setProperty("scout.proxy.uddiVersion", "3.0");
+			// Protocolo de transporte usado para invocações ao UDDI registry
+			props.setProperty("scout.proxy.transportClass", "org.apache.juddi.v3.client.transport.JAXWSTransport");
+			connFactory.setProperties(props);
+
+			// Finalmente, estabelece a ligação ao UDDI registry
+			Connection connection = connFactory.createConnection();
+
+			PasswordAuthentication passwdAuth = new PasswordAuthentication("username", "password".toCharArray());  
+			Set<PasswordAuthentication> creds = new HashSet<PasswordAuthentication>();  
+			creds.add(passwdAuth);
+			connection.setCredentials(creds);
+			
+			// Obter objecto RegistryService
+			RegistryService rs = connection.getRegistryService();
+						
+			// Obter objecto QueryManager da JAXR Business API 
+			// (caso se pretenda fazer pesquisas)
+			BusinessQueryManager businessQueryManager = rs.getBusinessQueryManager();
+			
+			Collection findQualifiers = new ArrayList();
+			Collection namePatterns = new ArrayList();
+			namePatterns.add("%SD-Store%");
+			
+			BulkResponse r = businessQueryManager.findOrganizations(findQualifiers, namePatterns, null, null, null, null);
+			
+			Collection<Organization> orgs = r.getCollection();
+			
+			System.out.println("A IMPRIMIR AS ORGANIZACOES!!!!!!!!!!!!!!!");
+			System.out.println(orgs);
+			System.out.println("ACABEI DE IMPRIMIR ORGANIZACOES");
+			
+		}catch(Exception e){
+			
+		}
+		
+//		String endpointUrl = ConsolaWebService.endpointUrlMap.get(fornecedorName);
+////		if(endpointUrl==null){
+////			throw new FornecedorNameException_Exception();
+////		}
+//		BindingProvider bp = (BindingProvider)webService;
+//		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);
 	}
 	
 	@WebMethod
