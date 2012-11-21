@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -20,6 +21,8 @@ import javax.xml.registry.Connection;
 import javax.xml.registry.ConnectionFactory;
 import javax.xml.registry.RegistryService;
 import javax.xml.registry.infomodel.Organization;
+import javax.xml.registry.infomodel.Service;
+import javax.xml.registry.infomodel.ServiceBinding;
 import javax.xml.ws.BindingProvider;
 
 import sdstore.businesserver.exception.CategoriaNameException;
@@ -40,6 +43,7 @@ import sdstore.stubs.QuantidadeException_Exception;
 public class ConsolaWebService {
 	
 	private static Map<String, String> endpointUrlMap;
+	private Set<String> enderecos = new HashSet<String>();
 //	carrinho de compras do cliente
 	private List<ProdutoDto> carrinhoCompras = new ArrayList<ProdutoDto>();
 	private Set<String> listaCategoriasPortal = new HashSet<String>();
@@ -47,17 +51,17 @@ public class ConsolaWebService {
 	private Set<ProdutoDto> listaProdutosCliente = new HashSet<ProdutoDto>();
 	
 	static{
-		ConsolaWebService.endpointUrlMap = new HashMap<String, String>();
+//		ConsolaWebService.endpointUrlMap = new HashMap<String, String>();
 //		ConsolaWebService.endpointUrlMap.put("fornecedor1", "http://localhost:8080/sdstore-server-fornecedor1/BusinessServerFornecedor1");
 //		ConsolaWebService.endpointUrlMap.put("fornecedor2", "http://localhost:8080/sdstore-server-fornecedor2/BusinessServerFornecedor2");
 	}
 	
 	PortalWebService webService;
 	
-	{
-		PortalWebServiceService service = new PortalWebServiceService();
-		webService = service.getPortalWebServicePort();
-	}
+//	{
+//		PortalWebServiceService service = new PortalWebServiceService();
+//		webService = service.getPortalWebServicePort();
+//	}
 	
 	private void updateEndpointUrl(String fornecedorName){
 		try{
@@ -110,6 +114,30 @@ public class ConsolaWebService {
 			System.out.println("A IMPRIMIR AS ORGANIZACOES!!!!!!!!!!!!!!!");
 			System.out.println(orgs);
 			System.out.println("ACABEI DE IMPRIMIR ORGANIZACOES");
+			
+//			vou passar as organizações e buscar os servicos
+			for(Organization o:orgs){
+				System.out.println(o);
+				Collection<?> servicos = o.getServices();
+				Iterator<?> servIter = servicos.iterator();
+				System.out.println("VOU IMPRIMIR SERVICE BINDINGS!!!!!!!!!!!!!");
+				while(servIter.hasNext()){
+					System.out.println("A IMPRIMIR SERVICE BINDINGS!");
+					Service svc = (Service) servIter.next();
+					Collection<?> serviceBindings = svc.getServiceBindings();
+					System.out.println(serviceBindings);
+					Iterator<?> sbIter = serviceBindings.iterator();
+					while(sbIter.hasNext()){
+						ServiceBinding sb = (ServiceBinding) sbIter.next();
+						System.out.println("A IMPRIIR URL DOS SERVICOS!!!!!!");
+						System.out.println(sb.getAccessURI());
+						enderecos.add(sb.getAccessURI());
+					}
+				}
+			}
+			System.out.println("A IMPRIMIR OS ENDERECOS QUE ESTAO NO PORTAL ACESSIVEIS");
+			System.out.println(enderecos);
+//			System.out.println(endpointUrlMap);
 			
 		}catch(Exception e){
 			
