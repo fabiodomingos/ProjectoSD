@@ -38,6 +38,8 @@ import sdstore.businesserver.domain.Produto;
 public class BusinessServerInitListener implements ServletContextListener{
 	
 	TreeSet<String> enderecos = new TreeSet<String>();
+	
+	// lista de bindings URL
 	ArrayList<String> bindings = new ArrayList<String>();
 
 	@Override
