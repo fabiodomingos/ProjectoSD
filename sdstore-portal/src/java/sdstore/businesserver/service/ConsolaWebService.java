@@ -65,13 +65,13 @@ public class ConsolaWebService {
 	
 	private void updateEndpointUrl(String fornecedorName){
 		try{
-			InitialContext context = new InitialContext();
-			ConnectionFactory connFactory = (ConnectionFactory) context.lookup("java:jboss/jaxr/ConnectionFactory");
+//			InitialContext context = new InitialContext();
+//			ConnectionFactory connFactory = (ConnectionFactory) context.lookup("java:jboss/jaxr/ConnectionFactory");
 			
 			////////////////////////////////////////
 			////// LIGACAO AO UDDI REGISTRY ////////
 			////////////////////////////////////////
-
+			ConnectionFactory connFactory = org.apache.ws.scout.registry.ConnectionFactoryImpl.newInstance();
 			Properties props = new Properties();
 			// Localização do ficheiro de configuração da ligação,
 			// que deve estar na directoria WEB-INF/classes do .war
@@ -79,9 +79,9 @@ public class ConsolaWebService {
 			// URL para pesquisas ao UDDI registry
 			props.setProperty("javax.xml.registry.queryManagerURL", "http://localhost:8081/juddiv3/services/inquiry");
 			// URL para publicar dados no UDDI registry
-			props.setProperty("javax.xml.registry.lifeCycleManagerURL", "http://localhost:8081/juddiv3/services/publish");
+//			props.setProperty("javax.xml.registry.lifeCycleManagerURL", "http://localhost:8081/juddiv3/services/publish");
 			// URL do gestor de segurança do UDDI registry
-			props.setProperty("javax.xml.registry.securityManagerURL", "http://localhost:8081/juddiv3/services/security");
+//			props.setProperty("javax.xml.registry.securityManagerURL", "http://localhost:8081/juddiv3/services/security");
 			// Versão UDDI que o registry usa
 			props.setProperty("scout.proxy.uddiVersion", "3.0");
 			// Protocolo de transporte usado para invocações ao UDDI registry
