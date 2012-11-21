@@ -38,6 +38,7 @@ import sdstore.businesserver.domain.Produto;
 public class BusinessServerInitListener implements ServletContextListener{
 	
 	TreeSet<String> enderecos = new TreeSet<String>();
+	ArrayList<String> bindings = new ArrayList<String>();
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0){
@@ -126,8 +127,14 @@ public class BusinessServerInitListener implements ServletContextListener{
 			String nomeFornecedor = arg0.getServletContext().getInitParameter("nomeFornecedor");
 			String nomeFornecedorGrande = arg0.getServletContext().getInitParameter("nomeFornecedorGrande");
 			String bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
+			bindings.add(bindingURL);
 			
-			Organization org = businessLifeCycleManager.createOrganization(organizationName);				
+			if(bindings.contains(bindingURL)){
+				System.out.println("JAAAAA EXISTE ESTE URLLLLLLLLLLLLLLLL");
+			}
+			else{
+			
+			Organization org = businessLifeCycleManager.createOrganization(organizationName);
 
 			// Cria serviço
 			Service service = businessLifeCycleManager.createService(nomeFornecedor);
@@ -157,6 +164,9 @@ public class BusinessServerInitListener implements ServletContextListener{
 	            System.out.println("Registo completado com sucesso.");
 		    else
 	            System.out.println("Erro durante o registo no UDDI.");
+		    
+			}
+		    
 		    
 			
 		} catch (Exception e) {
