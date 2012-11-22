@@ -53,6 +53,9 @@
 			  <tarfileset dir="${resources.dir}" prefix="WEB-INF/classes">
 				<include name="uddi.xml"/>
 			  </tarfileset>
+			  <tarfileset dir="${lib.dir}" prefix="WEB-INF/lib">
+				<include name="**.jar" />
+			  </tarfileset>
 			</war>
 		
 	</target>
