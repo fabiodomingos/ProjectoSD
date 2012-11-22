@@ -42,7 +42,8 @@ import sdstore.stubs.QuantidadeException_Exception;
 @WebService
 public class ConsolaWebService {
 	
-	private static Map<String, String> endpointUrlMap;
+//	private static Map<String, String> endpointUrlMap;
+//	lista dos enderecos dos fornecedores
 	private Set<String> enderecos = new HashSet<String>();
 //	carrinho de compras do cliente
 	private List<ProdutoDto> carrinhoCompras = new ArrayList<ProdutoDto>();
@@ -51,23 +52,13 @@ public class ConsolaWebService {
 	private Set<ProdutoDto> listaProdutosCliente = new HashSet<ProdutoDto>();
 	
 	static{
-//		ConsolaWebService.endpointUrlMap = new HashMap<String, String>();
-//		ConsolaWebService.endpointUrlMap.put("fornecedor1", "http://localhost:8080/sdstore-server-fornecedor1/BusinessServerFornecedor1");
-//		ConsolaWebService.endpointUrlMap.put("fornecedor2", "http://localhost:8080/sdstore-server-fornecedor2/BusinessServerFornecedor2");
 	}
 	
 	PortalWebService webService;
-//	
-//	{
-//		PortalWebServiceService service = new PortalWebServiceService();
-//		webService = service.getPortalWebServicePort();
-//	}
+
 	
 	private void updateEndpointUrl(){
 		try{
-//			InitialContext context = new InitialContext();
-//			ConnectionFactory connFactory = (ConnectionFactory) context.lookup("java:jboss/jaxr/ConnectionFactory");
-			
 			////////////////////////////////////////
 			////// LIGACAO AO UDDI REGISTRY ////////
 			////////////////////////////////////////
@@ -78,10 +69,6 @@ public class ConsolaWebService {
 			props.setProperty("scout.juddi.client.config.file", "uddi.xml");
 			// URL para pesquisas ao UDDI registry
 			props.setProperty("javax.xml.registry.queryManagerURL", "http://localhost:8081/juddiv3/services/inquiry");
-			// URL para publicar dados no UDDI registry
-//			props.setProperty("javax.xml.registry.lifeCycleManagerURL", "http://localhost:8081/juddiv3/services/publish");
-			// URL do gestor de segurança do UDDI registry
-//			props.setProperty("javax.xml.registry.securityManagerURL", "http://localhost:8081/juddiv3/services/security");
 			// Versão UDDI que o registry usa
 			props.setProperty("scout.proxy.uddiVersion", "3.0");
 			// Protocolo de transporte usado para invocações ao UDDI registry
@@ -117,18 +104,11 @@ public class ConsolaWebService {
 					}
 				}
 			}
-			System.out.println("A IMPRIMIR OS ENDERECOS QUE ESTAO NO PORTAL ACESSIVEIS");
-			System.out.println(enderecos);			
+//			System.out.println("A IMPRIMIR OS ENDERECOS QUE ESTAO NO PORTAL ACESSIVEIS");
+//			System.out.println(enderecos);			
 		}catch(Exception e){
 			
 		}
-		
-//		String endpointUrl = ConsolaWebService.endpointUrlMap.get(fornecedorName);
-////		if(endpointUrl==null){
-////			throw new FornecedorNameException_Exception();
-////		}
-//		BindingProvider bp = (BindingProvider)webService;
-//		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);
 	}
 	
 	private PortalWebService getFornecedores(String endereco){
@@ -151,10 +131,6 @@ public class ConsolaWebService {
 			CategoriaListDto dto = new CategoriaListDto();
 			System.out.println("listaCategorias!!!!!!");
 			for(String endereco:enderecos){
-//				getFornecedores(endereco);
-//				BindingProvider bp = (BindingProvider)webService;
-//				System.out.println(endereco);
-//				bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endereco);
 				PortalWebService webService = getFornecedores(endereco);
 				List<String> listaCategoria = webService.listaCategoriaWebService().getCategoriaList();
 				for(String cate:listaCategoria){
@@ -163,19 +139,6 @@ public class ConsolaWebService {
 			}
 			dto.setCategoriaList(listaCategoriasPortal);
 			return dto;
-//				updateEndpointUrl("fornecedor1");
-//				List<String> listaCategoria =  webService.listaCategoriaWebService().getCategoriaList();
-//				CategoriaListDto dto = new CategoriaListDto();
-//				for(String cate: listaCategoria){
-//					juntaCategorias(cate);
-//				}
-//				updateEndpointUrl("fornecedor2");
-//				List<String> listaCategoria2 =  webService.listaCategoriaWebService().getCategoriaList();
-//				for(String cate: listaCategoria2){
-//					juntaCategorias(cate);
-//				}
-//				dto.setCategoriaList(listaCategoriasPortal);
-//				return dto;
 		}catch(ProdutoListException_Exception e){
 			throw new ProdutoListException();
 		}
@@ -185,29 +148,21 @@ public class ConsolaWebService {
 	public ProdListDto getlistaProdutos(String categoria) throws ProdutoListException, CategoriaNameException{
 		try{
 			listaProdutosPortal.clear();
-//			updateEndpointUrl("fornecedor1");
-			List<sdstore.stubs.ProdutoDto> listaProduto = webService.getListaProdutoWebService().getListaDto();
-			for(sdstore.stubs.ProdutoDto prod : listaProduto){
-				ProdutoDto novo = new ProdutoDto();
-				novo.setCategoria(prod.getCategoria());
-				novo.setDescricao(prod.getDescricao());
-				novo.setId(prod.getId());
-				novo.setPreco(prod.getPreco()+0.1*prod.getPreco());
-				novo.setQuantidade(prod.getQuantidade());
-				juntaProdutos(novo);
+//			podera estar a mais, a pensar numa solucao para nao ir sempre ao uddi
+			updateEndpointUrl();
+			for(String endereco:enderecos){
+				PortalWebService webService = getFornecedores(endereco);
+				List<sdstore.stubs.ProdutoDto> listaProduto = webService.getListaProdutoWebService().getListaDto();
+				for(sdstore.stubs.ProdutoDto prod:listaProduto){
+					ProdutoDto novo = new ProdutoDto();
+					novo.setCategoria(prod.getCategoria());
+					novo.setDescricao(prod.getDescricao());
+					novo.setId(prod.getId());
+					novo.setPreco(prod.getPreco()+0.1*prod.getPreco());
+					novo.setQuantidade(prod.getQuantidade());
+					juntaProdutos(novo);
+				}
 			}
-//			updateEndpointUrl("fornecedor2");
-			List<sdstore.stubs.ProdutoDto> listaProduto2 = webService.getListaProdutoWebService().getListaDto();
-			for(sdstore.stubs.ProdutoDto prod : listaProduto2){
-				ProdutoDto novo = new ProdutoDto();
-				novo.setCategoria(prod.getCategoria());
-				novo.setDescricao(prod.getDescricao());
-				novo.setId(prod.getId());
-				novo.setPreco(prod.getPreco()+0.1*prod.getPreco());
-				novo.setQuantidade(prod.getQuantidade());
-				juntaProdutos(novo);
-			}	
-			
 			prodCategoria(categoria);
 			if(listaProdutosCliente.isEmpty()){
 				throw new CategoriaNameException(categoria);
@@ -221,7 +176,6 @@ public class ConsolaWebService {
 	
 	@WebMethod
 	public CarrinhoDto listaCarrinho(){
-//		updateEndpointUrl("fornecedor1");
 		Double precoTotal = 0.0;
 		CarrinhoDto dto = new CarrinhoDto(carrinhoCompras);
 		for(ProdutoDto prod : carrinhoCompras){
@@ -234,45 +188,44 @@ public class ConsolaWebService {
 	
 	@WebMethod
 	public void juntaCarrinho(String codigo,Integer quantidade) throws ProdutoExistException{
-//		updateEndpointUrl("fornecedor1");
 		try{
-		sdstore.stubs.ProdutoDto dtoRecebido = webService.pedeProduto(codigo);
-//		List<sdstore.stubs.ProdutoDto> listaProdutos = webService.getListaProdutoWebService().getListaDto();	
-		Integer controlo = 0;
-		ProdutoDto prodEnviar = new ProdutoDto();
-		if(carrinhoCompras.isEmpty()){			
-			prodEnviar.setId(dtoRecebido.getId());
-			prodEnviar.setQuantidade(quantidade);
-			prodEnviar.setPreco(dtoRecebido.getPreco()+dtoRecebido.getPreco()*0.1);
-			prodEnviar.setCategoria(dtoRecebido.getCategoria());
-			prodEnviar.setDescricao(dtoRecebido.getDescricao());
-			carrinhoCompras.add(prodEnviar);
-		}
-		else{
-			for(ProdutoDto dto: carrinhoCompras){
-				if(dto.getId().equals(codigo)){
-					dto.setQuantidade(quantidade+dto.getQuantidade());
-					controlo=1;
+			Integer controlo = 0;
+			for(String endereco:enderecos){
+				PortalWebService webService = getFornecedores(endereco);
+				sdstore.stubs.ProdutoDto dtoRecebido = webService.pedeProduto(codigo);
+				ProdutoDto prodEnviar = new ProdutoDto();
+				if(carrinhoCompras.isEmpty()){
+					prodEnviar.setId(dtoRecebido.getId());
+					prodEnviar.setQuantidade(quantidade);
+					prodEnviar.setPreco(dtoRecebido.getPreco()+dtoRecebido.getPreco()*0.1);
+					prodEnviar.setCategoria(dtoRecebido.getCategoria());
+					prodEnviar.setDescricao(dtoRecebido.getDescricao());
+					carrinhoCompras.add(prodEnviar);	
+				}else{
+					for(ProdutoDto dto:carrinhoCompras){
+						if(dto.getId().equals(codigo)){
+						dto.setQuantidade(quantidade+dto.getQuantidade());
+						controlo=1;
+						}
+					}
+				}
+				if(controlo==0){
+				prodEnviar.setId(dtoRecebido.getId());
+				prodEnviar.setQuantidade(quantidade);
+				prodEnviar.setPreco(dtoRecebido.getPreco()+dtoRecebido.getPreco()*0.1);
+				prodEnviar.setCategoria(dtoRecebido.getCategoria());
+				prodEnviar.setDescricao(dtoRecebido.getDescricao());
+				carrinhoCompras.add(prodEnviar);
 				}
 			}
-			if(controlo==0){
-			prodEnviar.setId(dtoRecebido.getId());
-			prodEnviar.setQuantidade(quantidade);
-			prodEnviar.setPreco(dtoRecebido.getPreco()+dtoRecebido.getPreco()*0.1);
-			prodEnviar.setCategoria(dtoRecebido.getCategoria());
-			prodEnviar.setDescricao(dtoRecebido.getDescricao());
-			carrinhoCompras.add(prodEnviar);
-			}
-		}
+
 		}catch(ProdutoExistException_Exception e){
 			throw new ProdutoExistException(codigo);
 		}
-
 	}
 	
 	@WebMethod
 	public void limpaCarrinho(){
-//		updateEndpointUrl("fornecedor1");
 		carrinhoCompras.clear();
 		
 	}
@@ -282,7 +235,6 @@ public class ConsolaWebService {
 		String nome = null;
 		Integer quantidade = 0;
 		try{		
-//		updateEndpointUrl("fornecedor1");
 		for(ProdutoDto prod: carrinhoCompras){
 			String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade());
 			nome = prod.getId();
@@ -299,7 +251,6 @@ public class ConsolaWebService {
 	
 	
 	public void juntaCategorias(String categoria){
-		
 		listaCategoriasPortal.add(categoria);
 	}
 	
@@ -330,9 +281,6 @@ public class ConsolaWebService {
 	public void prodCategoria(String categoria){
 		listaProdutosCliente.clear();
 		for(ProdutoDto prod : listaProdutosPortal){
-//			if(!prod.getCategoria().equals(categoria)){
-//				listaProdutosPortal.remove(prod);
-//			}
 			if(prod.getCategoria().equals(categoria)){
 				listaProdutosCliente.add(prod);
 			}
