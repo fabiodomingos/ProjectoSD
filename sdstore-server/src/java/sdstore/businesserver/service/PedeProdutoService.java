@@ -4,7 +4,6 @@ package sdstore.businesserver.service;
 import sdstore.businesserver.domain.Catalogo;
 import sdstore.businesserver.domain.Produto;
 import sdstore.businesserver.exception.ProdutoExistException;
-import sdstore.businesserver.exception.ProdutoListException;
 import sdstore.businesserver.service.dto.ProdutoDto;
 
 public class PedeProdutoService extends PortalService{
