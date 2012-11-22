@@ -3,7 +3,6 @@ package sdstore.businesserver.service;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
-import sdstore.businesserver.exception.CategoriaNameException;
 import sdstore.businesserver.exception.ProdutoExistException;
 import sdstore.businesserver.exception.ProdutoListException;
 import sdstore.businesserver.exception.QuantidadeException;
