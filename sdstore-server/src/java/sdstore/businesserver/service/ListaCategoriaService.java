@@ -1,6 +1,6 @@
 package sdstore.businesserver.service;
 
-import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,7 +8,6 @@ import java.util.Set;
 import sdstore.businesserver.domain.Catalogo;
 
 import sdstore.businesserver.domain.Produto;
-import sdstore.businesserver.exception.CategoriaNameException;
 import sdstore.businesserver.exception.ProdutoListException;
 import sdstore.businesserver.service.dto.CategoriaListDto;
 
