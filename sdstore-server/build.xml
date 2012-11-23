@@ -11,6 +11,7 @@
 	<property name="deploy.dir" value="${project.jboss.home}/${project.jboss.conf}/deployments" />
 	<property name="build.dir" value="build" />
 	<property name="src.dir" value="src/java" />
+	<property name="lib.dir" value="lib" />
 	<property name="resources.dir" value="src/resources" />
 	<property name="javac.debug" value="true" />
 	<property name="javac.deprecation" value="false" />
