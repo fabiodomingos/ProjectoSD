@@ -180,7 +180,7 @@ public class ConsolaWebService {
 	}
 	
 	@WebMethod
-	public ProdListDto getlistaProdutos(String categoria) throws ProdutoListException, CategoriaNameException{
+	public ProdListDto getlistaProdutos(String categoria) throws CategoriaNameException, ProdutoListException{
 		try{
 			listaProdutosPortal.clear();
 //			podera estar a mais, a pensar numa solucao para nao ir sempre ao uddi
@@ -223,43 +223,55 @@ public class ConsolaWebService {
 		return dto;
 	}
 	
-	@WebMethod
-	public void juntaCarrinho(String codigo,Integer quantidade) throws ProdutoExistException{
-		try{
-			Integer controlo = 0;
-			for(String endereco:enderecos){
-				PortalWebService webService = getFornecedores(endereco);
-				sdstore.stubs.ProdutoDto dtoRecebido = webService.pedeProduto(codigo);
-				ProdutoDto prodEnviar = new ProdutoDto();
-				if(carrinhoCompras.isEmpty()){
-					prodEnviar.setId(dtoRecebido.getId());
-					prodEnviar.setQuantidade(quantidade);
-					prodEnviar.setPreco(dtoRecebido.getPreco()+dtoRecebido.getPreco()*0.1);
-					prodEnviar.setCategoria(dtoRecebido.getCategoria());
-					prodEnviar.setDescricao(dtoRecebido.getDescricao());
-					carrinhoCompras.add(prodEnviar);	
-				}else{
-					for(ProdutoDto dto:carrinhoCompras){
-						if(dto.getId().equals(codigo)){
-						dto.setQuantidade(quantidade+dto.getQuantidade());
-						controlo=1;
-						}
-					}
-				}
-				if(controlo==0){
-				prodEnviar.setId(dtoRecebido.getId());
-				prodEnviar.setQuantidade(quantidade);
-				prodEnviar.setPreco(dtoRecebido.getPreco()+dtoRecebido.getPreco()*0.1);
-				prodEnviar.setCategoria(dtoRecebido.getCategoria());
-				prodEnviar.setDescricao(dtoRecebido.getDescricao());
-				carrinhoCompras.add(prodEnviar);
-				}
-			}
-
-		}catch(ProdutoExistException_Exception e){
-			throw new ProdutoExistException(codigo);
-		}
-	}
+//	@WebMethod
+//	public void juntaCarrinho(String codigo,Integer quantidade) throws ProdutoExistException{
+//		try{
+//			Integer controlo = 0;
+//			for(String endereco:enderecos){
+//				PortalWebService webService = getFornecedores(endereco);
+//				List<sdstore.stubs.ProdutoDto> listaProduto = webService.getListaProdutoWebService().getListaDto();
+//				for(sdstore.stubs.ProdutoDto prod:listaProduto){
+//					ProdutoDto prodEnviar = new ProdutoDto();
+//					if(prod.getId().equals(codigo)){
+//						prodEnviar.setId(prod.getId());
+//						prodEnviar.setQuantidade(prod.getQuantidade());
+//						prodEnviar.setPreco(prod.getPreco()+prod.getPreco()*0.1);
+//						prodEnviar.setCategoria(prod.getCategoria());
+//						prodEnviar.setDescricao(prod.getDescricao());
+//						carrinhoCompras.add(prodEnviar);
+//					}
+//				}
+//				//sdstore.stubs.ProdutoDto dtoRecebido = webService.pedeProduto(codigo);
+////				ProdutoDto prodEnviar = new ProdutoDto();
+////				if(carrinhoCompras.isEmpty()){
+////					prodEnviar.setId(dtoRecebido.getId());
+////					prodEnviar.setQuantidade(quantidade);
+////					prodEnviar.setPreco(dtoRecebido.getPreco()+dtoRecebido.getPreco()*0.1);
+////					prodEnviar.setCategoria(dtoRecebido.getCategoria());
+////					prodEnviar.setDescricao(dtoRecebido.getDescricao());
+////					carrinhoCompras.add(prodEnviar);	
+////				}else{
+////					for(ProdutoDto dto:carrinhoCompras){
+////						if(dto.getId().equals(codigo)){
+////						dto.setQuantidade(quantidade+dto.getQuantidade());
+////						controlo=1;
+////						}
+////					}
+////				}
+////				if(controlo==0){
+////				prodEnviar.setId(dtoRecebido.getId());
+////				prodEnviar.setQuantidade(quantidade);
+////				prodEnviar.setPreco(dtoRecebido.getPreco()+dtoRecebido.getPreco()*0.1);
+////				prodEnviar.setCategoria(dtoRecebido.getCategoria());
+////				prodEnviar.setDescricao(dtoRecebido.getDescricao());
+////				carrinhoCompras.add(prodEnviar);
+////				}
+//			}
+//
+//		}catch(ProdutoExistException_Exception e){
+//			throw new ProdutoExistException(codigo);
+//		}
+//	}
 	
 	@WebMethod
 	public void limpaCarrinho(){
