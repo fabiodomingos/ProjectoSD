@@ -3,6 +3,7 @@ package sdstore.businesserver.service;
 
 import java.net.PasswordAuthentication;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,6 +51,11 @@ public class ConsolaWebService {
 	private Set<String> listaCategoriasPortal = new HashSet<String>();
 	private Set<ProdutoDto> listaProdutosPortal = new HashSet<ProdutoDto>();
 	private Set<ProdutoDto> listaProdutosCliente = new HashSet<ProdutoDto>();
+	
+	//variavel de controlo das horas a actualizar
+	private int primeiraVez=0;
+	Calendar dataAntiga;
+	Calendar dataNova;
 	
 	static{
 	}
@@ -124,10 +130,39 @@ public class ConsolaWebService {
 		return webService;
 	}
 	
+//	metodo que verifica se necessita actualizar ou nao o UDDI
+	public boolean horaUpdate(){
+		System.out.println("A verificar horas");
+		boolean resposta=false;
+		if(primeiraVez==0){
+//			primeira vez tira os tempos
+			dataAntiga = Calendar.getInstance();
+			dataNova = Calendar.getInstance();
+			System.out.println(dataAntiga.getTimeInMillis()+" ESTA E A DATA ANTIGA");
+			System.out.println(dataNova.getTimeInMillis()+" ESTA E A DATA NOVA");
+			resposta = true;
+			primeiraVez=1;
+		}else{
+			dataNova = Calendar.getInstance();
+			long diferenca = dataNova.getTimeInMillis() - dataAntiga.getTimeInMillis();
+			System.out.println("diferenca em milisegundos: "+diferenca);
+			if(diferenca>10000){
+				dataAntiga = Calendar.getInstance();
+				resposta = true;
+			}else{
+				resposta = false;
+			}
+		}
+		return resposta;
+	}
+	
 	@WebMethod
 	public CategoriaListDto listaCategoriaWebService() throws ProdutoListException{
 		try{
+//			horaUpdate();
+			if(horaUpdate()==true){
 			updateEndpointUrl();
+			}
 			CategoriaListDto dto = new CategoriaListDto();
 			System.out.println("listaCategorias!!!!!!");
 			for(String endereco:enderecos){
@@ -149,7 +184,9 @@ public class ConsolaWebService {
 		try{
 			listaProdutosPortal.clear();
 //			podera estar a mais, a pensar numa solucao para nao ir sempre ao uddi
+			if(horaUpdate()==true){
 			updateEndpointUrl();
+			}
 			for(String endereco:enderecos){
 				PortalWebService webService = getFornecedores(endereco);
 				List<sdstore.stubs.ProdutoDto> listaProduto = webService.getListaProdutoWebService().getListaDto();
