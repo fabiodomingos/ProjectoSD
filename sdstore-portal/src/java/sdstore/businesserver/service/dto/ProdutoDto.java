@@ -1,6 +1,6 @@
 package sdstore.businesserver.service.dto;
 
-public class ProdutoDto {
+public class ProdutoDto implements Comparable<ProdutoDto>{
 	
 	private String id;
 	private Double preco;
@@ -59,5 +59,16 @@ public class ProdutoDto {
 
 	public void setCategoria(String categoria) {
 		this.categoria = categoria;
+	}
+	
+	@Override
+	public int compareTo(ProdutoDto dto) {
+		if(this.getPreco() < dto.getPreco()){
+			return -1;
+		}
+		if(this.getPreco() > dto.getPreco()){
+			return 1;
+		}
+		return 0;
 	}
 }
