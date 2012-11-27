@@ -39,6 +39,8 @@ public class BusinessServerInitListener implements ServletContextListener{
 	
 	TreeSet<String> enderecos = new TreeSet<String>();
 	
+	BaseDados dados;
+	
 	// lista de bindings URL
 	ArrayList<String> bindings = new ArrayList<String>();
 
@@ -52,6 +54,7 @@ public class BusinessServerInitListener implements ServletContextListener{
 		//codigo para executar apos o deploy da aplicacao no jboss
 		try {
 			
+			dados = new BaseDados(new File("/temp/bd_projecto"));
 			String catalogoName = arg0.getServletContext().getInitParameter("nomeCatalogo");
 			String listaProdutosTxt = arg0.getServletContext().getInitParameter("listaProdutos");
 
@@ -72,7 +75,8 @@ public class BusinessServerInitListener implements ServletContextListener{
 				Catalogo catalogo = Catalogo.getCatalogo(catalogoName);
 				//vai buscar um produto e regista no catalogo
 				Produto p = Produto.getProduto(splited[0]);
-				catalogo.registaProduto(p,Double.parseDouble(splited[3]), Integer.parseInt(splited[4]));				
+				catalogo.registaProduto(p,Double.parseDouble(splited[3]), Integer.parseInt(splited[4]));	
+				dados.run(p);
 			}
 			
 			
