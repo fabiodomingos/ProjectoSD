@@ -29,6 +29,7 @@ import javax.xml.registry.infomodel.ServiceBinding;
 import javax.xml.ws.BindingProvider;
 
 import sdstore.businesserver.exception.CategoriaNameException;
+import sdstore.businesserver.exception.PortalException;
 import sdstore.businesserver.exception.ProdutoExistException;
 import sdstore.businesserver.exception.ProdutoListException;
 import sdstore.businesserver.exception.QuantidadeException;
@@ -241,6 +242,7 @@ public class ConsolaWebService {
 						prodEnviar.setPreco(prod.getPreco()+prod.getPreco()*0.1);
 						prodEnviar.setCategoria(prod.getCategoria());
 						prodEnviar.setDescricao(prod.getDescricao());
+						prodEnviar.setFornecedor(endereco);
 						carrinhoCompras.add(prodEnviar);
 					}
 				}
@@ -278,12 +280,14 @@ public class ConsolaWebService {
 		String nome = null;
 		Integer quantidade = 0;
 		try{		
-		for(ProdutoDto prod: carrinhoCompras){
+		for(ProdutoDto prod: carrinhoCliente){
+			PortalWebService webService = getFornecedores(prod.getFornecedor());
 			String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade());
 			nome = prod.getId();
 			quantidade = prod.getQuantidade();
 		}
 		carrinhoCompras.clear();
+		carrinhoCliente.clear();
 		}catch(ProdutoExistException_Exception e){
 			throw new ProdutoExistException(nome);
 		}catch(QuantidadeException_Exception e){

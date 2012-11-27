@@ -7,6 +7,7 @@ public class ProdutoDto implements Comparable<ProdutoDto>{
 	private Integer quantidade;
 	private String descricao;
 	private String categoria;
+	private String fornecedor;
 		
 	public ProdutoDto(){
 		
@@ -70,5 +71,13 @@ public class ProdutoDto implements Comparable<ProdutoDto>{
 			return 1;
 		}
 		return 0;
+	}
+
+	public String getFornecedor() {
+		return fornecedor;
+	}
+
+	public void setFornecedor(String fornecedor) {
+		this.fornecedor = fornecedor;
 	}
 }

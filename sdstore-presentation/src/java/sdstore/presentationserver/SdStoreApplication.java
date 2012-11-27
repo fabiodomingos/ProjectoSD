@@ -131,8 +131,8 @@ public class SdStoreApplication {
 	private static void juntaCommand(String codigo, Integer quantidade) {
 		try {
 			serviceBridge.Junta(codigo,quantidade);
-		} catch (ProdutoExistException e) {
-			ProdutoExistExceptionPresenter.present(e);
+		} catch (ProdutoListException e) {
+			ProdutoListExceptionPresenter.present(e);
 		} catch(SOAPFaultException e){
 			
 		}

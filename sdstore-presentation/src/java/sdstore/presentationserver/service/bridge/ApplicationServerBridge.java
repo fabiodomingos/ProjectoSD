@@ -1,5 +1,7 @@
 package sdstore.presentationserver.service.bridge;
 
+import javax.xml.ws.soap.SOAPFaultException;
+
 import sdstore.presentationserver.exception.CategoriaNameException;
 import sdstore.presentationserver.exception.ProdutoExistException;
 import sdstore.presentationserver.exception.ProdutoListException;
@@ -15,7 +17,7 @@ public interface ApplicationServerBridge{
 	
 	public void Limpa();
 	
-	public void Junta(String codigo,Integer quantidade) throws ProdutoExistException;
+	public void Junta(String codigo,Integer quantidade) throws ProdutoListException, SOAPFaultException;
 	
 	public CarrinhoDto Carrinho();
 	
