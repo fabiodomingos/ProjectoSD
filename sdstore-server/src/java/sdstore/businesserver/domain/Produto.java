@@ -84,4 +84,6 @@ public class Produto {
 	public void setPreco(Double prize) {
 		this.preco = prize;
 	}
+	
+	private Produto() {};
 }
