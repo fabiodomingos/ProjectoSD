@@ -113,5 +113,13 @@ public class BaseDados {
 //	        assert bob != null;
 //	        assert !bob.employerIds.contains(gizmoInc.id);
 	    }
+	
+	
+	public Produto get(String codigo) throws DatabaseException{
+		
+		Produto resposta = dao.produtoById.get(codigo);
+		return resposta;
+	}
+	
 
 }
