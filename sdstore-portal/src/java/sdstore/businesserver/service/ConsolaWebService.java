@@ -218,6 +218,10 @@ public class ConsolaWebService {
 	
 	@WebMethod
 	public CarrinhoDto listaCarrinho(){
+		horaUpdate();
+		if(horaUpdate()==true){
+		updateEndpointUrl();
+		}
 		Double precoTotal = 0.0;
 		CarrinhoDto dto = new CarrinhoDto(carrinhoCliente);
 		for(ProdutoDto prod : carrinhoCliente){
@@ -231,6 +235,10 @@ public class ConsolaWebService {
 	@WebMethod
 	public void juntaCarrinho(String codigo,Integer quantidade) throws ProdutoListException{
 		try{
+			horaUpdate();
+			if(horaUpdate()==true){
+			updateEndpointUrl();
+			}
 			for(String endereco:enderecos){
 				PortalWebService webService = getFornecedores(endereco);
 				List<sdstore.stubs.ProdutoDto> listaProduto = webService.getListaProdutoWebService().getListaDto();
@@ -280,6 +288,10 @@ public class ConsolaWebService {
 		String nome = null;
 		Integer quantidade = 0;
 		try{		
+			horaUpdate();
+			if(horaUpdate()==true){
+			updateEndpointUrl();
+			}
 		for(ProdutoDto prod: carrinhoCliente){
 			PortalWebService webService = getFornecedores(prod.getFornecedor());
 			String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade());
