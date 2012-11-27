@@ -3,7 +3,10 @@ package sdstore.businesserver.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sleepycat.persist.model.Entity;
+import com.sleepycat.persist.model.PrimaryKey;
 
+@Entity
 public class Produto {
 	
 	private static Map<String, Produto> produtoMap;
@@ -12,6 +15,7 @@ public class Produto {
 		Produto.produtoMap = new HashMap<String, Produto>();
 	}
 	
+	@PrimaryKey
 	String id;
 	String descricao;
 	String categoria;
