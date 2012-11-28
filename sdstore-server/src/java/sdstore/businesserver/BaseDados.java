@@ -1,12 +1,15 @@
 package sdstore.businesserver;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import sdstore.businesserver.domain.Produto;
 
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
+import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.StoreConfig;
 
@@ -121,5 +124,13 @@ public class BaseDados {
 		return resposta;
 	}
 	
+	public List<Produto> getCategoria() throws DatabaseException{
+		EntityCursor<Produto> produtos = dao.produtoById.entities();
+		List<Produto> listaProdutos = new ArrayList<Produto>();
+		for(Produto prod:produtos){
+			listaProdutos.add(prod);
+		}
+		return listaProdutos;
+	}
 
 }
