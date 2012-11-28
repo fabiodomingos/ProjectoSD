@@ -142,6 +142,7 @@ public class Catalogo {
 		if(controlo==0){
 			throw new ProdutoExistException(_codigo);
 		}
+		dados.run(prod);
 		return resultado;
 //		for(Produto prod : produtoMap){
 //			if(prod.getId().equals(_codigo)){
