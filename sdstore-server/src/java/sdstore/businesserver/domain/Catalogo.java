@@ -57,7 +57,10 @@ public class Catalogo {
 		this.preco_portal = preco_portal;
 		this.quantidade_total = quantidade_total;
 		//produtoMap = new ArrayList<Produto>();
-		dados = new BaseDados(new File("/temp/bd_projecto"));
+		File dir = new File("/temp/"+name);
+		dir.mkdir();
+//		dados = new BaseDados(new File("/temp/"+name));
+		dados=new BaseDados(dir);
 	}
 	
 	public static void createCatalogo(String name){
@@ -94,14 +97,14 @@ public class Catalogo {
 		return p;
 	}
 	
-//	public static List<Produto> getProdutoList() throws ProdutoListException{
+	public static List<Produto> getProdutoList() throws ProdutoListException{
 ////		if(produtoMap.isEmpty()){
 ////			throw new ProdutoListException();
 ////		}
 ////		return produtoMap;
 		
-
-//	}
+		return dados.getCategoria();
+	}
 
 //	regista um produto no catalogo
 	public void registaProduto(Produto p,Double preco,Integer quantidade) {
