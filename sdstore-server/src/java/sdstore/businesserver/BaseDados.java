@@ -66,5 +66,14 @@ public class BaseDados {
 		}
 		return listaProdutos;
 	}
+	
+	
+	public void close()
+	        throws DatabaseException {
+
+	        store.close();
+	        env.close();
+	    }
+	
 
 }
