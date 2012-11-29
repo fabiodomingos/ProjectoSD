@@ -10,8 +10,6 @@ public class ProductAccessor {
 	
 	/* Person accessors */
     PrimaryIndex<String,Produto> produtoById;
-//    SecondaryIndex<String,String,Produto> produtoByCategoria;
-//    SecondaryIndex<String,String,Produto> produtoByDescricao;
 
 
     /* Opens all primary and secondary indices. */
@@ -20,14 +18,6 @@ public class ProductAccessor {
 
         produtoById = store.getPrimaryIndex(
             String.class, Produto.class);
-
-//        produtoByCategoria = store.getSecondaryIndex(
-//            produtoById, String.class, "Categoria");
-//
-//        produtoByDescricao = store.getSecondaryIndex(
-//            produtoById, String.class, "Descricao");
-
-
     }
 
 }
