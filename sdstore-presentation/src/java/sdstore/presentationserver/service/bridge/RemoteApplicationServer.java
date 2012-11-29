@@ -69,19 +69,19 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	}
 
 	@Override
-	public void Junta(String codigo,Integer quantidade) throws ProdutoListException,SOAPFaultException {
+	public void Junta(String codigo,Integer quantidade,String user) throws ProdutoListException,SOAPFaultException {
 		try{
 		updateEndpointUrl();
-		webService.juntaCarrinho(codigo, quantidade);
+		webService.juntaCarrinho(codigo, quantidade, user);
 		}catch(ProdutoListException_Exception e){
 			throw new ProdutoListException();
 		}
 	}
 
 	@Override
-	public CarrinhoDto Carrinho() throws SOAPFaultException{
+	public CarrinhoDto Carrinho(String user) throws SOAPFaultException{
 		updateEndpointUrl();
-		CarrinhoDto dtoCarrinho = webService.listaCarrinho();
+		CarrinhoDto dtoCarrinho = webService.listaCarrinho(user);
 		return dtoCarrinho;
 	}
 	
