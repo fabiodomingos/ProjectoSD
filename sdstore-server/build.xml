@@ -100,7 +100,7 @@
 
 
 	<!-- this is new: Undeploy all the web services -->
-	<target name="undeployall" depends="undeploy-sdstore-server-fornecedor1" description="Deploy all web services">
+	<target name="undeployall" depends="undeploy-sdstore-server-fornecedor1,undeploy-sdstore-server-fornecedor2" description="Deploy all web services">
 	</target>
 
 	<target name="undeploy" description="Undeploy from JBoss AS">
