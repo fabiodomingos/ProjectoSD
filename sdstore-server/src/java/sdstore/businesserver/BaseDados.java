@@ -64,6 +64,7 @@ public class BaseDados {
 		for(Produto prod:produtos){
 			listaProdutos.add(prod);
 		}
+		produtos.close();
 		return listaProdutos;
 	}
 	
