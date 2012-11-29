@@ -59,6 +59,10 @@ public class Catalogo {
 		dados=new BaseDados(dir);
 	}
 	
+	public static BaseDados getDados(){
+		return dados;
+	}
+	
 	public static void createCatalogo(String name){
 //		Catalogo catalogo = Catalogo.catalogoMap.get(name);
 		Catalogo newCatalogo = new Catalogo(name, 0.1, 0);
