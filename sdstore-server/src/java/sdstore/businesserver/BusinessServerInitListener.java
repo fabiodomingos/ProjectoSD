@@ -53,11 +53,12 @@ public class BusinessServerInitListener implements ServletContextListener{
 	public void contextInitialized(ServletContextEvent arg0){
 		//codigo para executar apos o deploy da aplicacao no jboss
 		try {
-			
-			//dados = new BaseDados(new File("/temp/bd_projecto"));
 			String catalogoName = arg0.getServletContext().getInitParameter("nomeCatalogo");
 			String listaProdutosTxt = arg0.getServletContext().getInitParameter("listaProdutos");
 
+			File dir = new File("/temp/"+catalogoName+"/je.lck");
+			dir.delete();
+			
 			//le a linha do ficheiro
 			File file = new File(listaProdutosTxt);
 			FileInputStream in = new FileInputStream(file);
