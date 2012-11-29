@@ -38,6 +38,8 @@ import sdstore.businesserver.domain.Produto;
 public class BusinessServerInitListener implements ServletContextListener{
 	
 	TreeSet<String> enderecos = new TreeSet<String>();
+	File dir;
+	BaseDados dados;
 	
 	//BaseDados dados;
 	
@@ -46,7 +48,9 @@ public class BusinessServerInitListener implements ServletContextListener{
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0){
-		//codigo para libertar recursos antes do undeploy
+		dados.close();
+		dir.delete();
+		
 	}
 	
 	@Override 
@@ -56,8 +60,9 @@ public class BusinessServerInitListener implements ServletContextListener{
 			String catalogoName = arg0.getServletContext().getInitParameter("nomeCatalogo");
 			String listaProdutosTxt = arg0.getServletContext().getInitParameter("listaProdutos");
 
-			File dir = new File("/temp/"+catalogoName+"/je.lck");
-			dir.delete();
+			dir = new File("/temp/"+catalogoName+"/je.lck");
+			
+			
 			
 			//le a linha do ficheiro
 			File file = new File(listaProdutosTxt);
@@ -66,6 +71,7 @@ public class BusinessServerInitListener implements ServletContextListener{
 			
 			//cria o catalogo
 		    Catalogo.createCatalogo(catalogoName);
+		    dados = Catalogo.getDados();
 			
 			while(scanner.hasNext()){
 				String readLine = scanner.nextLine();
