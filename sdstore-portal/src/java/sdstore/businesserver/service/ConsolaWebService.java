@@ -56,6 +56,10 @@ public class ConsolaWebService {
 	private Set<ProdutoDto> listaProdutosPortal = new HashSet<ProdutoDto>();
 	private Set<ProdutoDto> listaProdutosCliente = new HashSet<ProdutoDto>();
 	
+	
+//	coisas do diabo
+	private Map<String,List<ProdutoDto>> carrinhoClientes = new HashMap<String, List<ProdutoDto>>();
+	
 	//variavel de controlo das horas a actualizar
 	private int primeiraVez=0;
 	private Integer controlo = 0;
@@ -164,6 +168,8 @@ public class ConsolaWebService {
 	@WebMethod
 	public CategoriaListDto listaCategoriaWebService() throws ProdutoListException{
 		try{
+			
+			
 			if(horaUpdate()==true){
 			updateEndpointUrl();
 			}
@@ -216,7 +222,7 @@ public class ConsolaWebService {
 	}
 	
 	@WebMethod
-	public CarrinhoDto listaCarrinho(){
+	public CarrinhoDto listaCarrinho(String user){
 		Double precoTotal = 0.0;
 		CarrinhoDto dto = new CarrinhoDto(carrinhoCliente);
 		for(ProdutoDto prod : carrinhoCliente){
@@ -228,8 +234,14 @@ public class ConsolaWebService {
 	}
 	
 	@WebMethod
-	public void juntaCarrinho(String codigo,Integer quantidade) throws ProdutoListException{
+	public void juntaCarrinho(String codigo,Integer quantidade,String user) throws ProdutoListException{
 		try{
+			
+			if(!carrinhoClientes.isEmpty()){
+			 carrinhoCliente = carrinhoClientes.get(user);
+			 carrinhoClientes.remove(user);
+			}
+			
 			if(horaUpdate()==true){
 			updateEndpointUrl();
 			}
@@ -264,7 +276,9 @@ public class ConsolaWebService {
 					break;
 				}
 			}
+			carrinhoClientes.put(user, carrinhoCliente);
 			carrinhoCompras.clear();
+//			CarrinhoCompras c = new CarrinhoCompras(carrinhoCliente, user);
 
 		}catch(ProdutoListException_Exception e){
 			throw new ProdutoListException();
