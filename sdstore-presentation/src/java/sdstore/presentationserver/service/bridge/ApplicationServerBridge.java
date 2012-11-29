@@ -17,9 +17,9 @@ public interface ApplicationServerBridge{
 	
 	public void Limpa();
 	
-	public void Junta(String codigo,Integer quantidade) throws ProdutoListException, SOAPFaultException;
+	public void Junta(String codigo,Integer quantidade,String user) throws ProdutoListException, SOAPFaultException;
 	
-	public CarrinhoDto Carrinho();
+	public CarrinhoDto Carrinho(String user);
 	
 	public ProdListDto listaProdutosCategoria(String categoria) throws ProdutoListException, CategoriaNameException;
 	
