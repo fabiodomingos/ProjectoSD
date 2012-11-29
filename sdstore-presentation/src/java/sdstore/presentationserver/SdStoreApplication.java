@@ -34,11 +34,21 @@ public class SdStoreApplication {
 	
 	private static ApplicationServerBridge serviceBridge = null;
 	
-	public static void main(String[] args){
-		System.out.println("Benvindo a applicação SDStore\n\n"
-				+ "Insira o comando:");
+	private static String user = null;
 	
+	public static void main(String[] args){
+		
+		
+		System.out.println("Benvindo a applicação SDStore\n\n");
+		
 		serviceBridge = new RemoteApplicationServer();
+	
+		
+		System.out.println("Indique o seu username: ");
+		user = readInputFromConsole();
+		
+		System.out.println("Seja benvindo ao Portal: "+user);
+		
 		
 		while(true){
 			System.out.println("[SDStore]> ");
@@ -130,7 +140,7 @@ public class SdStoreApplication {
 
 	private static void juntaCommand(String codigo, Integer quantidade) {
 		try {
-			serviceBridge.Junta(codigo,quantidade);
+			serviceBridge.Junta(codigo,quantidade,user);
 		} catch (ProdutoListException e) {
 			ProdutoListExceptionPresenter.present(e);
 		} catch(SOAPFaultException e){
@@ -140,7 +150,7 @@ public class SdStoreApplication {
 
 	private static void carrinhoCommand() {
 		try {
-			CarrinhoDto result = serviceBridge.Carrinho();
+			CarrinhoDto result = serviceBridge.Carrinho(user);
 			CarrinhoPresenter.present(result);
 		} catch (Exception e) {
 			
