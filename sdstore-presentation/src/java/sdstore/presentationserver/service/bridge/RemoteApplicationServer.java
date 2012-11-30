@@ -86,16 +86,16 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	}
 	
 	@Override
-	public void Limpa(){
+	public void Limpa(String user){
 		updateEndpointUrl();
-		webService.limpaCarrinho();
+		webService.limpaCarrinho(user);
 	}
 	
 	@Override
-	public void Encomenda() throws ProdutoExistException, QuantidadeException,SOAPFaultException {
+	public void Encomenda(String user) throws ProdutoExistException, QuantidadeException,SOAPFaultException {
 		try{
 		updateEndpointUrl();
-		webService.encomenda();
+		webService.encomenda(user);
 		}catch(ProdutoExistException_Exception e){
 			throw new ProdutoExistException(null);
 		}catch(QuantidadeException_Exception e){
