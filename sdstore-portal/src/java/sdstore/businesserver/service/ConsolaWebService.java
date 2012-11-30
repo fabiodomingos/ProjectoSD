@@ -51,6 +51,9 @@ public class ConsolaWebService {
 	private Set<String> enderecos = new HashSet<String>();
 //	carrinho de compras do cliente
 	private List<ProdutoDto> carrinhoCompras = new ArrayList<ProdutoDto>();
+	
+	// carrinho de compras do cliente Auxiliar
+	private List<ProdutoDto> carrinhoComprasAux = new ArrayList<ProdutoDto>();
 
 	private Set<String> listaCategoriasPortal = new HashSet<String>();
 	private Set<ProdutoDto> listaProdutosPortal = new HashSet<ProdutoDto>();
@@ -243,6 +246,7 @@ public class ConsolaWebService {
 	public void juntaCarrinho(String codigo,Integer quantidade,String user) throws ProdutoListException{
 		try{
 			List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
+			List<ProdutoDto> carrinhoClienteAux = new ArrayList<ProdutoDto>();
 			System.out.println(carrinhoClientes);
 			System.out.println(carrinhoCliente);
 			if(!carrinhoClientes.isEmpty()){
@@ -253,47 +257,88 @@ public class ConsolaWebService {
 			if(horaUpdate()==true){
 			updateEndpointUrl();
 			}
+			
+			// Vai buscar todos os produtos que existem nos diferente fornecedores 
 			for(String endereco:enderecos){
 				PortalWebService webService = getFornecedores(endereco);
 				List<sdstore.stubs.ProdutoDto> listaProduto = webService.getListaProdutoWebService().getListaDto();
 				for(sdstore.stubs.ProdutoDto prod:listaProduto){
 					ProdutoDto prodEnviar = new ProdutoDto();
-					if(prod.getId().equals(codigo)){
-						prodEnviar.setId(prod.getId());
-						prodEnviar.setQuantidade(prod.getQuantidade());
-						prodEnviar.setPreco(prod.getPreco()+prod.getPreco()*0.1);
-						prodEnviar.setCategoria(prod.getCategoria());
-						prodEnviar.setDescricao(prod.getDescricao());
-						prodEnviar.setFornecedor(endereco);
-						carrinhoCompras.add(prodEnviar);
+					prodEnviar.setId(prod.getId());
+					prodEnviar.setQuantidade(prod.getQuantidade());
+					prodEnviar.setPreco(prod.getPreco()+prod.getPreco()*0.1);
+					prodEnviar.setCategoria(prod.getCategoria());
+					prodEnviar.setDescricao(prod.getDescricao());
+					prodEnviar.setFornecedor(endereco);
+					carrinhoCompras.add(prodEnviar);
+				}
+			}
+			
+			// Vamos retirar ao carrinhoCompras GLOBAL a quantidade que o cliente j‡ tem no seu carrinho 
+			for(ProdutoDto prod: carrinhoCompras){
+				for(ProdutoDto prod2: carrinhoCliente){
+					if((prod2.getId().equals(prod.getId()))
+							&&(prod2.getFornecedor().equals(prod.getFornecedor()))){
+						prod.setQuantidade(prod.getQuantidade()-prod2.getQuantidade());
 					}
 				}
 			}
-			Collections.sort(carrinhoCompras);
-			Integer quantidadeAux=0;
-			for(ProdutoDto dto: carrinhoCompras){
-				System.out.println("PRECOOOOO:  "+dto.getPreco());
-//				nova parte de verificacao da quantidade ja pedida.
-				for(ProdutoDto dtoaux:carrinhoCliente){
-					if((dtoaux.getId().equals(dto.getId()))&&(dtoaux.getFornecedor().equals(dto.getFornecedor()))){
-//						se ja existir o produto do mesmo fornecedor eu vou adicionar a quantidade k ja tinha requerido.
-						quantidadeAux = quantidade + dtoaux.getQuantidade();
-					}
+			
+			// Vai retirar do carrinhoCompras GLOBAL os produtos que n‹o queremos e colocamos numa lista auxiliar 
+			for(ProdutoDto prod: carrinhoCompras){
+				if(prod.getId().equals(codigo)&&prod.getQuantidade()>0){
+					carrinhoComprasAux.add(prod);
 				}
-					
-				quantidadeAux = dto.getQuantidade();
+			}
+
+			// Ordena o carrinhoComprasAux pelo preco
+			Collections.sort(carrinhoComprasAux);
+			
+			// Adiciona ao carrinhoCliente o produto pretendido
+			Integer quantidadeAux = 0;
+			for(ProdutoDto prod: carrinhoComprasAux){
+				quantidadeAux = prod.getQuantidade();
 				if(quantidade>quantidadeAux){
-					carrinhoCliente.add(dto);
+					carrinhoCliente.add(prod);
 					quantidade = quantidade-quantidadeAux;
 				}
 				else{
-					dto.setQuantidade(quantidade);
-					carrinhoCliente.add(dto);
+					prod.setQuantidade(quantidade);
+					carrinhoCliente.add(prod);
 					break;
 				}
 			}
-			carrinhoClientes.put(user, carrinhoCliente);
+			
+			// Junta os produtos por fornecedor		
+			Integer QuantidadeTotal = 0;
+			Double PrecoTotal = 0.0;
+			for(ProdutoDto prod : carrinhoCliente){
+				if(!carrinhoClienteAux.isEmpty()){
+					for(ProdutoDto prod2: carrinhoClienteAux){
+						if((prod2.getId().equals(prod.getId()))&&(prod2.getFornecedor().equals(prod.getFornecedor()))){
+							QuantidadeTotal = prod2.getQuantidade()+prod.getQuantidade();
+							PrecoTotal = prod2.getPreco()+prod.getPreco();
+							prod2.setQuantidade(QuantidadeTotal);
+							prod2.setPreco(PrecoTotal);
+//							break;
+							continue;
+						}
+						else{
+							carrinhoClienteAux.add(prod);
+							break;
+//							continue;
+						}
+					}
+				}
+				else{
+					carrinhoClienteAux.add(prod);
+				}
+			}
+			
+			carrinhoClientes.put(user, carrinhoClienteAux);
 			carrinhoCompras.clear();
+			carrinhoComprasAux.clear();
+
 		}catch(ProdutoListException_Exception e){
 			throw new ProdutoListException();
 		}
