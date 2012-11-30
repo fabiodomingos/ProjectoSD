@@ -312,7 +312,9 @@ public class ConsolaWebService {
 			// Junta os produtos por fornecedor		
 			Integer QuantidadeTotal = 0;
 			Double PrecoTotal = 0.0;
+			Integer controlo = 0;
 			for(ProdutoDto prod : carrinhoCliente){
+				controlo = 0;
 				if(!carrinhoClienteAux.isEmpty()){
 					for(ProdutoDto prod2: carrinhoClienteAux){
 						if((prod2.getId().equals(prod.getId()))&&(prod2.getFornecedor().equals(prod.getFornecedor()))){
@@ -321,14 +323,19 @@ public class ConsolaWebService {
 							prod2.setQuantidade(QuantidadeTotal);
 							prod2.setPreco(PrecoTotal);
 //							break;
-							continue;
+							controlo = 1;
+//							break;
 						}
-						else{
-							carrinhoClienteAux.add(prod);
-							break;
-//							continue;
-						}
+//						else{
+//							carrinhoClienteAux.add(prod);
+//							break;
+////							continue;
+//						}
 					}
+					if(controlo == 0){
+						carrinhoClienteAux.add(prod);
+					}
+					
 				}
 				else{
 					carrinhoClienteAux.add(prod);
