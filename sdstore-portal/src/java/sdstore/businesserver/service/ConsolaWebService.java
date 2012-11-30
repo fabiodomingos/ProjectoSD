@@ -121,9 +121,7 @@ public class ConsolaWebService {
 						enderecos.add(sb.getAccessURI());
 					}
 				}
-			}
-//			System.out.println("A IMPRIMIR OS ENDERECOS QUE ESTAO NO PORTAL ACESSIVEIS");
-//			System.out.println(enderecos);			
+			}		
 		}catch(Exception e){
 			
 		}
@@ -150,8 +148,6 @@ public class ConsolaWebService {
 //			primeira vez tira os tempos
 			dataAntiga = Calendar.getInstance();
 			dataNova = Calendar.getInstance();
-//			System.out.println(dataAntiga.getTimeInMillis()+" ESTA E A DATA ANTIGA");
-//			System.out.println(dataNova.getTimeInMillis()+" ESTA E A DATA NOVA");
 			resposta = true;
 			primeiraVez=1;
 		}else{
@@ -312,9 +308,9 @@ public class ConsolaWebService {
 			// Junta os produtos por fornecedor		
 			Integer QuantidadeTotal = 0;
 			Double PrecoTotal = 0.0;
-			Integer controlo = 0;
+			Integer control = 0;
 			for(ProdutoDto prod : carrinhoCliente){
-				controlo = 0;
+				control = 0;
 				if(!carrinhoClienteAux.isEmpty()){
 					for(ProdutoDto prod2: carrinhoClienteAux){
 						if((prod2.getId().equals(prod.getId()))&&(prod2.getFornecedor().equals(prod.getFornecedor()))){
@@ -322,17 +318,10 @@ public class ConsolaWebService {
 							PrecoTotal = prod2.getPreco()+prod.getPreco();
 							prod2.setQuantidade(QuantidadeTotal);
 							prod2.setPreco(PrecoTotal);
-//							break;
-							controlo = 1;
-//							break;
+							control = 1;
 						}
-//						else{
-//							carrinhoClienteAux.add(prod);
-//							break;
-////							continue;
-//						}
 					}
-					if(controlo == 0){
+					if(control == 0){
 						carrinhoClienteAux.add(prod);
 					}
 					
