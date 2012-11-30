@@ -13,9 +13,9 @@ import sdstore.presentationserver.service.stubs.ProdutoListException_Exception;
 
 public interface ApplicationServerBridge{
 
-	public void Encomenda() throws ProdutoExistException, QuantidadeException;
+	public void Encomenda(String user) throws ProdutoExistException, QuantidadeException;
 	
-	public void Limpa();
+	public void Limpa(String user);
 	
 	public void Junta(String codigo,Integer quantidade,String user) throws ProdutoListException, SOAPFaultException;
 	
