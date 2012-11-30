@@ -88,8 +88,7 @@ public class Catalogo {
 	public void registaProduto(Produto p,Double preco,Integer quantidade) {
 		p.setQuantidade(quantidade);
 		p.setPreco(preco);
-		dados.run(p);
-//		System.out.println("VERRRR A BASE DE DADOS: "+ dados);
+		dados.run2(p);
 	}
 
 	public static String retiraProduto(String _codigo,Integer _quantidade) throws ProdutoExistException, QuantidadeException {
