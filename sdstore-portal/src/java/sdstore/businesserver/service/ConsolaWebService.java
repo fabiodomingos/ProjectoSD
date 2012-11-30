@@ -51,7 +51,7 @@ public class ConsolaWebService {
 	private Set<String> enderecos = new HashSet<String>();
 //	carrinho de compras do cliente
 	private List<ProdutoDto> carrinhoCompras = new ArrayList<ProdutoDto>();
-	private List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
+
 	private Set<String> listaCategoriasPortal = new HashSet<String>();
 	private Set<ProdutoDto> listaProdutosPortal = new HashSet<ProdutoDto>();
 	private Set<ProdutoDto> listaProdutosCliente = new HashSet<ProdutoDto>();
@@ -147,14 +147,14 @@ public class ConsolaWebService {
 //			primeira vez tira os tempos
 			dataAntiga = Calendar.getInstance();
 			dataNova = Calendar.getInstance();
-			System.out.println(dataAntiga.getTimeInMillis()+" ESTA E A DATA ANTIGA");
-			System.out.println(dataNova.getTimeInMillis()+" ESTA E A DATA NOVA");
+//			System.out.println(dataAntiga.getTimeInMillis()+" ESTA E A DATA ANTIGA");
+//			System.out.println(dataNova.getTimeInMillis()+" ESTA E A DATA NOVA");
 			resposta = true;
 			primeiraVez=1;
 		}else{
 			dataNova = Calendar.getInstance();
 			long diferenca = dataNova.getTimeInMillis() - dataAntiga.getTimeInMillis();
-			System.out.println("diferenca em milisegundos: "+diferenca);
+//			System.out.println("diferenca em milisegundos: "+diferenca);
 			if(diferenca>10000){
 				dataAntiga = Calendar.getInstance();
 				resposta = true;
@@ -224,19 +224,27 @@ public class ConsolaWebService {
 	@WebMethod
 	public CarrinhoDto listaCarrinho(String user){
 		Double precoTotal = 0.0;
+		List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
+		if(!carrinhoClientes.isEmpty()){
+			carrinhoCliente = carrinhoClientes.get(user);
+			carrinhoClientes.remove(user);
+		}
 		CarrinhoDto dto = new CarrinhoDto(carrinhoCliente);
 		for(ProdutoDto prod : carrinhoCliente){
 			System.out.println(prod);
 			precoTotal = precoTotal + prod.getPreco()*prod.getQuantidade();
 		}
 		dto.setTotalPreco(precoTotal);
+		carrinhoClientes.put(user, carrinhoCliente);
 		return dto;
 	}
 	
 	@WebMethod
 	public void juntaCarrinho(String codigo,Integer quantidade,String user) throws ProdutoListException{
 		try{
-			
+			List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
+			System.out.println(carrinhoClientes);
+			System.out.println(carrinhoCliente);
 			if(!carrinhoClientes.isEmpty()){
 			 carrinhoCliente = carrinhoClientes.get(user);
 			 carrinhoClientes.remove(user);
@@ -265,6 +273,14 @@ public class ConsolaWebService {
 			Integer quantidadeAux=0;
 			for(ProdutoDto dto: carrinhoCompras){
 				System.out.println("PRECOOOOO:  "+dto.getPreco());
+//				nova parte de verificacao da quantidade ja pedida.
+				for(ProdutoDto dtoaux:carrinhoCliente){
+					if((dtoaux.getId().equals(dto.getId()))&&(dtoaux.getFornecedor().equals(dto.getFornecedor()))){
+//						se ja existir o produto do mesmo fornecedor eu vou adicionar a quantidade k ja tinha requerido.
+						quantidadeAux = quantidade + dtoaux.getQuantidade();
+					}
+				}
+					
 				quantidadeAux = dto.getQuantidade();
 				if(quantidade>quantidadeAux){
 					carrinhoCliente.add(dto);
@@ -278,23 +294,30 @@ public class ConsolaWebService {
 			}
 			carrinhoClientes.put(user, carrinhoCliente);
 			carrinhoCompras.clear();
-//			CarrinhoCompras c = new CarrinhoCompras(carrinhoCliente, user);
-
 		}catch(ProdutoListException_Exception e){
 			throw new ProdutoListException();
 		}
 	}
 	
 	@WebMethod
-	public void limpaCarrinho(){
+	public void limpaCarrinho(String user){
+		List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
+		carrinhoCliente = carrinhoClientes.get(user);
 		carrinhoCliente.clear();
 		
 	}
 	
 	@WebMethod
-	public void encomenda() throws ProdutoExistException, QuantidadeException{
+	public void encomenda(String user) throws ProdutoExistException, QuantidadeException{
 		String nome = null;
 		Integer quantidade = 0;
+		List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
+		System.out.println(carrinhoClientes);
+		System.out.println(carrinhoCliente);
+		if(!carrinhoClientes.isEmpty()){
+			carrinhoCliente = carrinhoClientes.get(user);
+			
+		}
 		try{		
 			if(horaUpdate()==true){
 			updateEndpointUrl();
@@ -307,10 +330,13 @@ public class ConsolaWebService {
 		}
 		carrinhoCompras.clear();
 		carrinhoCliente.clear();
+		carrinhoClientes.remove(user);
 		}catch(ProdutoExistException_Exception e){
 			throw new ProdutoExistException(nome);
 		}catch(QuantidadeException_Exception e){
+			carrinhoCliente.clear();
 			carrinhoCompras.clear();
+			carrinhoClientes.remove(user);
 			throw new QuantidadeException(quantidade);
 		}
 	}
