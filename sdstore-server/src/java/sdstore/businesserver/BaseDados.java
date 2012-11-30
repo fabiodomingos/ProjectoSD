@@ -51,6 +51,10 @@ public class BaseDados {
 	        dao.produtoById.put(prod);
 	    }
 	
+	public void run2(Produto prod) throws DatabaseException{
+		dao.produtoById.putNoOverwrite(prod);
+	}
+	
 	
 	public Produto get(String codigo) throws DatabaseException{
 		
