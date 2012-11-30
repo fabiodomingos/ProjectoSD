@@ -118,7 +118,7 @@ public class SdStoreApplication {
 
 	private static void encomendaCommand() {
 		try {
-			serviceBridge.Encomenda();
+			serviceBridge.Encomenda(user);
 		} catch (ProdutoExistException e) {
 			ProdutoExistExceptionPresenter.present(e);
 		}catch(QuantidadeException e){
@@ -131,7 +131,7 @@ public class SdStoreApplication {
 
 	private static void limpaCommand() {
 		try {
-			serviceBridge.Limpa();
+			serviceBridge.Limpa(user);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
