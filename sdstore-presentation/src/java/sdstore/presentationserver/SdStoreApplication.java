@@ -39,7 +39,7 @@ public class SdStoreApplication {
 	public static void main(String[] args){
 		
 		
-		System.out.println("Benvindo a applicação SDStore\n\n");
+		System.out.println("Bem-vindo a applicação SDStore\n\n");
 		
 		serviceBridge = new RemoteApplicationServer();
 	
