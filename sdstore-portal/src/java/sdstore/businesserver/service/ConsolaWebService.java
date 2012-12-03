@@ -54,6 +54,7 @@ public class ConsolaWebService {
 	
 	// carrinho de compras do cliente Auxiliar
 	private List<ProdutoDto> carrinhoComprasAux = new ArrayList<ProdutoDto>();
+	
 
 	private Set<String> listaCategoriasPortal = new HashSet<String>();
 	private Set<ProdutoDto> listaProdutosPortal = new HashSet<ProdutoDto>();
@@ -167,8 +168,6 @@ public class ConsolaWebService {
 	@WebMethod
 	public CategoriaListDto listaCategoriaWebService() throws ProdutoListException{
 		try{
-			
-			
 			if(horaUpdate()==true){
 			updateEndpointUrl();
 			}
@@ -224,10 +223,10 @@ public class ConsolaWebService {
 	public CarrinhoDto listaCarrinho(String user){
 		Double precoTotal = 0.0;
 		List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
-		if(!carrinhoClientes.isEmpty()){
+		if(carrinhoClientes.containsKey(user)){
 			carrinhoCliente = carrinhoClientes.get(user);
-			carrinhoClientes.remove(user);
 		}
+		
 		CarrinhoDto dto = new CarrinhoDto(carrinhoCliente);
 		for(ProdutoDto prod : carrinhoCliente){
 			System.out.println(prod);
@@ -245,10 +244,9 @@ public class ConsolaWebService {
 			List<ProdutoDto> carrinhoClienteAux = new ArrayList<ProdutoDto>();
 			System.out.println(carrinhoClientes);
 			
-
-			 if(carrinhoClientes.containsKey(user)){
-				 carrinhoCliente = carrinhoClientes.get(user);
-			 }
+			if(carrinhoClientes.containsKey(user)){
+			 carrinhoCliente = carrinhoClientes.get(user);
+			}
 			 System.out.println(carrinhoCliente);
 			
 			if(horaUpdate()==true){
@@ -272,21 +270,23 @@ public class ConsolaWebService {
 			}
 			
 			// Vamos retirar ao carrinhoCompras GLOBAL a quantidade que o cliente j‡ tem no seu carrinho 
-			for(ProdutoDto prod: carrinhoCompras){
-				for(ProdutoDto prod2: carrinhoCliente){
-					if((prod2.getId().equals(prod.getId()))
-							&&(prod2.getFornecedor().equals(prod.getFornecedor()))){
-						prod.setQuantidade(prod.getQuantidade()-prod2.getQuantidade());
-					}
-				}
-			}
+			carrinhoCompras = retiraQuantiLista(carrinhoCliente);
+//			for(ProdutoDto prod: carrinhoCompras){
+//				for(ProdutoDto prod2: carrinhoCliente){
+//					if((prod2.getId().equals(prod.getId()))
+//							&&(prod2.getFornecedor().equals(prod.getFornecedor()))){
+//						prod.setQuantidade(prod.getQuantidade()-prod2.getQuantidade());
+//					}
+//				}
+//			}
 			
 			// Vai retirar do carrinhoCompras GLOBAL os produtos que n‹o queremos e colocamos numa lista auxiliar 
-			for(ProdutoDto prod: carrinhoCompras){
-				if(prod.getId().equals(codigo)&&prod.getQuantidade()>0){
-					carrinhoComprasAux.add(prod);
-				}
-			}
+			carrinhoComprasAux = adicionaAuxiliar(carrinhoCompras, codigo);
+//			for(ProdutoDto prod: carrinhoCompras){
+//				if(prod.getId().equals(codigo)&&prod.getQuantidade()>0){
+//					carrinhoComprasAux.add(prod);
+//				}
+//			}
 
 			// Ordena o carrinhoComprasAux pelo preco
 			Collections.sort(carrinhoComprasAux);
@@ -344,9 +344,10 @@ public class ConsolaWebService {
 	@WebMethod
 	public void limpaCarrinho(String user){
 		List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
-		carrinhoCliente = carrinhoClientes.get(user);
-		carrinhoCliente.clear();
-		
+		if(carrinhoClientes.containsKey(user)){
+		 carrinhoCliente = carrinhoClientes.get(user);
+		 carrinhoCliente.clear();
+		}
 	}
 	
 	@WebMethod
@@ -354,11 +355,10 @@ public class ConsolaWebService {
 		String nome = null;
 		Integer quantidade = 0;
 		List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
-		System.out.println(carrinhoClientes);
-		System.out.println(carrinhoCliente);
-		if(!carrinhoClientes.isEmpty()){
-			carrinhoCliente = carrinhoClientes.get(user);
-			
+//		System.out.println(carrinhoClientes);
+//		System.out.println(carrinhoCliente);
+		if(carrinhoClientes.containsKey(user)){
+			 carrinhoCliente = carrinhoClientes.get(user);
 		}
 		try{		
 			if(horaUpdate()==true){
@@ -422,5 +422,27 @@ public class ConsolaWebService {
 		
 	}
 	
-	
+	// Vamos retirar ao carrinhoCompras GLOBAL a quantidade que o cliente j‡ tem no seu carrinho 
+	public List<ProdutoDto> retiraQuantiLista(List<ProdutoDto> carrinhoCliente){
+		for(ProdutoDto prod: carrinhoCompras){
+			for(ProdutoDto prod2: carrinhoCliente){
+				if((prod2.getId().equals(prod.getId()))
+						&&(prod2.getFornecedor().equals(prod.getFornecedor()))){
+					prod.setQuantidade(prod.getQuantidade()-prod2.getQuantidade());
+				}
+			}
+		}
+		return carrinhoCompras;
+	}
+
+	// Vai retirar do carrinhoCompras GLOBAL os produtos que n‹o queremos e colocamos numa lista auxiliar 
+	public List<ProdutoDto> adicionaAuxiliar(List<ProdutoDto> carrinhoCompras,String codigo){
+//		List<ProdutoDto> carrinhoClienteAux = new ArrayList<ProdutoDto>();
+		for(ProdutoDto prod: carrinhoCompras){
+			if(prod.getId().equals(codigo)&&prod.getQuantidade()>0){
+				carrinhoComprasAux.add(prod);
+			}
+		}
+		return carrinhoComprasAux;
+	}
 }
