@@ -244,11 +244,12 @@ public class ConsolaWebService {
 			List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
 			List<ProdutoDto> carrinhoClienteAux = new ArrayList<ProdutoDto>();
 			System.out.println(carrinhoClientes);
-			System.out.println(carrinhoCliente);
-			if(!carrinhoClientes.isEmpty()){
-			 carrinhoCliente = carrinhoClientes.get(user);
-			 carrinhoClientes.remove(user);
-			}
+			
+
+			 if(carrinhoClientes.containsKey(user)){
+				 carrinhoCliente = carrinhoClientes.get(user);
+			 }
+			 System.out.println(carrinhoCliente);
 			
 			if(horaUpdate()==true){
 			updateEndpointUrl();
