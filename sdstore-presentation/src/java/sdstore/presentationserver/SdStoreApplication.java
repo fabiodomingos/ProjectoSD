@@ -47,7 +47,7 @@ public class SdStoreApplication {
 		System.out.println("Indique o seu username: ");
 		user = readInputFromConsole();
 		
-		System.out.println("Seja benvindo ao Portal: "+user);
+		System.out.println("Seja bem-vindo ao Portal: "+user);
 		
 		
 		while(true){
