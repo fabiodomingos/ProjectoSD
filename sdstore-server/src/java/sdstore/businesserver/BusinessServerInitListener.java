@@ -40,6 +40,7 @@ public class BusinessServerInitListener implements ServletContextListener{
 	TreeSet<String> enderecos = new TreeSet<String>();
 	File dir;
 	BaseDados dados;
+	String organizationName;
 	
 	//BaseDados dados;
 	
@@ -48,8 +49,93 @@ public class BusinessServerInitListener implements ServletContextListener{
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0){
-		dados.close();
-		dir.delete();
+		
+		try{
+			dados.close();
+			dir.delete();
+			
+			ConnectionFactory connFactory = org.apache.ws.scout.registry.ConnectionFactoryImpl.newInstance();
+			/**
+			 * Ligacao ao UDDI
+			 */
+			Properties props = new Properties();
+			props.setProperty("scout.juddi.client.config.file", "uddi.xml");
+			props.setProperty("javax.xml.registry.queryManagerURL",  "http://localhost:8081/juddiv3/services/inquiry");
+			props.setProperty("javax.xml.registry.lifeCycleManagerURL", "http://localhost:8081/juddiv3/services/publish");
+			props.setProperty("javax.xml.registry.securityManagerURL", "http://localhost:8081/juddiv3/services/security");
+			props.setProperty("scout.proxy.uddiVersion", "3.0");
+			props.setProperty("scout.proxy.transportClass", "org.apache.juddi.v3.client.transport.JAXWSTransport");
+			connFactory.setProperties(props);
+
+			Connection connection = connFactory.createConnection();
+
+
+			PasswordAuthentication passwdAuth = new PasswordAuthentication("username", "password".toCharArray());  
+			Set<PasswordAuthentication> creds = new HashSet<PasswordAuthentication>();  
+			creds.add(passwdAuth);
+			connection.setCredentials(creds);
+			
+			/**
+			 * Obter objecto RegistryService
+			 */
+			RegistryService rs = connection.getRegistryService();
+
+			/*
+			 * Obter objecto QueryManager
+			 */
+			BusinessQueryManager businessQueryManager = rs.getBusinessQueryManager();
+			/*
+			 * Obter objecto LifeCycle
+			 */
+			BusinessLifeCycleManager businessLifeCycleManager = rs.getBusinessLifeCycleManager();
+
+			Collection<String> findQualifiers = new ArrayList<String>();
+			findQualifiers.add(FindQualifier.SORT_BY_NAME_DESC);
+			
+			//String organizationName = "Anacom";
+			//String serviceName = operatorName;
+			organizationName = "SD-Store";
+
+			Collection<String> namePatterns = new ArrayList<String>();
+			namePatterns.add("%"+organizationName+"%");
+			BulkResponse r = businessQueryManager.findOrganizations(findQualifiers, namePatterns, null, null, null, null);
+
+			@SuppressWarnings("unchecked")
+			Collection<Organization> orgs = r.getCollection();
+			Organization orgApagar = null;
+			Service servApagar = null;
+
+			for(Organization o: orgs){
+				if (o.getName().getValue().equals(organizationName)) {
+					System.out.println("ENTRA AQUIII");
+					Collection<?> servicos = o.getServices();
+					Iterator<?> servIter = servicos.iterator();
+					while(servIter.hasNext()){
+						System.out.println("UMMMMMMMMMMM");
+						Service svc = (Service) servIter.next();
+//						Collection<?> serviceBindings = svc.getServiceBindings();
+//						Iterator<?> sbIter = serviceBindings.iterator();
+//						while(sbIter.hasNext()){
+//							System.out.println("DOIIIISSSSSSS");
+//							ServiceBinding sb = (ServiceBinding) sbIter.next();
+//							svc.removeServiceBinding(sb);
+//						}
+						o.removeService(svc);
+					}
+				}
+				orgs.remove(o);
+			}
+			
+			//orgApagar.removeService(servApagar);
+			businessLifeCycleManager.saveOrganizations(orgs);
+			
+		
+		
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		
 		
 	}
 	
@@ -139,7 +225,7 @@ public class BusinessServerInitListener implements ServletContextListener{
 			////////////////////////////////////////////////////////
 			
 			// Não se encontrou a organização já registada, logo vamos criá-la
-			String organizationName = "SD-Store";
+			organizationName = "SD-Store";
 			String nomeFornecedor = arg0.getServletContext().getInitParameter("nomeFornecedor");
 			String nomeFornecedorGrande = arg0.getServletContext().getInitParameter("nomeFornecedorGrande");
 			String bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
@@ -153,7 +239,9 @@ public class BusinessServerInitListener implements ServletContextListener{
 			Collection<Organization> orgs = r.getCollection();
 			                       
 			for (Organization o : orgs) {
+				System.out.println("TOMAAAAAA");
 				if (o.getName().getValue().equals(organizationName)) {
+					System.out.println("ENTRAAAAAAA");
 					Collection<?> servicos = o.getServices();
 					Iterator<?> servIter = servicos.iterator();
 					while(servIter.hasNext()){
