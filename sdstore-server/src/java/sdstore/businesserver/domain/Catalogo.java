@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.xa.XAException;
+
 import sdstore.businesserver.BaseDados;
 import sdstore.businesserver.exception.ProdutoExistException;
 import sdstore.businesserver.exception.ProdutoListException;
@@ -113,6 +115,27 @@ public class Catalogo {
 		}
 		dados.run(prod);
 		return resultado;
+	}
+	
+	
+	public static String prepare(String xid, String codigo, Integer quantidade){
+		try{
+			Produto prod = dados.get(codigo);
+			if(prod==null){
+				throw new ProdutoExistException(codigo);
+			}
+			String resultado;
+			if(prod.getQuantidade()<quantidade){
+				resultado = "NO";
+			}
+			else{
+				resultado = "YES";
+				dados.preparar(xid);
+			}
+			return resultado;
+		}catch(XAException e){
+			return "ABORT";
+		}
 	}
 	
 	
