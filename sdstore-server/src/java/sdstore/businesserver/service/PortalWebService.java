@@ -46,4 +46,13 @@ public class PortalWebService {
 		CategoriaListDto result = service.getListCategoria();
 		return result;	
 	}
+	
+	
+	@WebMethod
+	public String CanCommitService(String tx, String codigo, Integer quantidade){
+		CanCommitService service = new CanCommitService(tx,codigo,quantidade);
+		service.execute();
+		String resultado = service.getResultado();
+		return resultado;
+	}
 }
