@@ -55,6 +55,8 @@ public class ConsolaWebService {
 	// carrinho de compras do cliente Auxiliar
 	private List<ProdutoDto> carrinhoComprasAux = new ArrayList<ProdutoDto>();
 	
+	private List<String> respostas = new ArrayList<String>();
+	
 
 	private Set<String> listaCategoriasPortal = new HashSet<String>();
 	private Set<ProdutoDto> listaProdutosPortal = new HashSet<ProdutoDto>();
@@ -366,13 +368,28 @@ public class ConsolaWebService {
 			}
 		for(ProdutoDto prod: carrinhoCliente){
 			PortalWebService webService = getFornecedores(prod.getFornecedor());
-			String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade());
-			nome = prod.getId();
-			quantidade = prod.getQuantidade();
+			String resultado = webService.canCommitService(prod.getFornecedor(), prod.getId(), prod.getQuantidade());
+			respostas.add(resultado);
 		}
+		
+		System.out.println(respostas);
+		
+		if(verificaCanCommit().equals("Yes")){
+			for(ProdutoDto prod: carrinhoCliente){
+				PortalWebService webService = getFornecedores(prod.getFornecedor());
+				String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade());
+				nome = prod.getId();
+				quantidade = prod.getQuantidade();
+			}
+		}
+		else{
+//			webService.abort();
+		}
+		
 		carrinhoCompras.clear();
 		carrinhoCliente.clear();
 		carrinhoClientes.remove(user);
+		respostas.clear();
 		}catch(ProdutoExistException_Exception e){
 			throw new ProdutoExistException(nome);
 		}catch(QuantidadeException_Exception e){
@@ -383,6 +400,19 @@ public class ConsolaWebService {
 		}
 	}
 	
+	public String verificaCanCommit(){
+		String result = null;
+		for(String res: respostas){
+			if(res.equals("No")){
+				result="No";
+				break;
+			}
+			else{
+				result="Yes";
+			}
+		}
+		return result;
+	}
 	
 	public void juntaCategorias(String categoria){
 		listaCategoriasPortal.add(categoria);
