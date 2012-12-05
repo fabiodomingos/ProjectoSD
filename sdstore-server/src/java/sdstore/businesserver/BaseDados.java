@@ -93,6 +93,11 @@ public class BaseDados {
 		env.rollback(imp);
 	}
 	
+	public void commit(String xid) throws XAException{
+		XidImpl imp = new XidImpl(1, xid.getBytes(), null);
+		env.commit(imp, true);
+	}
+	
 	public void close()
 	        throws DatabaseException {
 
