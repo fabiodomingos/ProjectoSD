@@ -134,9 +134,16 @@ public class Catalogo {
 			}
 			return resultado;
 		}catch(XAException e){
-			return "ABORT";
+			return "NO";
 		}
 	}
 	
+	public static void abort(String xid){
+		try{
+		dados.abort(xid);
+		}catch(XAException e){
+			
+		}
+	}
 	
 }

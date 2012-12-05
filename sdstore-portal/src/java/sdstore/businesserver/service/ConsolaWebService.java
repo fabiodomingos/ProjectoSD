@@ -55,7 +55,7 @@ public class ConsolaWebService {
 	// carrinho de compras do cliente Auxiliar
 	private List<ProdutoDto> carrinhoComprasAux = new ArrayList<ProdutoDto>();
 	
-	private List<String> respostas = new ArrayList<String>();
+	private Map<String,String> respostas = new HashMap<String, String>();
 	
 
 	private Set<String> listaCategoriasPortal = new HashSet<String>();
@@ -80,6 +80,8 @@ public class ConsolaWebService {
 	
 	private void updateEndpointUrl(){
 		try{
+//			apaga antes de inserir novos para garantir que so esta la os que realmente estao.
+			enderecos.clear();
 			////////////////////////////////////////
 			////// LIGACAO AO UDDI REGISTRY ////////
 			////////////////////////////////////////
@@ -124,7 +126,8 @@ public class ConsolaWebService {
 						enderecos.add(sb.getAccessURI());
 					}
 				}
-			}		
+			}	
+			System.out.println("ENDERECOS DOS FORNECEDORES: "+enderecos);
 		}catch(Exception e){
 			
 		}
@@ -363,18 +366,20 @@ public class ConsolaWebService {
 			 carrinhoCliente = carrinhoClientes.get(user);
 		}
 		try{		
-			if(horaUpdate()==true){
-			updateEndpointUrl();
-			}
+//			if(horaUpdate()==true){
+//			updateEndpointUrl();
+//			}
 		for(ProdutoDto prod: carrinhoCliente){
 			PortalWebService webService = getFornecedores(prod.getFornecedor());
+			System.out.println("akiiiiiiii");
 			String resultado = webService.canCommitService(prod.getFornecedor(), prod.getId(), prod.getQuantidade());
-			respostas.add(resultado);
+			System.out.println("ESTOUUUUUUUUUUU");
+			respostas.put(prod.getFornecedor(), resultado);
 		}
 		
 		System.out.println(respostas);
 		
-		if(verificaCanCommit().equals("Yes")){
+		if(verificaCanCommit().equals("YES")){
 			for(ProdutoDto prod: carrinhoCliente){
 				PortalWebService webService = getFornecedores(prod.getFornecedor());
 				String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade());
@@ -390,25 +395,42 @@ public class ConsolaWebService {
 		carrinhoCliente.clear();
 		carrinhoClientes.remove(user);
 		respostas.clear();
-		}catch(ProdutoExistException_Exception e){
-			throw new ProdutoExistException(nome);
-		}catch(QuantidadeException_Exception e){
-			carrinhoCliente.clear();
+		}catch(Exception e){
+			System.out.println("VIM AQUI CABRÌO");
+			for(String chave: respostas.keySet()){
+				PortalWebService webService = getFornecedores(chave);
+				webService.abortService(chave);
+			}	
+		
+//		}catch(ProdutoExistException_Exception e){
+//			throw new ProdutoExistException(nome);
+//		}catch(QuantidadeException_Exception e){
+//			carrinhoCliente.clear();
+//			carrinhoCompras.clear();
+//			carrinhoClientes.remove(user);
+//			throw new QuantidadeException(quantidade);
+//		}catch(javax.xml.ws.soap.SOAPFaultException e){
+//			System.out.println("VIM AQUI CABRÌO");
+//			for(String chave: respostas.keySet()){
+//				PortalWebService webService = getFornecedores(chave);
+//				webService.abortService(chave);
+//			}
 			carrinhoCompras.clear();
+			carrinhoCliente.clear();
 			carrinhoClientes.remove(user);
-			throw new QuantidadeException(quantidade);
+			respostas.clear();
 		}
 	}
 	
 	public String verificaCanCommit(){
 		String result = null;
-		for(String res: respostas){
-			if(res.equals("No")){
-				result="No";
+		for(String res: respostas.values()){
+			if(res.equals("NO")){
+				result="NO";
 				break;
 			}
 			else{
-				result="Yes";
+				result="YES";
 			}
 		}
 		return result;

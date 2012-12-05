@@ -88,6 +88,10 @@ public class BaseDados {
 		env.prepare(imp);	
 	}
 	
+	public void abort(String xid) throws XAException{
+		XidImpl imp = new XidImpl(1, xid.getBytes(), null);
+		env.rollback(imp);
+	}
 	
 	public void close()
 	        throws DatabaseException {

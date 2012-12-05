@@ -55,4 +55,10 @@ public class PortalWebService {
 		String resultado = service.getResultado();
 		return resultado;
 	}
+	
+	@WebMethod
+	public void AbortService(String tx){
+		AbortService service = new AbortService(tx);
+		service.execute();
+	}
 }
