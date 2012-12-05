@@ -374,9 +374,7 @@ public class ConsolaWebService {
 //			}
 		for(ProdutoDto prod: carrinhoCliente){
 			PortalWebService webService = getFornecedores(prod.getFornecedor());
-			System.out.println("akiiiiiiii");
 			String resultado = webService.canCommitService(prod.getFornecedor(), prod.getId(), prod.getQuantidade());
-			System.out.println("ESTOUUUUUUUUUUU");
 			respostas.put(prod.getFornecedor(), resultado);
 		}
 		
@@ -385,7 +383,7 @@ public class ConsolaWebService {
 		if(verificaCanCommit().equals("YES")){
 			for(ProdutoDto prod: carrinhoCliente){
 				PortalWebService webService = getFornecedores(prod.getFornecedor());
-				String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade());
+				String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade(), prod.getFornecedor());
 				nome = prod.getId();
 				quantidade = prod.getQuantidade();
 			}
@@ -399,7 +397,6 @@ public class ConsolaWebService {
 		carrinhoClientes.remove(user);
 		respostas.clear();
 		}catch(Exception e){
-			System.out.println("VIM AQUI CABRÌO");
 			for(String chave: respostas.keySet()){
 				PortalWebService webService = getFornecedores(chave);
 				webService.abortService(chave);
