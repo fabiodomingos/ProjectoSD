@@ -146,4 +146,13 @@ public class Catalogo {
 		}
 	}
 	
+	
+	public static void commit(String xid){
+		try{
+			dados.commit(xid);
+		}catch(XAException e){
+			
+		}
+	}
+	
 }
