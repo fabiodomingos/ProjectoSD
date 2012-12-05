@@ -26,7 +26,9 @@ import javax.xml.registry.RegistryService;
 import javax.xml.registry.infomodel.Organization;
 import javax.xml.registry.infomodel.Service;
 import javax.xml.registry.infomodel.ServiceBinding;
+import javax.xml.soap.SOAPException;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.soap.SOAPFaultException;
 
 import sdstore.businesserver.exception.CategoriaNameException;
 import sdstore.businesserver.exception.PortalException;
@@ -173,6 +175,7 @@ public class ConsolaWebService {
 	@WebMethod
 	public CategoriaListDto listaCategoriaWebService() throws ProdutoListException{
 		try{
+			listaCategoriasPortal.clear();
 			if(horaUpdate()==true){
 			updateEndpointUrl();
 			}
@@ -356,7 +359,7 @@ public class ConsolaWebService {
 	}
 	
 	@WebMethod
-	public void encomenda(String user) throws ProdutoExistException, QuantidadeException{
+	public void encomenda(String user) throws ProdutoExistException, QuantidadeException, ProdutoListException{
 		String nome = null;
 		Integer quantidade = 0;
 		List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
@@ -400,7 +403,13 @@ public class ConsolaWebService {
 			for(String chave: respostas.keySet()){
 				PortalWebService webService = getFornecedores(chave);
 				webService.abortService(chave);
-			}	
+			}
+			carrinhoCompras.clear();
+			carrinhoCliente.clear();
+			carrinhoClientes.remove(user);
+			respostas.clear();
+			
+			throw new ProdutoListException();
 		
 //		}catch(ProdutoExistException_Exception e){
 //			throw new ProdutoExistException(nome);
@@ -415,10 +424,7 @@ public class ConsolaWebService {
 //				PortalWebService webService = getFornecedores(chave);
 //				webService.abortService(chave);
 //			}
-			carrinhoCompras.clear();
-			carrinhoCliente.clear();
-			carrinhoClientes.remove(user);
-			respostas.clear();
+		
 		}
 	}
 	

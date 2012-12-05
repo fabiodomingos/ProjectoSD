@@ -13,7 +13,7 @@ import sdstore.presentationserver.service.stubs.ProdutoListException_Exception;
 
 public interface ApplicationServerBridge{
 
-	public void Encomenda(String user) throws ProdutoExistException, QuantidadeException;
+	public void Encomenda(String user) throws ProdutoExistException, QuantidadeException, ProdutoListException;
 	
 	public void Limpa(String user);
 	

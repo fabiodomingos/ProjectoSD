@@ -92,7 +92,7 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	}
 	
 	@Override
-	public void Encomenda(String user) throws ProdutoExistException, QuantidadeException,SOAPFaultException {
+	public void Encomenda(String user) throws ProdutoExistException, QuantidadeException, ProdutoListException {
 		try{
 		updateEndpointUrl();
 		webService.encomenda(user);
@@ -100,6 +100,9 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 			throw new ProdutoExistException(null);
 		}catch(QuantidadeException_Exception e){
 			throw new QuantidadeException(null);
+		}catch(ProdutoListException_Exception e){
+			throw new ProdutoListException();
+			
 		}
 		
 	}

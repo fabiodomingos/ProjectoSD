@@ -27,7 +27,9 @@ import sdstore.presentationserver.service.bridge.RemoteApplicationServer;
 import sdstore.presentationserver.service.stubs.CarrinhoDto;
 import sdstore.presentationserver.service.stubs.CategoriaListDto;
 import sdstore.presentationserver.service.stubs.ProdListDto;
+import sdstore.presentationserver.service.stubs.ProdutoExistException_Exception;
 import sdstore.presentationserver.service.stubs.ProdutoListException_Exception;
+import sdstore.presentationserver.service.stubs.SOAPFaultException_Exception;
 
 
 public class SdStoreApplication {
@@ -123,8 +125,8 @@ public class SdStoreApplication {
 			ProdutoExistExceptionPresenter.present(e);
 		}catch(QuantidadeException e){
 			QuantidadeExceptionPresenter.present(e);
-		}catch(SOAPFaultException e){
-			
+		}catch(ProdutoListException e){
+			System.out.println("Encomenda nao realizada");
 		}
 		
 	}
