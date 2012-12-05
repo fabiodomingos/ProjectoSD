@@ -99,32 +99,37 @@ public class BusinessServerInitListener implements ServletContextListener{
 			Collection<String> namePatterns = new ArrayList<String>();
 			namePatterns.add("%"+organizationName+"%");
 			BulkResponse r = businessQueryManager.findOrganizations(findQualifiers, namePatterns, null, null, null, null);
-
+			
+			String nomeFornecedor = arg0.getServletContext().getInitParameter("nomeFornecedor");
+			String nomeFornecedorGrande = arg0.getServletContext().getInitParameter("nomeFornecedorGrande");
+			String bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
+		
+			
 			@SuppressWarnings("unchecked")
 			Collection<Organization> orgs = r.getCollection();
-			Organization orgApagar = null;
-			Service servApagar = null;
-
-			for(Organization o: orgs){
-				if (o.getName().getValue().equals(organizationName)) {
-					System.out.println("ENTRA AQUIII");
+			
+			System.out.println("ORGANIZACOES "+orgs);
+			ServiceBinding sbRemove = null;
+			for(Organization o:orgs){
+				if(o.getName().getValue().equals(organizationName)){
 					Collection<?> servicos = o.getServices();
 					Iterator<?> servIter = servicos.iterator();
 					while(servIter.hasNext()){
-						System.out.println("UMMMMMMMMMMM");
 						Service svc = (Service) servIter.next();
-//						Collection<?> serviceBindings = svc.getServiceBindings();
-//						Iterator<?> sbIter = serviceBindings.iterator();
-//						while(sbIter.hasNext()){
-//							System.out.println("DOIIIISSSSSSS");
-//							ServiceBinding sb = (ServiceBinding) sbIter.next();
-//							svc.removeServiceBinding(sb);
-//						}
-						o.removeService(svc);
+						Collection<?> serviceBindings = svc.getServiceBindings();
+						Iterator<?> sbIter = serviceBindings.iterator();
+						while(sbIter.hasNext()){
+							ServiceBinding sb = (ServiceBinding) sbIter.next();
+							System.out.println("SERVICE URL "+sb.getAccessURI());
+							if(sb.getAccessURI().equals(bindingURL)){
+								sbRemove = sb;
+							}
+						}
+						svc.removeServiceBinding(sbRemove);
 					}
 				}
-				orgs.remove(o);
 			}
+		
 			
 			//orgApagar.removeService(servApagar);
 			businessLifeCycleManager.saveOrganizations(orgs);
@@ -224,12 +229,11 @@ public class BusinessServerInitListener implements ServletContextListener{
 			// existentes no UDDI registry
 			////////////////////////////////////////////////////////
 			
-			// Não se encontrou a organização já registada, logo vamos criá-la
 			organizationName = "SD-Store";
 			String nomeFornecedor = arg0.getServletContext().getInitParameter("nomeFornecedor");
 			String nomeFornecedorGrande = arg0.getServletContext().getInitParameter("nomeFornecedorGrande");
 			String bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
-		
+			
 			Organization org = null;
 			Collection<String> namePatterns = new ArrayList<String>();
 			namePatterns.add("%"+organizationName+"%");
@@ -237,11 +241,10 @@ public class BusinessServerInitListener implements ServletContextListener{
 			BulkResponse r = businessQueryManager.findOrganizations(findQualifiers, namePatterns, null, null, null, null);
 			@SuppressWarnings("unchecked")
 			Collection<Organization> orgs = r.getCollection();
-			                       
+			
 			for (Organization o : orgs) {
-				System.out.println("TOMAAAAAA");
+				System.out.println("ENTROOOO AQUIIIIIII");
 				if (o.getName().getValue().equals(organizationName)) {
-					System.out.println("ENTRAAAAAAA");
 					Collection<?> servicos = o.getServices();
 					Iterator<?> servIter = servicos.iterator();
 					while(servIter.hasNext()){
@@ -253,35 +256,56 @@ public class BusinessServerInitListener implements ServletContextListener{
 							bindings.add(sb.getAccessURI());
 						}
 					}
+					org = o;
 				}
 			}
 			
-			if(bindings.contains(bindingURL)){
-				System.out.println("JAAAAA EXISTEEEEEEEEEE");
+			if(org==null){
+				System.out.println("MEQUIEEEEE");
+				org = businessLifeCycleManager.createOrganization(organizationName);
+
+				//Cria serviço
+				Service service = businessLifeCycleManager.createService(nomeFornecedor);
+				service.setDescription(businessLifeCycleManager.createInternationalString(nomeFornecedor));
+				// Adiciona o serviço à organização
+				org.addService(service);
+							    
+				// Cria serviceBinding
+				ServiceBinding serviceBinding = businessLifeCycleManager.createServiceBinding();
+				serviceBinding.setDescription(businessLifeCycleManager.createInternationalString("url do binding"));
+				serviceBinding.setValidateURI(false);
+				// Aqui define-se o URL do endpoint do Web Service
+				serviceBinding.setAccessURI(bindingURL);				
+				// Adiciona o serviceBinding ao serviço
+				service.addServiceBinding(serviceBinding);	
 			}
 			else{
-			
-			org = businessLifeCycleManager.createOrganization(organizationName);
-
-			// Cria serviço
-			Service service = businessLifeCycleManager.createService(nomeFornecedor);
-			service.setDescription(businessLifeCycleManager.createInternationalString(nomeFornecedor));
-			// Adiciona o serviço à organização
-			org.addService(service);
-			    
-			// Cria serviceBinding
-			ServiceBinding serviceBinding = businessLifeCycleManager.createServiceBinding();
-			serviceBinding.setDescription(businessLifeCycleManager.createInternationalString("url do binding"));
-			serviceBinding.setValidateURI(false);
-			// Aqui define-se o URL do endpoint do Web Service
-			serviceBinding.setAccessURI(bindingURL);				
-			// Adiciona o serviceBinding ao serviço
-			service.addServiceBinding(serviceBinding);	
+				if(bindings.contains(bindingURL)){
+					System.out.println("JAAAAA EXISTEEEEEEEEEE");
+				}
+				else{
+					System.out.println(org.getName().toString());
+					System.out.println("CAOOOOOOOOOOO");
+					Service service = businessLifeCycleManager.createService(nomeFornecedor);
+					service.setDescription(businessLifeCycleManager.createInternationalString(nomeFornecedor));
+				// Adiciona o serviço à organização
+					org.addService(service);
+							    
+				// Cria serviceBinding
+					ServiceBinding serviceBinding = businessLifeCycleManager.createServiceBinding();
+					serviceBinding.setDescription(businessLifeCycleManager.createInternationalString("url do binding"));
+					serviceBinding.setValidateURI(false);
+				// Aqui define-se o URL do endpoint do Web Service
+					serviceBinding.setAccessURI(bindingURL);				
+				// Adiciona o serviceBinding ao serviço
+					service.addServiceBinding(serviceBinding);	
+				}
+			}
 			
 			Collection<Organization> orgs2 = new ArrayList<Organization>();
 		    orgs2.add(org);
 		     
-		    // Finalmente, regista a nova organization/service/serviceBinding
+			// Finalmente, regista a nova organization/service/serviceBinding
 		    // (ou as novas alterações) no UDDI registry
 		    BulkResponse br1 = businessLifeCycleManager.saveOrganizations(orgs2);
 		    
@@ -289,10 +313,6 @@ public class BusinessServerInitListener implements ServletContextListener{
 	            System.out.println("Registo completado com sucesso.");
 		    else
 	            System.out.println("Erro durante o registo no UDDI.");
-		    
-			
-			
-			}
 				
 			
 		} catch (Exception e) {
