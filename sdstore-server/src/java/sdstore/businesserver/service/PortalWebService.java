@@ -14,8 +14,8 @@ import sdstore.businesserver.service.dto.ProdutoListDto;
 public class PortalWebService {
 	
 	@WebMethod
-	public String RetiraProduto(String codigo,Integer quantidade) throws ProdutoExistException, QuantidadeException{
-		RetiraProdutoService service = new RetiraProdutoService(codigo,quantidade);
+	public String RetiraProduto(String codigo,Integer quantidade,String tx) throws ProdutoExistException, QuantidadeException{
+		RetiraProdutoService service = new RetiraProdutoService(codigo,quantidade,tx);
 		service.execute();
 		String result = service.getResultado();
 		return result;
