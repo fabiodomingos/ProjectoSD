@@ -113,31 +113,49 @@ public class BusinessServerInitListener implements ServletContextListener{
 			Service apagar = null;
 			Organization delete = null;
 			for(Organization o:orgs){
-				if(o.getName().getValue().equals(organizationName)){
-					//Service serv = null;
-					Collection<?> servicos = o.getServices();
-					Iterator<?> servIter = servicos.iterator();
-					while(servIter.hasNext()){
-						Service svc = (Service) servIter.next();
-						//serv = svc;
-						Collection<?> serviceBindings = svc.getServiceBindings();
-						Iterator<?> sbIter = serviceBindings.iterator();
-						while(sbIter.hasNext()){
-							ServiceBinding sb = (ServiceBinding) sbIter.next();
-							System.out.println("SERVICE URL "+sb.getAccessURI());
-							if(sb.getAccessURI().equals(bindingURL)){
-								sbRemove = sb;
-								svc.removeServiceBinding(sbRemove);
-								break;
+				@SuppressWarnings("unchecked")
+				Collection<Service> servs = o.getServices();
+				if(!servs.isEmpty()){
+					for(Service c:servs){
+						Collection<ServiceBinding> binds = c.getServiceBindings();
+						if(c.getName().getValue().equals(nomeFornecedor)){
+							for(ServiceBinding b: binds){
+								if(b.getAccessURI().equals(bindingURL)){
+									c.removeServiceBinding(b);
+									break;
+								}
 							}
 						}
-						o.removeService(svc);
-						break;
-						//svc.removeServiceBinding(sbRemove);
 					}
-					//o.removeService(serv);
 				}
 			}
+//			for(Organization o:orgs){
+//				if(o.getName().getValue().equals(organizationName)){
+//					//Service serv = null;
+//					Collection<?> servicos = o.getServices();
+//					Iterator<?> servIter = servicos.iterator();
+//					while(servIter.hasNext()){
+//						Service svc = (Service) servIter.next();
+//						//serv = svc;
+//						Collection<?> serviceBindings = svc.getServiceBindings();
+//						System.out.println("BINDING QUE ESTA NO SERVICO: "+ serviceBindings.size());
+//						Iterator<?> sbIter = serviceBindings.iterator();
+//						while(sbIter.hasNext()){
+//							ServiceBinding sb = (ServiceBinding) sbIter.next();
+//							System.out.println("SERVICE URL "+sb.getAccessURI());
+//							if(sb.getAccessURI().equals(bindingURL)){
+//								sbRemove = sb;
+//								svc.removeServiceBinding(sbRemove);
+//								break;
+//							}
+//						}
+////						o.removeService(svc);
+//						break;
+//						//svc.removeServiceBinding(sbRemove);
+//					}
+//					//o.removeService(serv);
+//				}
+//			}
 		
 			
 			//orgApagar.removeService(servApagar);
@@ -239,9 +257,9 @@ public class BusinessServerInitListener implements ServletContextListener{
 			////////////////////////////////////////////////////////
 			
 			organizationName = "SD-Store";
-			String nomeFornecedor = arg0.getServletContext().getInitParameter("nomeFornecedor");
-			String nomeFornecedorGrande = arg0.getServletContext().getInitParameter("nomeFornecedorGrande");
-			String bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
+//			String nomeFornecedor = arg0.getServletContext().getInitParameter("nomeFornecedor");
+//			String nomeFornecedorGrande = arg0.getServletContext().getInitParameter("nomeFornecedorGrande");
+//			String bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
 			
 			Organization org = null;
 			Collection<String> namePatterns = new ArrayList<String>();
@@ -253,98 +271,111 @@ public class BusinessServerInitListener implements ServletContextListener{
 			
 			System.out.println("ORGANIZACAOES EXISTENTESSSS:   "+ orgs.size());
 			
-			for (Organization o : orgs) {
-				System.out.println("ENTROOOO AQUIIIIIII");
-				if (o.getName().getValue().equals(organizationName)) {
-					org = o;
-					Service service = null;
-					@SuppressWarnings("unchecked")
-					Collection<Service> servicos = o.getServices();
-					for(Service s: servicos){
-						if(s.getName().getValue().equals(nomeFornecedor)){
-							service = s;
-							System.out.println("QUAL O SERVICO: "+ service.getDescription().getValue());
-							ServiceBinding serviceBinding = null;
-							@SuppressWarnings("unchecked")
-							Collection<ServiceBinding> sBindings = s.getServiceBindings();
-							System.out.println("TOTAL DE URLS:  "+ sBindings.size());
-							for(ServiceBinding sb: sBindings){
-								System.out.println("VARIAVEL BINDINGURL:  "+ bindingURL);
-								System.out.println("PROCURA DE BINDING URL:  "+ sb.getAccessURI());
-								if(sb.getAccessURI().equals(bindingURL)){
-									serviceBinding = sb;
-									sb.setAccessURI(bindingURL);
-								}
-							}
-							if(serviceBinding ==null){
-								serviceBinding = businessLifeCycleManager.createServiceBinding();
-							    serviceBinding.setDescription(businessLifeCycleManager.
-							            createInternationalString("URL do binding"));
-							    serviceBinding.setValidateURI(false);
-							    
-							    serviceBinding.setAccessURI(bindingURL);				
-							    
-							    service.addServiceBinding(serviceBinding);
-							}
-						}
+			if(orgs.size()==0 || orgs==null){
+				System.out.println("VAI CRIAR A ORGANIZACAO PELA PRIMEIRA VEZ!!!");
+				org = businessLifeCycleManager.createOrganization(organizationName);             
+			}
+			else{
+				for(Organization or : orgs){
+					if(or.getName().getValue().equalsIgnoreCase(organizationName)) {
+						org=or;
+
 					}
-					if(service == null){
-						service = businessLifeCycleManager.createService(nomeFornecedor);
-						service.setDescription(businessLifeCycleManager.createInternationalString(nomeFornecedor));
-						org.addService(service);
-						
-						ServiceBinding serviceBinding = businessLifeCycleManager.createServiceBinding();
-					    serviceBinding.setDescription(businessLifeCycleManager.
-					            createInternationalString("url do binding"));
-					    serviceBinding.setValidateURI(false);
-					    
-					    serviceBinding.setAccessURI(bindingURL);				
-					    service.addServiceBinding(serviceBinding);
-					}
-					
 				}
 			}
 			
-			if(org==null){
-				System.out.println("MEQUIEEEEE");
-				org = businessLifeCycleManager.createOrganization(organizationName);
+			String nomeFornecedor = arg0.getServletContext().getInitParameter("nomeFornecedor");
+			String nomeFornecedorGrande = arg0.getServletContext().getInitParameter("nomeFornecedorGrande");
+			String bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
+			
+			
+			// Cria serviço
+			Service service = businessLifeCycleManager.createService(nomeFornecedor);
+			service.setDescription(businessLifeCycleManager.createInternationalString(nomeFornecedor));
+			// Adiciona o serviço à organização
+			org.addService(service);
 
-				//Cria serviço
-				Service service = businessLifeCycleManager.createService(nomeFornecedor);
-				service.setDescription(businessLifeCycleManager.createInternationalString(nomeFornecedor));
-				// Adiciona o serviço à organização
-				org.addService(service);
-							    
-				// Cria serviceBinding
-				ServiceBinding serviceBinding = businessLifeCycleManager.createServiceBinding();
-				serviceBinding.setDescription(businessLifeCycleManager.createInternationalString("url do binding"));
-				serviceBinding.setValidateURI(false);
-				// Aqui define-se o URL do endpoint do Web Service
-				serviceBinding.setAccessURI(bindingURL);				
-				// Adiciona o serviceBinding ao serviço
-				service.addServiceBinding(serviceBinding);	
-			}
-//			else{
-//				if(bindings.contains(bindingURL)){
-//					System.out.println("JAAAAA EXISTEEEEEEEEEE");
+			// Cria serviceBinding
+			ServiceBinding serviceBinding = businessLifeCycleManager.createServiceBinding();
+			serviceBinding.setDescription(businessLifeCycleManager.createInternationalString("url do fornecedor"));
+			serviceBinding.setValidateURI(false);
+			// Aqui define-se o URL do endpoint do Web Service
+			serviceBinding.setAccessURI(bindingURL);				
+			// Adiciona o serviceBinding ao serviço
+			service.addServiceBinding(serviceBinding);
+			
+//			for (Organization o : orgs) {
+//				System.out.println("ENTROOOO AQUIIIIIII");
+//				if (o.getName().getValue().equals(organizationName)) {
+//					org = o;
+//					Service service = null;
+//					@SuppressWarnings("unchecked")
+//					Collection<Service> servicos = o.getServices();
+//					for(Service s: servicos){
+//						if(s.getName().getValue().equals(nomeFornecedor)){
+//							service = s;
+//							System.out.println("QUAL O SERVICO: "+ service.getDescription().getValue());
+//							ServiceBinding serviceBinding = null;
+//							@SuppressWarnings("unchecked")
+//							Collection<ServiceBinding> sBindings = s.getServiceBindings();
+//							System.out.println("TOTAL DE URLS:  "+ sBindings.size());
+//							for(ServiceBinding sb: sBindings){
+//								System.out.println("VARIAVEL BINDINGURL:  "+ bindingURL);
+//								System.out.println("PROCURA DE BINDING URL:  "+ sb.getAccessURI());
+//								if(sb.getAccessURI().equals(bindingURL)){
+//									serviceBinding = sb;
+//									sb.setAccessURI(bindingURL);
+//								}
+//							}
+//							if(serviceBinding ==null){
+//								serviceBinding = businessLifeCycleManager.createServiceBinding();
+//							    serviceBinding.setDescription(businessLifeCycleManager.
+//							            createInternationalString("URL do binding"));
+//							    serviceBinding.setValidateURI(false);
+//							    
+//							    serviceBinding.setAccessURI(bindingURL);				
+//							    
+//							    service.addServiceBinding(serviceBinding);
+//							}
+//						}
+//					}
+//					if(service == null){
+//						System.out.println("ESTOU AQUI");
+//						service = businessLifeCycleManager.createService(nomeFornecedor);
+//						service.setDescription(businessLifeCycleManager.createInternationalString(nomeFornecedor));
+//						org.addService(service);
+//						System.out.println("SERVICO:   "+ service.getName().getValue());
+//						
+//						ServiceBinding serviceBinding = businessLifeCycleManager.createServiceBinding();
+//					    serviceBinding.setDescription(businessLifeCycleManager.
+//					            createInternationalString("url do binding"));
+//					    serviceBinding.setValidateURI(false);
+//					    
+//					    serviceBinding.setAccessURI(bindingURL);				
+//					    service.addServiceBinding(serviceBinding);
+//					}
+//					
 //				}
-//				else{
-//					System.out.println(org.getName().toString());
-//					System.out.println("CAOOOOOOOOOOO");
-//					Service service = businessLifeCycleManager.createService(nomeFornecedor);
-//					service.setDescription(businessLifeCycleManager.createInternationalString(nomeFornecedor));
+//			}
+//			
+//			if(org==null){
+//				System.out.println("MEQUIEEEEE");
+//				org = businessLifeCycleManager.createOrganization(organizationName);
+//
+//				//Cria serviço
+//				Service service = businessLifeCycleManager.createService(nomeFornecedor);
+//				service.setDescription(businessLifeCycleManager.createInternationalString(nomeFornecedor));
 //				// Adiciona o serviço à organização
-//					org.addService(service);
+//				org.addService(service);
 //							    
 //				// Cria serviceBinding
-//					ServiceBinding serviceBinding = businessLifeCycleManager.createServiceBinding();
-//					serviceBinding.setDescription(businessLifeCycleManager.createInternationalString("url do binding"));
-//					serviceBinding.setValidateURI(false);
+//				ServiceBinding serviceBinding = businessLifeCycleManager.createServiceBinding();
+//				serviceBinding.setDescription(businessLifeCycleManager.createInternationalString("url do binding"));
+//				serviceBinding.setValidateURI(false);
 //				// Aqui define-se o URL do endpoint do Web Service
-//					serviceBinding.setAccessURI(bindingURL);				
+//				serviceBinding.setAccessURI(bindingURL);				
 //				// Adiciona o serviceBinding ao serviço
-//					service.addServiceBinding(serviceBinding);	
-//				}
+//				service.addServiceBinding(serviceBinding);	
 //			}
 			
 			Collection<Organization> orgs2 = new ArrayList<Organization>();
