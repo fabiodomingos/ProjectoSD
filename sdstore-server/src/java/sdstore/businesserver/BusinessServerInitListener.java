@@ -110,14 +110,16 @@ public class BusinessServerInitListener implements ServletContextListener{
 			
 			System.out.println("ORGANIZACOES "+orgs);
 			ServiceBinding sbRemove = null;
+			Service apagar = null;
+			Organization delete = null;
 			for(Organization o:orgs){
 				if(o.getName().getValue().equals(organizationName)){
-					Service serv = null;
+					//Service serv = null;
 					Collection<?> servicos = o.getServices();
 					Iterator<?> servIter = servicos.iterator();
 					while(servIter.hasNext()){
 						Service svc = (Service) servIter.next();
-						serv = svc;
+						//serv = svc;
 						Collection<?> serviceBindings = svc.getServiceBindings();
 						Iterator<?> sbIter = serviceBindings.iterator();
 						while(sbIter.hasNext()){
@@ -125,11 +127,15 @@ public class BusinessServerInitListener implements ServletContextListener{
 							System.out.println("SERVICE URL "+sb.getAccessURI());
 							if(sb.getAccessURI().equals(bindingURL)){
 								sbRemove = sb;
+								svc.removeServiceBinding(sbRemove);
+								break;
 							}
 						}
-						svc.removeServiceBinding(sbRemove);
+						o.removeService(svc);
+						break;
+						//svc.removeServiceBinding(sbRemove);
 					}
-					o.removeService(serv);
+					//o.removeService(serv);
 				}
 			}
 		
