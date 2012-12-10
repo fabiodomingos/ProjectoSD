@@ -53,6 +53,8 @@ public class BaseDados {
 	         * Add a parent and two children using the Person primary index.
 	         * Specifying a non-null parentSsn adds the child Person to the
 	         * sub-index of children for that parent key.
+	         *
+	         *(em principio falta adicionar a transaçao a este put
 	         */
 	        dao.produtoById.put(prod);
 	    }
