@@ -1,5 +1,6 @@
 package sdstore.businesserver.service;
 
+import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
@@ -11,6 +12,7 @@ import sdstore.businesserver.service.dto.ProdutoDto;
 import sdstore.businesserver.service.dto.ProdutoListDto;
 
 @WebService
+@HandlerChain(file="handler-chain.xml")
 public class PortalWebService {
 	
 	@WebMethod
