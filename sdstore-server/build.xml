@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="sdstore-server" default="deployall" basedir="." >
+<project name="sdstore-server" default="deploy" basedir="." >
 
 	<property file="${basedir}/build.properties" />
 	<property environment="env"/>
@@ -47,7 +47,15 @@
 	  <copy overwrite="true" tofile="${resources.dir}/WEB-INF/web.xml" file="${resources.dir}/WEB-INF/${project.name}.xml" />
 	</target>
 	
-	<target name="dist" depends="compile,copyclasses,copy-web-xml" description="Create the application distribution archive">
+	<target name="copyhandlers">
+		<copy todir="${build.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*.xml"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="dist" depends="compile,copyclasses,copy-web-xml,copyhandlers" description="Create the application distribution archive">
 		<fail unless="project.type">project.type not set</fail>
 		<war warfile="${dist.dir}/${project.name}.${project.type}" webxml="${resources.dir}/WEB-INF/web.xml">
 			  <classes dir="${build.dir}" />
@@ -62,22 +70,22 @@
 	</target>
 
 	<!-- this is new: Deploy the fornecedor1 web service -->
-	<target name="deploy-sdstore-server-fornecedor1" depends="">
+	<target name="deploy-sdstore-server-fornecedor1" depends="clean">
       <antcall target="deploy" >
       	<param name="project.name" value="sdstore-server-fornecedor1"/>
       </antcall>
 	</target>
 
 	<!-- this is new: Deploy the fornecedor2 web service -->
-	<target name="deploy-sdstore-server-fornecedor2" depends="">
+	<target name="deploy-sdstore-server-fornecedor2" depends="clean">
       <antcall target="deploy" >
       	<param name="project.name" value="sdstore-server-fornecedor2"/>
       </antcall>
 	</target>
 
 	<!-- this is new: Deploy all the web services -->
-	<target name="deployall" depends="clean,deploy-sdstore-server-fornecedor1,deploy-sdstore-server-fornecedor2" description="Deploy all web services">
-	</target>
+	<!--<target name="deployall" depends="clean,deploy-sdstore-server-fornecedor1,deploy-sdstore-server-fornecedor2" description="Deploy all web services">
+	</target>-->
 	
 	<target name="deploy" depends="dist" description="Deploy to JBoss AS">
 		<fail unless="project.jboss.home">project.jboss.home not set</fail>
