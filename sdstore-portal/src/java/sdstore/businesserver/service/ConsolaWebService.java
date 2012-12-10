@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.naming.InitialContext;
@@ -46,6 +47,7 @@ import sdstore.stubs.ProdutoListException_Exception;
 import sdstore.stubs.QuantidadeException_Exception;
 
 @WebService
+@HandlerChain(file="handler-chain.xml")
 public class ConsolaWebService {
 	
 //	private static Map<String, String> endpointUrlMap;
