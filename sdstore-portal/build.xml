@@ -53,7 +53,15 @@
 	  <copy overwrite="true" tofile="${resources.dir}/WEB-INF/web.xml" file="${resources.dir}/WEB-INF/${project.name}.xml" />
 	</target>
 	
-	<target name="dist" depends="copy-web-xml" description="Create the application distribution archive">
+	<target name="copyhandlers">
+		<copy todir="${build.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*.xml"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="dist" depends="copy-web-xml,copyhandlers" description="Create the application distribution archive">
 		<fail unless="project.type">project.type not set</fail>
 		<war warfile="${dist.dir}/${project.name}.${project.type}" webxml="${resources.dir}/WEB-INF/web.xml">
 			  <classes dir="${build.dir}" />
