@@ -29,7 +29,6 @@ import sdstore.presentationserver.service.stubs.CategoriaListDto;
 import sdstore.presentationserver.service.stubs.ProdListDto;
 import sdstore.presentationserver.service.stubs.ProdutoExistException_Exception;
 import sdstore.presentationserver.service.stubs.ProdutoListException_Exception;
-import sdstore.presentationserver.service.stubs.SOAPFaultException_Exception;
 
 
 public class SdStoreApplication {
