@@ -52,14 +52,14 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     	BASE64Decoder b64d = new BASE64Decoder();
     	
 //    	vai buscar a chave privada
-    	Key serverPublicKey = null;
-    	Key privateKey = ServerObj.getServerPrivateKey();
+//    	Key serverPublicKey = null;
+//    	Key privateKey = ServerObj.getServerPrivateKey();
     	
     	Boolean outboundProperty = (Boolean)
         context.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY);
     
     	if (outboundProperty.booleanValue()) {
-    		System.out.println("Outbound SOAP message:");
+    		System.out.println("Outbound Fornecedor SOAP message: "+context);
     		try{
     			SOAPMessage message = context.getMessage();			
     			SOAPPart soapPart = message.getSOAPPart();
@@ -67,25 +67,25 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     			SOAPBody soapBody = soapEnvelope.getBody();
     			SOAPHeader soapHeader = soapEnvelope.getHeader();
     			
-    			if(soapHeader == null) {
-    				// header is optional
-    				soapHeader = soapEnvelope.addHeader();
-    			}
-    			
-//    			Faz a assinatura digital
-    			if(soapBody.getFirstChild()!=null){
-    				plainText = soapBody.getFirstChild().getTextContent().getBytes();
-    			}else{
-    				plainText="".getBytes();
-    			}
-    			cipherDigest = makeDigitalSignature(plainText,privateKey);
-    			// create new SOAP header element
-    			
-    				Name name = soapEnvelope.createName("timestamp", "bn", "http://www.sd.com/");
-    				SOAPElement element = soapHeader.addChildElement(name);
-    				element.addTextNode(b64e.encodeBuffer(cipherDigest));
-    				result = true;
-//    				element.addTextNode( Long.toString(new Date().getTime())  );
+//    			if(soapHeader == null) {
+//    				// header is optional
+//    				soapHeader = soapEnvelope.addHeader();
+//    			}
+//    			
+////    			Faz a assinatura digital
+//    			if(soapBody.getFirstChild()!=null){
+//    				plainText = soapBody.getFirstChild().getTextContent().getBytes();
+//    			}else{
+//    				plainText="".getBytes();
+//    			}
+//    			cipherDigest = makeDigitalSignature(plainText,privateKey);
+//    			// create new SOAP header element
+//    			
+//    				Name name = soapEnvelope.createName("timestamp", "bn", "http://www.sd.com/");
+//    				SOAPElement element = soapHeader.addChildElement(name);
+//    				element.addTextNode(b64e.encodeBuffer(cipherDigest));
+//    				result = true;
+////    			element.addTextNode( Long.toString(new Date().getTime())  );
     				
     		}catch(Exception e){
     			System.out.println("[OUTBOUND] Apanhou excecao no metodo de criacao");
@@ -95,7 +95,7 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     		}
 		}
 		else {
-          System.out.println("Inbound SOAP message: none");
+          System.out.println("Inbound Fornecedor SOAP message: "+context);
 			try{
 			SOAPMessage message = context.getMessage();
 			SOAPPart soapPart = message.getSOAPPart();
@@ -103,27 +103,27 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 			SOAPBody soapBody = message.getSOAPBody();
 			SOAPHeader soapHeader = soapEnvelope.getHeader();
 			
-			if(soapHeader==null){
-				soapHeader = soapEnvelope.addHeader();
-			}
-			
-			if(soapBody.getFirstChild()!=null){
-				plainText = soapBody.getFirstChild().getTextContent().getBytes();
-			}else{
-				plainText="".getBytes();
-			}
-			
-//			serverPublicKey - falta buscar a chave com o readKeys
-			
-//			verificar a assinatura
-			cipherDigest = b64d.decodeBuffer(soapHeader.getLastChild().getFirstChild().getTextContent());
-			soapHeader.detachNode();
-			soapHeader.detachNode();
-			
-			if(!verifyDigitalSignature(cipherDigest,plainText,serverPublicKey)){
-				return false;
-			}
-			
+//			if(soapHeader==null){
+//				soapHeader = soapEnvelope.addHeader();
+//			}
+//			
+//			if(soapBody.getFirstChild()!=null){
+//				plainText = soapBody.getFirstChild().getTextContent().getBytes();
+//			}else{
+//				plainText="".getBytes();
+//			}
+//			
+////			serverPublicKey - falta buscar a chave com o readKeys
+//			
+////			verificar a assinatura
+//			cipherDigest = b64d.decodeBuffer(soapHeader.getLastChild().getFirstChild().getTextContent());
+//			soapHeader.detachNode();
+//			soapHeader.detachNode();
+//			
+//			if(!verifyDigitalSignature(cipherDigest,plainText,serverPublicKey)){
+//				return false;
+//			}
+//			
 			result = true;
 			
 			}catch(Exception e){
