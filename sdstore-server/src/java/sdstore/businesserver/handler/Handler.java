@@ -85,7 +85,7 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     				SOAPElement element = soapHeader.addChildElement(name);
     				element.addTextNode(b64e.encodeBuffer(cipherDigest));
     				result = true;
-    				element.addTextNode( Long.toString(new Date().getTime())  );
+//    				element.addTextNode( Long.toString(new Date().getTime())  );
     				
     		}catch(Exception e){
     			System.out.println("[OUTBOUND] Apanhou excecao no metodo de criacao");
@@ -95,7 +95,7 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     		}
 		}
 		else {
-//          System.out.println("Inbound SOAP message: none");
+          System.out.println("Inbound SOAP message: none");
 			try{
 			SOAPMessage message = context.getMessage();
 			SOAPPart soapPart = message.getSOAPPart();
