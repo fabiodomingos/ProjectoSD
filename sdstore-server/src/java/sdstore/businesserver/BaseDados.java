@@ -46,7 +46,7 @@ public class BaseDados {
 	}
 	
 	
-	public void run(Produto prod)
+	public void run(Transaction tx,Produto prod)
 	        throws DatabaseException {
 
 	        /*
@@ -56,7 +56,7 @@ public class BaseDados {
 	         *
 	         *(em principio falta adicionar a transaçao a este put
 	         */
-	        dao.produtoById.put(prod);
+	        dao.produtoById.put(tx,prod);
 	    }
 	
 	public void run2(Produto prod) throws DatabaseException{
@@ -83,10 +83,16 @@ public class BaseDados {
 	
 	// PARTE PARA O 2PC ////////
 	
-	public void preparar(String xid) throws XAException{
+	public Transaction beginTransaction(String xid) throws XAException{
 		txn = env.beginTransaction(null, null);
-		XidImpl imp = new XidImpl(1, xid.getBytes(), null);
+		XidImpl imp = new XidImpl(1,xid.getBytes(),null);
 		env.setXATransaction(imp, txn);
+		return txn;
+	}
+	public void preparar(String xid) throws XAException{
+//		txn = env.beginTransaction(null, null);
+		XidImpl imp = new XidImpl(1, xid.getBytes(), null);
+//		env.setXATransaction(imp, txn);
 		env.prepare(imp);	
 	}
 	
