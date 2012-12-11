@@ -57,7 +57,7 @@ public class BaseDados {
 	         *(em principio falta adicionar a transaçao a este put
 	         */
 	        dao.produtoById.put(tx,prod);
-	    }
+	}
 	
 	public void run2(Produto prod) throws DatabaseException{
 		dao.produtoById.putNoOverwrite(prod);
