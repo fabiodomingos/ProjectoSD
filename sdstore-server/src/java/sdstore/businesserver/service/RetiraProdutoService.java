@@ -1,5 +1,7 @@
 package sdstore.businesserver.service;
 
+import javax.transaction.xa.XAException;
+
 import sdstore.businesserver.domain.Catalogo;
 import sdstore.businesserver.exception.ProdutoExistException;
 import sdstore.businesserver.exception.QuantidadeException;
@@ -20,8 +22,9 @@ public class RetiraProdutoService extends PortalService{
 	@Override
 	public final void dispatch() throws ProdutoExistException, QuantidadeException{
 		try{
-		result = Catalogo.retiraProduto(_codigo,_quantidade);
-		Catalogo.commit(_tx);
+		
+		result = Catalogo.retiraProduto(_codigo,_quantidade,_tx);
+//		Catalogo.commit(_tx);
 		}catch(ProdutoExistException e){
 			throw new ProdutoExistException(_codigo);
 		}catch(QuantidadeException e){
