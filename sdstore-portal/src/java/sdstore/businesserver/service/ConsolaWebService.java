@@ -74,9 +74,14 @@ public class ConsolaWebService {
 	
 	//variavel de controlo das horas a actualizar
 	private int primeiraVez=0;
+	private int primeira2PC=0;
 	private Integer controlo = 0;
 	Calendar dataAntiga;
 	Calendar dataNova;
+//	Calendar horaCanCommitAntiga;
+//	Calendar horaCanCommitNova;
+	boolean commit;
+	boolean abort;
 	
 	static{
 	}
@@ -369,15 +374,11 @@ public class ConsolaWebService {
 		String nome = null;
 		Integer quantidade = 0;
 		List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
-//		System.out.println(carrinhoClientes);
-//		System.out.println(carrinhoCliente);
-//		vai buscar o carrinho do cliente
+
 		if(carrinhoClientes.containsKey(user)){
 			 carrinhoCliente = carrinhoClientes.get(user);
 		}
 		try{
-			
-			
 			for(ProdutoDto prod:carrinhoCliente){
 				PortalWebService webService = getFornecedores(prod.getFornecedor());
 				String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade(), user);
@@ -402,13 +403,36 @@ public class ConsolaWebService {
 			
 			if(verificaCommit().equals("YES")){
 				for(String chave:respostasCanCommit.keySet()){
+					commit = false;
+					//int conta=0;
 					PortalWebService webService = getFornecedores(chave);
-					String resultado = webService.commitService(user);
+//					Thread.sleep(40000);
+//					System.out.println("PASSO NO SLEEP");
+					while(commit==false){
+						try{
+							String resultado = webService.commitService(user);
+							commit = true;
+						}catch(Exception e){
+							commit=false;
+//							if(conta==3){
+//								Thread.sleep(40000);
+//							}
+//							else{
+//								commit=false;
+//								conta++;
+//							}
+							
+						}
+					}
 				}
 			}else{
 				for(String chave:respostasCanCommit.keySet()){
+					abort = false;
 					PortalWebService webService = getFornecedores(chave);
-					webService.abortService(user);
+					while(abort==false){
+						webService.abortService(user);
+						abort = true;
+					}
 				}
 			}
 			
@@ -572,4 +596,25 @@ public class ConsolaWebService {
 		}
 		return carrinhoComprasAux;
 	}
+	
+	
+//	public long update2PC(){
+//		System.out.println("A verificar se precisa de enviar canCommit outra vez");
+//		long diferenca=0;
+//		if(primeira2PC==0){
+////			primeira vez tira os tempos
+//			horaCanCommitAntiga = Calendar.getInstance();
+//			horaCanCommitNova = Calendar.getInstance();
+//			diferenca = horaCanCommitNova.getTimeInMillis() - horaCanCommitAntiga.getTimeInMillis();
+//			primeira2PC=1;
+//		}else{
+//			horaCanCommitNova = Calendar.getInstance();
+//			diferenca = horaCanCommitNova.getTimeInMillis() - horaCanCommitAntiga.getTimeInMillis();
+//		}
+//		return diferenca;	
+//	}
+	
+	
+	
+	
 }
