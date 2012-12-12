@@ -1,5 +1,8 @@
 package sdstore.businesserver.service;
 
+import java.security.Key;
+import java.util.List;
+
 import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -17,8 +20,8 @@ import sdstore.businesserver.service.dto.ProdutoListDto;
 public class PortalWebService {
 	
 	@WebMethod
-	public String RetiraProduto(String codigo,Integer quantidade,String tx) throws ProdutoExistException, QuantidadeException,XAException{
-		RetiraProdutoService service = new RetiraProdutoService(codigo,quantidade,tx);
+	public String RetiraProduto(List<ProdutoDto> lista,String tx) throws ProdutoExistException, QuantidadeException,XAException{
+		RetiraProdutoService service = new RetiraProdutoService(lista,tx);
 		service.execute();
 		String result = service.getResultado();
 		return result;
@@ -72,4 +75,13 @@ public class PortalWebService {
 		String resultado = service.getResultado();
 		return resultado;
 	}
+	
+	
+//	@WebMethod
+//	public Key EnviaChavesService(Key chaveRecebida){
+//		TrocaChavesService service = new TrocaChavesService(chaveRecebida);
+//		service.execute();
+//		Key resultado = service.getResultado();
+//		return resultado;
+//	}
 }
