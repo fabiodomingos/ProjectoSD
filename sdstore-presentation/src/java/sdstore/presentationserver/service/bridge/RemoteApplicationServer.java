@@ -1,8 +1,12 @@
 package sdstore.presentationserver.service.bridge;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.xml.ws.handler.Handler;
+import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.soap.SOAPFaultException;
 
@@ -10,6 +14,7 @@ import sdstore.presentationserver.exception.CategoriaNameException;
 import sdstore.presentationserver.exception.ProdutoExistException;
 import sdstore.presentationserver.exception.ProdutoListException;
 import sdstore.presentationserver.exception.QuantidadeException;
+//import sdstore.presentationserver.handler.Handler;
 import sdstore.presentationserver.service.stubs.CarrinhoDto;
 import sdstore.presentationserver.service.stubs.CategoriaListDto;
 import sdstore.presentationserver.service.stubs.CategoriaNameException_Exception;
@@ -42,6 +47,13 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 		}
 		BindingProvider bp = (BindingProvider)webService;
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);
+		
+//		handlers
+		Binding binding = bp.getBinding();
+		sdstore.presentationserver.handler.Handler handler = new sdstore.presentationserver.handler.Handler();
+		List<Handler> handlerChain = new ArrayList<Handler>();
+		handlerChain.add(handler);
+		bp.getBinding().setHandlerChain(handlerChain);
 	}
 
 	@Override
