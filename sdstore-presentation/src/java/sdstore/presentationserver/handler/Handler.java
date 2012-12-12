@@ -1,10 +1,13 @@
 package sdstore.presentationserver.handler;
 
+import java.io.FileInputStream;
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Date;
 import java.util.Set;
 
@@ -34,8 +37,6 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 	@Override
 	public boolean handleMessage(SOAPMessageContext context) {
 		return setTimestamp(context);
-		
-//		return true;
 	}
 
 	@Override
@@ -51,41 +52,23 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     	BASE64Encoder b64e = new BASE64Encoder();
     	BASE64Decoder b64d = new BASE64Decoder();
     	
+    	String caminhoServidorPublica = "C:/Users/Mimoso/workspace/ProjectoSD/sdstore-presentation/src/resources/keysPortal/pubPortal.key";
 //    	vai buscar a chave privada
-    	Key serverPublicKey = null;
-    	Key privateKey = ServerObj.getServerPrivateKey();
+    	Key serverPublicKey = readPublicKey(caminhoServidorPublica);
     	
     	Boolean outboundProperty = (Boolean)
         context.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY);
     
     	if (outboundProperty.booleanValue()) {
-    		System.out.println("Outbound SOAP message:");
+//    		System.out.println("Outbound SOAP Client message:");
     		try{
     			SOAPMessage message = context.getMessage();			
     			SOAPPart soapPart = message.getSOAPPart();
     			SOAPEnvelope soapEnvelope = soapPart.getEnvelope();
     			SOAPBody soapBody = soapEnvelope.getBody();
     			SOAPHeader soapHeader = soapEnvelope.getHeader();
-    			
-    			if(soapHeader == null) {
-    				// header is optional
-    				soapHeader = soapEnvelope.addHeader();
-    			}
-    			
-//    			Faz a assinatura digital
-    			if(soapBody.getFirstChild()!=null){
-    				plainText = soapBody.getFirstChild().getTextContent().getBytes();
-    			}else{
-    				plainText="".getBytes();
-    			}
-    			cipherDigest = makeDigitalSignature(plainText,privateKey);
-    			// create new SOAP header element
-    			
-    				Name name = soapEnvelope.createName("timestamp", "bn", "http://www.sd.com/");
-    				SOAPElement element = soapHeader.addChildElement(name);
-    				element.addTextNode(b64e.encodeBuffer(cipherDigest));
+
     				result = true;
-    				element.addTextNode( Long.toString(new Date().getTime())  );
     				
     		}catch(Exception e){
     			System.out.println("[OUTBOUND] Apanhou excecao no metodo de criacao");
@@ -95,7 +78,7 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     		}
 		}
 		else {
-//          System.out.println("Inbound SOAP message: none");
+//          System.out.println("Inbound SOAP Client message: none");
 			try{
 			SOAPMessage message = context.getMessage();
 			SOAPPart soapPart = message.getSOAPPart();
@@ -106,20 +89,18 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 			if(soapHeader==null){
 				soapHeader = soapEnvelope.addHeader();
 			}
-			
+//			
 			if(soapBody.getFirstChild()!=null){
 				plainText = soapBody.getFirstChild().getTextContent().getBytes();
 			}else{
 				plainText="".getBytes();
 			}
-			
-//			serverPublicKey - falta buscar a chave com o readKeys
-			
-//			verificar a assinatura
+	
+////			verificar a assinatura
 			cipherDigest = b64d.decodeBuffer(soapHeader.getLastChild().getFirstChild().getTextContent());
 			soapHeader.detachNode();
 			soapHeader.detachNode();
-			
+		
 			if(!verifyDigitalSignature(cipherDigest,plainText,serverPublicKey)){
 				return false;
 			}
@@ -148,13 +129,29 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 		}
 	}
 
-	private byte[] makeDigitalSignature(byte[] plainText, Key privateKey) throws Exception{
-		Signature sig = Signature.getInstance("MD5WithRSA");
-		sig.initSign((PrivateKey) privateKey);
-		sig.update(plainText);
-		byte[] signature = sig.sign();
-		return signature;
+//	private byte[] makeDigitalSignature(byte[] plainText, Key privateKey) throws Exception{
+//		Signature sig = Signature.getInstance("MD5WithRSA");
+//		sig.initSign((PrivateKey) privateKey);
+//		sig.update(plainText);
+//		byte[] signature = sig.sign();
+//		return signature;
+//	}
+	
+	private Key readPublicKey(String publicKeyPath){
+		Key pub = null;
+		try{
+			FileInputStream fin = new FileInputStream(publicKeyPath);
+			byte[] pubEncoded = new byte[ fin.available() ];
+			fin.read(pubEncoded);
+			fin.close();
+			
+			X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(pubEncoded);
+			KeyFactory keyFacPub = KeyFactory.getInstance("RSA");
+
+			pub = keyFacPub.generatePublic(pubSpec);
+		}catch(Exception e){
+			System.out.println("[APANHEI EXCEPCAO DO READ PUBLIC]");
+		}
+        return pub;
 	}
-
-
 }
