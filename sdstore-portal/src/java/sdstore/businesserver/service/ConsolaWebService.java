@@ -28,7 +28,9 @@ import javax.xml.registry.infomodel.Organization;
 import javax.xml.registry.infomodel.Service;
 import javax.xml.registry.infomodel.ServiceBinding;
 import javax.xml.soap.SOAPException;
+import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.Handler;
 import javax.xml.ws.soap.SOAPFaultException;
 
 import sdstore.businesserver.exception.CategoriaNameException;
@@ -68,6 +70,9 @@ public class ConsolaWebService {
 	private Set<ProdutoDto> listaProdutosPortal = new HashSet<ProdutoDto>();
 	private Set<ProdutoDto> listaProdutosCliente = new HashSet<ProdutoDto>();
 	
+	
+	//cenas para os handlers
+	List<Handler> handlerList;
 	
 //	coisas do diabo
 	private Map<String,List<ProdutoDto>> carrinhoClientes = new HashMap<String, List<ProdutoDto>>();
@@ -137,7 +142,11 @@ public class ConsolaWebService {
 						enderecos.add(sb.getAccessURI());
 					}
 				}
-			}	
+			}
+			
+//			for(String url :enderecos){
+//				if
+//			}
 			System.out.println("ENDERECOS DOS FORNECEDORES: "+enderecos);
 		}catch(Exception e){
 			
@@ -152,6 +161,17 @@ public class ConsolaWebService {
 			if(ende.equals(endereco)){
 				BindingProvider bp = (BindingProvider)webService;
 				bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, ende);
+//				handlers
+				Binding binding = bp.getBinding();
+//				handlerList = binding.getHandlerChain();
+				sdstore.businesserver.handler.Handler handler = new sdstore.businesserver.handler.Handler();
+				List<Handler> handlerChain = new ArrayList<Handler>();
+				handlerChain.add(handler);
+				bp.getBinding().setHandlerChain(handlerChain);
+				
+//				Binding binding = bp.getBinding();
+//				List<Handler> handlerList = binding.getHandlerChain();
+//				binding.getHandlerChain();
 			}
 		}
 		return webService;
@@ -170,7 +190,6 @@ public class ConsolaWebService {
 		}else{
 			dataNova = Calendar.getInstance();
 			long diferenca = dataNova.getTimeInMillis() - dataAntiga.getTimeInMillis();
-//			System.out.println("diferenca em milisegundos: "+diferenca);
 			if(diferenca>10000){
 				dataAntiga = Calendar.getInstance();
 				resposta = true;
@@ -288,26 +307,10 @@ public class ConsolaWebService {
 			
 			// Vamos retirar ao carrinhoCompras GLOBAL a quantidade que o cliente j‡ tem no seu carrinho 
 			carrinhoCompras = retiraQuantiLista(carrinhoCliente);
-//			for(ProdutoDto prod: carrinhoCompras){
-//				for(ProdutoDto prod2: carrinhoCliente){
-//					if((prod2.getId().equals(prod.getId()))
-//							&&(prod2.getFornecedor().equals(prod.getFornecedor()))){
-//						prod.setQuantidade(prod.getQuantidade()-prod2.getQuantidade());
-//					}
-//				}
-//			}
-			
 			// Vai retirar do carrinhoCompras GLOBAL os produtos que n‹o queremos e colocamos numa lista auxiliar 
 			carrinhoComprasAux = adicionaAuxiliar(carrinhoCompras, codigo);
-//			for(ProdutoDto prod: carrinhoCompras){
-//				if(prod.getId().equals(codigo)&&prod.getQuantidade()>0){
-//					carrinhoComprasAux.add(prod);
-//				}
-//			}
-
 			// Ordena o carrinhoComprasAux pelo preco
 			Collections.sort(carrinhoComprasAux);
-			
 			// Adiciona ao carrinhoCliente o produto pretendido
 			Integer quantidadeAux = 0;
 			for(ProdutoDto prod: carrinhoComprasAux){
@@ -322,7 +325,6 @@ public class ConsolaWebService {
 					break;
 				}
 			}
-			
 			// Junta os produtos por fornecedor		
 			Integer QuantidadeTotal = 0;
 			Double PrecoTotal = 0.0;
@@ -348,7 +350,6 @@ public class ConsolaWebService {
 					carrinhoClienteAux.add(prod);
 				}
 			}
-			
 			carrinhoClientes.put(user, carrinhoClienteAux);
 			carrinhoCompras.clear();
 			carrinhoComprasAux.clear();
@@ -374,16 +375,41 @@ public class ConsolaWebService {
 		String nome = null;
 		Integer quantidade = 0;
 		List<ProdutoDto> carrinhoCliente = new ArrayList<ProdutoDto>();
-
+		Set<String> fornecedoresEnvolvidos = new HashSet<String>();
+		List<sdstore.stubs.ProdutoDto> produtosFinal = new ArrayList<sdstore.stubs.ProdutoDto>();
+		
 		if(carrinhoClientes.containsKey(user)){
 			 carrinhoCliente = carrinhoClientes.get(user);
 		}
 		try{
-			for(ProdutoDto prod:carrinhoCliente){
-				PortalWebService webService = getFornecedores(prod.getFornecedor());
-				String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade(), user);
-				respostas.put(prod.getFornecedor(), resultado);
+//			for(ProdutoDto prod:carrinhoCliente){
+//				PortalWebService webService = getFornecedores(prod.getFornecedor());
+//				String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade(), user);
+//				respostas.put(prod.getFornecedor(), resultado);
+//			}
+//			verifica os fornecedores envolvidos
+			for(ProdutoDto prod: carrinhoCliente){
+				fornecedoresEnvolvidos.add(prod.getFornecedor());
 			}
+			System.out.println("LISTA FORNECEDORES ENVOLVIDOS "+fornecedoresEnvolvidos);
+//			percorro a lista de fornecedores 
+			for(String forn:fornecedoresEnvolvidos){
+//				percorro o carrinho a procura dos produtos do fornecedor
+				for(ProdutoDto pro:carrinhoCliente){
+					if(forn.equals(pro.getFornecedor())){
+						sdstore.stubs.ProdutoDto prod1 = new sdstore.stubs.ProdutoDto();
+						prod1.setId(pro.getId());
+						prod1.setQuantidade(pro.getQuantidade());
+						produtosFinal.add(prod1);
+					}
+				}
+				System.out.println("LISTA DE PRODUTOS ENVOLVIDOS DO FORNECEDOR "+forn+" AI ESTA A LISTA "+produtosFinal);
+				PortalWebService webService = getFornecedores(forn);
+				String resultado = webService.retiraProduto(produtosFinal, user);
+				respostas.put(forn, resultado);
+			}
+			
+			
 			System.out.println("RESPOSTAS DO RETIRA PRODUTO "+respostas);
 //			respostas.clear();
 			if(verificaCanCommit().equals("YES")){
@@ -449,64 +475,7 @@ public class ConsolaWebService {
 			}
 		}
 	}
-		
-//		try{		
-//			if(horaUpdate()==true){
-//			updateEndpointUrl();
-//			}
-//		for(ProdutoDto prod: carrinhoCliente){
-//			PortalWebService webService = getFornecedores(prod.getFornecedor());
-//			String resultado = webService.canCommitService(user, prod.getId(), prod.getQuantidade());
-//			respostas.put(prod.getFornecedor(), resultado);
-//		}
-//		
-//		System.out.println(respostas);
-//		
-//		if(verificaCanCommit().equals("YES")){
-//			for(ProdutoDto prod: carrinhoCliente){
-//				PortalWebService webService = getFornecedores(prod.getFornecedor());
-//				String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade(), user);
-//				nome = prod.getId();
-//				quantidade = prod.getQuantidade();
-//			}
-//		}
-//		else{
-////			webService.abort();
-//		}
-//		
-//		carrinhoCompras.clear();
-//		carrinhoCliente.clear();
-//		carrinhoClientes.remove(user);
-//		respostas.clear();
-//		}catch(Exception e){
-//			for(String chave: respostas.keySet()){
-//				PortalWebService webService = getFornecedores(chave);
-//				webService.abortService(chave);
-//			}
-//			carrinhoCompras.clear();
-//			carrinhoCliente.clear();
-//			carrinhoClientes.remove(user);
-//			respostas.clear();
-//			
-//			throw new ProdutoListException();
-//		
-////		}catch(ProdutoExistException_Exception e){
-////			throw new ProdutoExistException(nome);
-////		}catch(QuantidadeException_Exception e){
-////			carrinhoCliente.clear();
-////			carrinhoCompras.clear();
-////			carrinhoClientes.remove(user);
-////			throw new QuantidadeException(quantidade);
-////		}catch(javax.xml.ws.soap.SOAPFaultException e){
-////			System.out.println("VIM AQUI CABRÌO");
-////			for(String chave: respostas.keySet()){
-////				PortalWebService webService = getFornecedores(chave);
-////				webService.abortService(chave);
-////			}
-//		
-//		}
-	
-	
+
 	public String verificaCanCommit(){
 		String result = null;
 		for(String res: respostas.values()){
@@ -588,33 +557,11 @@ public class ConsolaWebService {
 
 	// Vai retirar do carrinhoCompras GLOBAL os produtos que n‹o queremos e colocamos numa lista auxiliar 
 	public List<ProdutoDto> adicionaAuxiliar(List<ProdutoDto> carrinhoCompras,String codigo){
-//		List<ProdutoDto> carrinhoClienteAux = new ArrayList<ProdutoDto>();
 		for(ProdutoDto prod: carrinhoCompras){
 			if(prod.getId().equals(codigo)&&prod.getQuantidade()>0){
 				carrinhoComprasAux.add(prod);
 			}
 		}
 		return carrinhoComprasAux;
-	}
-	
-	
-//	public long update2PC(){
-//		System.out.println("A verificar se precisa de enviar canCommit outra vez");
-//		long diferenca=0;
-//		if(primeira2PC==0){
-////			primeira vez tira os tempos
-//			horaCanCommitAntiga = Calendar.getInstance();
-//			horaCanCommitNova = Calendar.getInstance();
-//			diferenca = horaCanCommitNova.getTimeInMillis() - horaCanCommitAntiga.getTimeInMillis();
-//			primeira2PC=1;
-//		}else{
-//			horaCanCommitNova = Calendar.getInstance();
-//			diferenca = horaCanCommitNova.getTimeInMillis() - horaCanCommitAntiga.getTimeInMillis();
-//		}
-//		return diferenca;	
-//	}
-	
-	
-	
-	
+	}	
 }
