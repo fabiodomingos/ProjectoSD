@@ -1,6 +1,5 @@
 package sdstore.businesserver.service;
 
-import javax.transaction.xa.XAException;
 
 import sdstore.businesserver.exception.PortalException;
 
