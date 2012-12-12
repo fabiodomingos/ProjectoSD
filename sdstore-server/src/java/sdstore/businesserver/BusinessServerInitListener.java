@@ -42,10 +42,8 @@ public class BusinessServerInitListener implements ServletContextListener{
 	BaseDados dados;
 	String organizationName;
 	
-	//BaseDados dados;
-	
-	public static String caminhoChavePublica;
-	public static String caminhoChavePrivada;
+	public static String caminhoChavePublica;//para por o caminho da chave publica
+	public static String caminhoChavePrivada;//para por o caminho da chave privada
 	
 	// lista de bindings URL
 	ArrayList<String> bindings = new ArrayList<String>();
@@ -134,8 +132,6 @@ public class BusinessServerInitListener implements ServletContextListener{
 			}
 			businessLifeCycleManager.saveOrganizations(orgs);
 			
-		
-		
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -156,8 +152,6 @@ public class BusinessServerInitListener implements ServletContextListener{
 
 			dir = new File("/temp/"+catalogoName+"/je.lck");
 			
-			
-			
 			//le a linha do ficheiro
 			File file = new File(listaProdutosTxt);
 			FileInputStream in = new FileInputStream(file);
@@ -177,7 +171,6 @@ public class BusinessServerInitListener implements ServletContextListener{
 				//vai buscar um produto e regista no catalogo
 				Produto p = Produto.getProduto(splited[0]);
 				catalogo.registaProduto(p,Double.parseDouble(splited[3]), Integer.parseInt(splited[4]));	
-				//dados.run(p);
 			}
 			
 			
@@ -233,10 +226,6 @@ public class BusinessServerInitListener implements ServletContextListener{
 			////////////////////////////////////////////////////////
 			
 			organizationName = "SD-Store";
-//			String nomeFornecedor = arg0.getServletContext().getInitParameter("nomeFornecedor");
-//			String nomeFornecedorGrande = arg0.getServletContext().getInitParameter("nomeFornecedorGrande");
-//			String bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
-			
 			Organization org = null;
 			Collection<String> namePatterns = new ArrayList<String>();
 			namePatterns.add("%"+organizationName+"%");
