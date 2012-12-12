@@ -58,8 +58,8 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 //    	vai buscar a chave privada
     	String caminhoPrivada = "C:/Users/Mimoso/workspace/ProjectoSD/sdstore-portal/src/resources/WEB-INF/keysPortal/privPortal.key";
     	String caminhoPub = "C:/Users/Mimoso/workspace/ProjectoSD/sdstore-portal/src/resources/WEB-INF/keysPortal/pubPortal.key";
-//    	Key serverPublicKey = readPublicKey("C:\Users\Mimoso\workspace\ProjectoSD\sdstore-portal\src\resources\WEB-INF\keysPortal\pubPortal.key");
-    	Key serverPublicKey = readPublicKey(caminhoPub);
+////    	Key serverPublicKey = readPublicKey("C:\Users\Mimoso\workspace\ProjectoSD\sdstore-portal\src\resources\WEB-INF\keysPortal\pubPortal.key");
+//    	Key serverPublicKey = readPublicKey(caminhoPub);
     	Key privateKey = readPrivateKey(caminhoPrivada);
     	
     	Boolean outboundProperty = (Boolean)
@@ -74,25 +74,30 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     			SOAPBody soapBody = soapEnvelope.getBody();
     			SOAPHeader soapHeader = soapEnvelope.getHeader();
     			
-//    			if(soapHeader == null) {
-//    				// header is optional
-//    				soapHeader = soapEnvelope.addHeader();
-//    			}
-//    			
-////    			Faz a assinatura digital
-//    			if(soapBody.getFirstChild()!=null){
-//    				plainText = soapBody.getFirstChild().getTextContent().getBytes();
-//    			}else{
-//    				plainText="".getBytes();
-//    			}
-//    			cipherDigest = makeDigitalSignature(plainText,privateKey);
-//    			// create new SOAP header element
-//    			
-//    				Name name = soapEnvelope.createName("timestamp", "bn", "http://www.sd.com/");
-//    				SOAPElement element = soapHeader.addChildElement(name);
-//    				element.addTextNode(b64e.encodeBuffer(cipherDigest));
-//    				result = true;
-//    				element.addTextNode( Long.toString(new Date().getTime())  );
+//    			message.writeTo(System.out);
+//    			System.out.println("PASSEI PELO OUTBOUND");
+    			if(soapHeader == null) {
+    				// header is optional
+    				soapHeader = soapEnvelope.addHeader();
+    			}
+			
+//    			Faz a assinatura digital
+    			if(soapBody.getFirstChild()!=null){
+    				plainText = soapBody.getFirstChild().getTextContent().getBytes();
+    			}else{
+    				plainText="".getBytes();
+    			}
+//    			System.out.println("VOU FAZER A ASSINATURA DIGITAL LADO DO PORTAL");
+    			cipherDigest = makeDigitalSignature(plainText,privateKey);
+    			// create new SOAP header element
+//    			System.out.println("VOU CODIFICAR A SEGUINTE MENSAGEM");
+//    			message.writeTo(System.out);
+    				Name name = soapEnvelope.createName("timestamp", "bn", "http://www.sd.com/");
+    				SOAPElement element = soapHeader.addChildElement(name);
+    				element.addTextNode(b64e.encodeBuffer(cipherDigest));
+    				result = true;
+//    				System.out.println("VOU IMPRIMIR A MENSAGEM CODIFICADA");
+//    				message.writeTo(System.out);
     				
     		}catch(Exception e){
     			System.out.println("[OUTBOUND] Apanhou excecao no metodo de criacao");
@@ -110,18 +115,19 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 			SOAPBody soapBody = message.getSOAPBody();
 			SOAPHeader soapHeader = soapEnvelope.getHeader();
 			
-//			if(soapHeader==null){
-//				soapHeader = soapEnvelope.addHeader();
-//			}
+			if(soapHeader==null){
+				soapHeader = soapEnvelope.addHeader();
+			}
 //			
-//			if(soapBody.getFirstChild()!=null){
-//				plainText = soapBody.getFirstChild().getTextContent().getBytes();
-//			}else{
-//				plainText="".getBytes();
-//			}
-//			
+			if(soapBody.getFirstChild()!=null){
+				plainText = soapBody.getFirstChild().getTextContent().getBytes();
+			}else{
+				plainText="".getBytes();
+			}
+			
 ////			serverPublicKey - falta buscar a chave com o readKeys
 //			
+//			Key fornecedorPublicKey = readPublicKey("");
 ////			verificar a assinatura
 //			cipherDigest = b64d.decodeBuffer(soapHeader.getLastChild().getFirstChild().getTextContent());
 //			soapHeader.detachNode();
@@ -169,20 +175,15 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 		try{
 			System.out.println("Reading public key from file " + publicKeyPath + " ...");
 			FileInputStream fin = new FileInputStream(publicKeyPath);
-			System.out.println("[FIZ O fileINPUT publica]");
 			byte[] pubEncoded = new byte[ fin.available() ];
 			fin.read(pubEncoded);
 			fin.close();
-			System.out.println("[FIZ o pubEncoded]");
 
 			X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(pubEncoded);
-			System.out.println("[FIZ o X509]");
 			KeyFactory keyFacPub = KeyFactory.getInstance("RSA");
-			System.out.println("[FIZ keyFacPub]");
 
 			pub = keyFacPub.generatePublic(pubSpec);
-			System.out.println("[Gerei o pub]");
-        
+			
 			System.out.println(pub);
 			System.out.println("---");
 		}catch(Exception e){
@@ -198,19 +199,14 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 			try{
 				System.out.println("Reading private key from file " + privateKeyPath + " ...");
 				FileInputStream fin = new FileInputStream(privateKeyPath);
-				System.out.println("[FIZ O fileINPUT privada]");
 				byte[] privEncoded = new byte[ fin.available() ];
 				fin.read(privEncoded);
 				fin.close();
-				System.out.println("[FIZ o privEncoded]");
 
 				PKCS8EncodedKeySpec privSpec = new PKCS8EncodedKeySpec(privEncoded);
-				System.out.println("[FIZ o PKCS8]");
 				KeyFactory keyFacPriv = KeyFactory.getInstance("RSA");
-				System.out.println("[FIZ keyFacPriv]");
 				
 				priv = keyFacPriv.generatePrivate(privSpec);
-				System.out.println("[Gerei o priv]");
 				
 				System.out.println(priv);
 				System.out.println("---");
