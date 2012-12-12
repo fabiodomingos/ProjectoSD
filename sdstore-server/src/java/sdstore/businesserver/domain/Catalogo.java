@@ -13,6 +13,7 @@ import sdstore.businesserver.BaseDados;
 import sdstore.businesserver.exception.ProdutoExistException;
 import sdstore.businesserver.exception.ProdutoListException;
 import sdstore.businesserver.exception.QuantidadeException;
+import sdstore.businesserver.service.dto.ProdutoDto;
 
 public class Catalogo {
 	
@@ -68,13 +69,11 @@ public class Catalogo {
 	}
 	
 	public static void createCatalogo(String name){
-//		Catalogo catalogo = Catalogo.catalogoMap.get(name);
 		Catalogo newCatalogo = new Catalogo(name, 0.1, 0);
 		Catalogo.catalogoMap.put(name, newCatalogo);
 	}
-//	
+
 	public static Catalogo getCatalogo(String name)  {
-//		Catalogo catalogo = Catalogo.catalogoMap.get(name);
 		return Catalogo.catalogoMap.get(name);
 	}
 	
@@ -95,59 +94,34 @@ public class Catalogo {
 		dados.run2(p);
 	}
 
-	public static String retiraProduto(String _codigo,Integer _quantidade,String tx) throws ProdutoExistException, QuantidadeException{
+	public static String retiraProduto(List<ProdutoDto> lista,String tx) throws ProdutoExistException, QuantidadeException{
 		String resultado = " ";
 		Integer controlo = 0;
 		try {
 //			inicia a transacao
 			Transaction trans = dados.beginTransaction(tx);
-			Produto prod = dados.get(_codigo);
-//			verificacao se existe o produto
-			if(prod.getId().equals(_codigo)){
-				controlo=1;
-				if(prod.getQuantidade()<_quantidade){
-					resultado = "NO";
-				}else{
-				prod.setQuantidade(prod.getQuantidade()-_quantidade);
-				resultado = "YES";
+			for(ProdutoDto prod : lista){
+				Produto prod1 = dados.get(prod.getId());
+//				vou verificar se tenho a quantidade e se existe a quantidade
+				if(prod1.getId().equals(prod.getId())){
+					controlo=1;
+					if(prod1.getQuantidade()<prod.getQuantidade()){
+						resultado = "NO";
+						break;
+					}else{
+						prod1.setQuantidade(prod1.getQuantidade()-prod.getQuantidade());
+////					se existir e tiver a quantidade certa vai fazer os puts
+						dados.run(trans,prod1);
+						resultado = "YES";
+					}
 				}
 			}
-			if(resultado.equals("NO")){
-			throw new QuantidadeException(_quantidade);
-			}
-			if(controlo==0){
-				throw new ProdutoExistException(_codigo);
-			}
-//			se existir vai fazer os puts
-			dados.run(trans,prod);
 //			retorna o resultado da cena
 			return resultado;
 		} catch (XAException e) {
 			resultado = "NO";
 			return resultado;
 		}
-		
-//		String resultado = " ";
-//		Integer controlo = 0;
-//		Produto prod = dados.get(_codigo);
-//		if(prod.getId().equals(_codigo)){
-//			controlo=1;
-//			if(prod.getQuantidade()<_quantidade){
-//				resultado = "KO";
-//			}
-//			else{
-//				prod.setQuantidade(prod.getQuantidade()-_quantidade);
-//				resultado = "OK";
-//			}
-//		}
-//		if(resultado.equals("KO")){
-//			throw new QuantidadeException(_quantidade);
-//		}
-//		if(controlo==0){
-//			throw new ProdutoExistException(_codigo);
-//		}
-//		dados.run(prod);
-//		return resultado;
 	}
 	
 	
@@ -158,24 +132,6 @@ public class Catalogo {
 		} catch (XAException e) {
 			return "NO";
 		}
-		
-//		try{
-//			Produto prod = dados.get(codigo);
-//			if(prod==null){
-//				throw new ProdutoExistException(codigo);
-//			}
-//			String resultado;
-//			if(prod.getQuantidade()<quantidade){
-//				resultado = "NO";
-//			}
-//			else{
-//				resultado = "YES";
-//				dados.preparar(xid);
-//			}
-//			return resultado;
-//		}catch(XAException e){
-//			return "NO";
-//		}
 	}
 	
 	public static void abort(String xid){
