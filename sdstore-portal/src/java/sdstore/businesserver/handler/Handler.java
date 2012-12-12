@@ -1,10 +1,14 @@
 package sdstore.businesserver.handler;
 
+import java.io.FileInputStream;
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Date;
 import java.util.Set;
 
@@ -52,8 +56,11 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     	BASE64Decoder b64d = new BASE64Decoder();
     	
 //    	vai buscar a chave privada
-//    	Key serverPublicKey = null;
-//    	Key privateKey = ServerObj.getServerPrivateKey();
+    	String caminhoPrivada = "C:/Users/Mimoso/workspace/ProjectoSD/sdstore-portal/src/resources/WEB-INF/keysPortal/privPortal.key";
+    	String caminhoPub = "C:/Users/Mimoso/workspace/ProjectoSD/sdstore-portal/src/resources/WEB-INF/keysPortal/pubPortal.key";
+//    	Key serverPublicKey = readPublicKey("C:\Users\Mimoso\workspace\ProjectoSD\sdstore-portal\src\resources\WEB-INF\keysPortal\pubPortal.key");
+    	Key serverPublicKey = readPublicKey(caminhoPub);
+    	Key privateKey = readPrivateKey(caminhoPrivada);
     	
     	Boolean outboundProperty = (Boolean)
         context.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY);
@@ -157,4 +164,61 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 	}
 
 
+	private Key readPublicKey(String publicKeyPath){
+		Key pub = null;
+		try{
+			System.out.println("Reading public key from file " + publicKeyPath + " ...");
+			FileInputStream fin = new FileInputStream(publicKeyPath);
+			System.out.println("[FIZ O fileINPUT publica]");
+			byte[] pubEncoded = new byte[ fin.available() ];
+			fin.read(pubEncoded);
+			fin.close();
+			System.out.println("[FIZ o pubEncoded]");
+
+			X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(pubEncoded);
+			System.out.println("[FIZ o X509]");
+			KeyFactory keyFacPub = KeyFactory.getInstance("RSA");
+			System.out.println("[FIZ keyFacPub]");
+
+			pub = keyFacPub.generatePublic(pubSpec);
+			System.out.println("[Gerei o pub]");
+        
+			System.out.println(pub);
+			System.out.println("---");
+		}catch(Exception e){
+			System.out.println("[APANHEI EXCEPCAO DO READ PUBLIC]");
+		}
+		
+        return pub;
+
+	}
+	
+	private Key readPrivateKey(String privateKeyPath){
+	       Key priv = null;
+			try{
+				System.out.println("Reading private key from file " + privateKeyPath + " ...");
+				FileInputStream fin = new FileInputStream(privateKeyPath);
+				System.out.println("[FIZ O fileINPUT privada]");
+				byte[] privEncoded = new byte[ fin.available() ];
+				fin.read(privEncoded);
+				fin.close();
+				System.out.println("[FIZ o privEncoded]");
+
+				PKCS8EncodedKeySpec privSpec = new PKCS8EncodedKeySpec(privEncoded);
+				System.out.println("[FIZ o PKCS8]");
+				KeyFactory keyFacPriv = KeyFactory.getInstance("RSA");
+				System.out.println("[FIZ keyFacPriv]");
+				
+				priv = keyFacPriv.generatePrivate(privSpec);
+				System.out.println("[Gerei o priv]");
+				
+				System.out.println(priv);
+				System.out.println("---");
+	    
+	       }catch(Exception e){
+	    	   System.out.println("[APANHEI EXCEPCAO DO READ PRIVATE]");
+	       }
+	       
+	       return priv;
+	    }
 }
