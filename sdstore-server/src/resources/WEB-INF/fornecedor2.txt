@@ -1,2 +1,5 @@
 0001 bananas fruta 2 10
 0002 coca-cola sumos 4 20
+0008 kitkat chocolates 2 10
+0009 mars chocolates 4 15
+0010 acer computadores 8 17
