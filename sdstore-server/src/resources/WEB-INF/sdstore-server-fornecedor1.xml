@@ -19,9 +19,19 @@
   	<param-value>catalogo1</param-value>
   </context-param>
 
+ <context-param>
+ 	<param-name>caminhoChavePrivada</param-name>
+ 	<param-value>C:\Users\Mimoso\workspace\ProjectoSD\sdstore-server\src\resources\WEB-INF\keysF1\privf1.key</param-value>
+ </context-param>
+
+ <context-param>
+ 	<param-name>caminhoChavePublica</param-name>
+ 	<param-value>C:\Users\Mimoso\workspace\ProjectoSD\sdstore-server\src\resources\WEB-INF\keysF1\pubf1.key</param-value>
+ </context-param>
+ 
   <context-param>
   	<param-name>listaProdutos</param-name>
-  	<param-value>C:\Users\Diogo\workspace\ProjectoSD\ProjectoSD\sdstore-server\src\resources\WEB-INF\fornecedor1.txt</param-value>
+  	<param-value>C:\Users\Mimoso\workspace\ProjectoSD\sdstore-server\src\resources\WEB-INF\fornecedor1.txt</param-value>
   </context-param>
 
   <listener>
