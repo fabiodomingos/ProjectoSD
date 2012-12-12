@@ -44,6 +44,9 @@ public class BusinessServerInitListener implements ServletContextListener{
 	
 	//BaseDados dados;
 	
+	public static String caminhoChavePublica;
+	public static String caminhoChavePrivada;
+	
 	// lista de bindings URL
 	ArrayList<String> bindings = new ArrayList<String>();
 
@@ -147,6 +150,9 @@ public class BusinessServerInitListener implements ServletContextListener{
 		try {
 			String catalogoName = arg0.getServletContext().getInitParameter("nomeCatalogo");
 			String listaProdutosTxt = arg0.getServletContext().getInitParameter("listaProdutos");
+			
+			caminhoChavePrivada = arg0.getServletContext().getInitParameter("caminhoChavePrivada");
+			caminhoChavePublica = arg0.getServletContext().getInitParameter("caminhoChavePublica");
 
 			dir = new File("/temp/"+catalogoName+"/je.lck");
 			
