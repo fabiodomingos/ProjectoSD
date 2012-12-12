@@ -89,10 +89,9 @@ public class BaseDados {
 		env.setXATransaction(imp, txn);
 		return txn;
 	}
+	
 	public void preparar(String xid) throws XAException{
-//		txn = env.beginTransaction(null, null);
 		XidImpl imp = new XidImpl(1, xid.getBytes(), null);
-//		env.setXATransaction(imp, txn);
 		env.prepare(imp);	
 	}
 	
