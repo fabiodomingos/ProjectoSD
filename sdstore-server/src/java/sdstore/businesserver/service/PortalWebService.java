@@ -77,11 +77,4 @@ public class PortalWebService {
 	}
 	
 	
-//	@WebMethod
-//	public Key EnviaChavesService(Key chaveRecebida){
-//		TrocaChavesService service = new TrocaChavesService(chaveRecebida);
-//		service.execute();
-//		Key resultado = service.getResultado();
-//		return resultado;
-//	}
 }
