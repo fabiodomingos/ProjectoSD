@@ -58,8 +58,7 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 //    	vai buscar a chave privada
     	String caminhoPrivada = "C:/Users/Diogo/workspace/ProjectoSD/ProjectoSD/sdstore-portal/src/resources/WEB-INF/keysPortal/privPortal.key";
     	String caminhoPub = "C:/Users/Diogo/workspace/ProjectoSD/ProjectoSD/sdstore-portal/src/resources/WEB-INF/keysPortal/pubPortal.key";
-////    	Key serverPublicKey = readPublicKey("C:\Users\Mimoso\workspace\ProjectoSD\sdstore-portal\src\resources\WEB-INF\keysPortal\pubPortal.key");
-//    	Key serverPublicKey = readPublicKey(caminhoPub);
+
     	Key privateKey = readPrivateKey(caminhoPrivada);
     	
     	Boolean outboundProperty = (Boolean)
@@ -74,8 +73,7 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     			SOAPBody soapBody = soapEnvelope.getBody();
     			SOAPHeader soapHeader = soapEnvelope.getHeader();
     			
-//    			message.writeTo(System.out);
-//    			System.out.println("PASSEI PELO OUTBOUND");
+
     			if(soapHeader == null) {
     				// header is optional
     				soapHeader = soapEnvelope.addHeader();
@@ -87,17 +85,14 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     			}else{
     				plainText="".getBytes();
     			}
-//    			System.out.println("VOU FAZER A ASSINATURA DIGITAL LADO DO PORTAL");
+
     			cipherDigest = makeDigitalSignature(plainText,privateKey);
     			// create new SOAP header element
-//    			System.out.println("VOU CODIFICAR A SEGUINTE MENSAGEM");
-//    			message.writeTo(System.out);
+
     				Name name = soapEnvelope.createName("timestamp", "bn", "http://www.sd.com/");
     				SOAPElement element = soapHeader.addChildElement(name);
     				element.addTextNode(b64e.encodeBuffer(cipherDigest));
     				result = true;
-//    				System.out.println("VOU IMPRIMIR A MENSAGEM CODIFICADA");
-//    				message.writeTo(System.out);
     				
     		}catch(Exception e){
     			System.out.println("[OUTBOUND] Apanhou excecao no metodo de criacao");
@@ -118,7 +113,7 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 			if(soapHeader==null){
 				soapHeader = soapEnvelope.addHeader();
 			}
-//			
+			
 			if(soapBody.getFirstChild()!=null){
 				plainText = soapBody.getFirstChild().getTextContent().getBytes();
 			}else{
