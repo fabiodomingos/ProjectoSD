@@ -57,7 +57,6 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     	BASE64Decoder b64d = new BASE64Decoder();
     	
 //    	vai buscar a chave privada
-//    	Key serverPublicKey = readPublicKey(BusinessServerInitListener.caminhoChavePublica);
     	Key privateKey = readPrivateKey(BusinessServerInitListener.caminhoChavePrivada);
     	
     	Boolean outboundProperty = (Boolean)
@@ -67,9 +66,6 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     		System.out.println("Outbound Fornecedor SOAP message: "+context);
     		try{
     			SOAPMessage message = context.getMessage();
-    			
-//    			System.out.println("A IMPRIMIR MENSAGEM QUE SAI");
-//    			message.writeTo(System.out);
     			
     			SOAPPart soapPart = message.getSOAPPart();
     			SOAPEnvelope soapEnvelope = soapPart.getEnvelope();
@@ -86,16 +82,14 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     			}else{
     				plainText="".getBytes();
     			}
-//    			System.out.println("VOU FAZER A ASSINATURA DIGITAL");
+
     			cipherDigest = makeDigitalSignature(plainText,privateKey);
 //    			// create new SOAP header element
-//    			System.out.println("FIZ A ASSINATURA DIGITAL E VOU METER NO CABECALHO");
     				Name name = soapEnvelope.createName("timestamp", "bn", "http://www.sd.com/");
     				SOAPElement element = soapHeader.addChildElement(name);
     				element.addTextNode(b64e.encodeBuffer(cipherDigest));
     				soapHeader.addNamespaceDeclaration("Fornecedor", BusinessServerInitListener.getUrl());
     				result = true;
-//    				System.out.println("IMPRIMIR A MENSAGEM COM A CIFRA FEITA");
     				message.writeTo(System.out);
 
     				
@@ -110,8 +104,6 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
           System.out.println("Inbound Fornecedor SOAP message: "+context);
 			try{
 			SOAPMessage message = context.getMessage();
-//			System.out.println("A IMPRIMIR A MENSAGEM QUE CHEGA");
-//			message.writeTo(System.out);
 			SOAPPart soapPart = message.getSOAPPart();
 			SOAPEnvelope soapEnvelope = soapPart.getEnvelope();
 			SOAPBody soapBody = message.getSOAPBody();
@@ -129,13 +121,11 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 			
 			Key serverPublicKey = readPublicKey("C:/Users/Diogo/workspace/ProjectoSD/ProjectoSD/sdstore-server/src/resources/WEB-INF/keysPortal/pubPortal.key");
 //			verificar a assinatura
-//			System.out.println("VOU DESCODIFICAR A MENSAGEM QUE RECEBI");
 			message.writeTo(System.out);
 			cipherDigest = b64d.decodeBuffer(soapHeader.getLastChild().getFirstChild().getTextContent());
-//			System.out.println("DESCODIFIQUEI A MENSAGEM QUE RECEBI");
 			soapHeader.detachNode();
 			soapHeader.detachNode();
-//			message.writeTo(System.out);
+
 			
 			if(!verifyDigitalSignature(cipherDigest,plainText,serverPublicKey)){
 				return false;
@@ -178,19 +168,14 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 			try{
 				System.out.println("Reading private key from file " + privateKeyPath + " ...");
 				FileInputStream fin = new FileInputStream(privateKeyPath);
-//				System.out.println("[FIZ O fileINPUT privada]");
 				byte[] privEncoded = new byte[ fin.available() ];
 				fin.read(privEncoded);
 				fin.close();
-//				System.out.println("[FIZ o privEncoded]");
 
 				PKCS8EncodedKeySpec privSpec = new PKCS8EncodedKeySpec(privEncoded);
-//				System.out.println("[FIZ o PKCS8]");
 				KeyFactory keyFacPriv = KeyFactory.getInstance("RSA");
-//				System.out.println("[FIZ keyFacPriv]");
 				
 				priv = keyFacPriv.generatePrivate(privSpec);
-//				System.out.println("[Gerei o priv]");
 				
 				System.out.println(priv);
 				System.out.println("---");
@@ -207,19 +192,14 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 		try{
 			System.out.println("Reading public key from file " + publicKeyPath + " ...");
 			FileInputStream fin = new FileInputStream(publicKeyPath);
-//			System.out.println("[FIZ O fileINPUT publica]");
 			byte[] pubEncoded = new byte[ fin.available() ];
 			fin.read(pubEncoded);
 			fin.close();
-//			System.out.println("[FIZ o pubEncoded]");
 
 			X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(pubEncoded);
-//			System.out.println("[FIZ o X509]");
 			KeyFactory keyFacPub = KeyFactory.getInstance("RSA");
-//			System.out.println("[FIZ keyFacPub]");
 
 			pub = keyFacPub.generatePublic(pubSpec);
-//			System.out.println("[Gerei o pub]");
         
 			System.out.println(pub);
 			System.out.println("---");
