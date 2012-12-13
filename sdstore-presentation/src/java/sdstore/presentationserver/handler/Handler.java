@@ -52,15 +52,14 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     	BASE64Encoder b64e = new BASE64Encoder();
     	BASE64Decoder b64d = new BASE64Decoder();
     	
-    	String caminhoServidorPublica = "C:/Users/Mimoso/workspace/ProjectoSD/sdstore-presentation/src/resources/keysPortal/pubPortal.key";
-//    	vai buscar a chave privada
+    	String caminhoServidorPublica = "C:/Users/Diogo/workspace/ProjectoSD/ProjectoSD/sdstore-presentation/src/resources/keysPortal/pubPortal.key";
+//    	vai buscar a chave publica
     	Key serverPublicKey = readPublicKey(caminhoServidorPublica);
     	
     	Boolean outboundProperty = (Boolean)
         context.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY);
     
     	if (outboundProperty.booleanValue()) {
-//    		System.out.println("Outbound SOAP Client message:");
     		try{
     			SOAPMessage message = context.getMessage();			
     			SOAPPart soapPart = message.getSOAPPart();
@@ -78,7 +77,6 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     		}
 		}
 		else {
-//          System.out.println("Inbound SOAP Client message: none");
 			try{
 			SOAPMessage message = context.getMessage();
 			SOAPPart soapPart = message.getSOAPPart();
@@ -129,13 +127,6 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 		}
 	}
 
-//	private byte[] makeDigitalSignature(byte[] plainText, Key privateKey) throws Exception{
-//		Signature sig = Signature.getInstance("MD5WithRSA");
-//		sig.initSign((PrivateKey) privateKey);
-//		sig.update(plainText);
-//		byte[] signature = sig.sign();
-//		return signature;
-//	}
 	
 	private Key readPublicKey(String publicKeyPath){
 		Key pub = null;
