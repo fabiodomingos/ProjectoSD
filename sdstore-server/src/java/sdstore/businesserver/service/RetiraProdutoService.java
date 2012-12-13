@@ -27,9 +27,9 @@ public class RetiraProdutoService extends PortalService{
 		
 		result = Catalogo.retiraProduto(_lista,_tx);
 		}catch(ProdutoExistException e){
-//			throw new ProdutoExistException(_codigo);
+
 		}catch(QuantidadeException e){
-//			throw new QuantidadeException(_quantidade);
+
 		}
 	}
 	
