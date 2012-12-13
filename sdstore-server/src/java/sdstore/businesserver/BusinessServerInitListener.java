@@ -94,8 +94,6 @@ public class BusinessServerInitListener implements ServletContextListener{
 			Collection<String> findQualifiers = new ArrayList<String>();
 			findQualifiers.add(FindQualifier.SORT_BY_NAME_DESC);
 			
-			//String organizationName = "Anacom";
-			//String serviceName = operatorName;
 			organizationName = "SD-Store";
 
 			Collection<String> namePatterns = new ArrayList<String>();
