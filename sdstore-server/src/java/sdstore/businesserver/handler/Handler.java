@@ -93,9 +93,10 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     				Name name = soapEnvelope.createName("timestamp", "bn", "http://www.sd.com/");
     				SOAPElement element = soapHeader.addChildElement(name);
     				element.addTextNode(b64e.encodeBuffer(cipherDigest));
+    				soapHeader.addNamespaceDeclaration("Fornecedor", BusinessServerInitListener.getUrl());
     				result = true;
 //    				System.out.println("IMPRIMIR A MENSAGEM COM A CIFRA FEITA");
-//    				message.writeTo(System.out);
+    				message.writeTo(System.out);
 
     				
     		}catch(Exception e){
@@ -126,7 +127,7 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 				plainText="".getBytes();
 			}
 			
-			Key serverPublicKey = readPublicKey("C:/Users/Mimoso/workspace/ProjectoSD/sdstore-server/src/resources/WEB-INF/keysPortal/pubPortal.key");
+			Key serverPublicKey = readPublicKey("C:/Users/Diogo/workspace/ProjectoSD/ProjectoSD/sdstore-server/src/resources/WEB-INF/keysPortal/pubPortal.key");
 //			verificar a assinatura
 //			System.out.println("VOU DESCODIFICAR A MENSAGEM QUE RECEBI");
 			message.writeTo(System.out);
