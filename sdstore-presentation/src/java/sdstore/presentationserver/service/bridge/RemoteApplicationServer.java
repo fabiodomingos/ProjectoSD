@@ -43,7 +43,7 @@ public class RemoteApplicationServer implements ApplicationServerBridge{
 	private void updateEndpointUrl(){
 		String endpointUrl = RemoteApplicationServer.endpointUrlMap.get("Portal");
 		if (endpointUrl == null) {
-//			throw new OperatorPrefixException_Exception();
+
 		}
 		BindingProvider bp = (BindingProvider)webService;
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);
