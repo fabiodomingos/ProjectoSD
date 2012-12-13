@@ -11,9 +11,6 @@ private Set<ProdutoDto> listaDto;
 		
 	}
 
-//	public ProdListDto(List<ProdutoDto> listaNovaProdutos) {
-//		
-//	}
 
 	public Set<ProdutoDto> getListaDto() {
 		return listaDto;
