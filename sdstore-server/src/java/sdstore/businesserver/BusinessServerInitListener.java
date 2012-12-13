@@ -41,6 +41,7 @@ public class BusinessServerInitListener implements ServletContextListener{
 	File dir;
 	BaseDados dados;
 	String organizationName;
+	static String bindingURL;
 	
 	public static String caminhoChavePublica;//para por o caminho da chave publica
 	public static String caminhoChavePrivada;//para por o caminho da chave privada
@@ -103,7 +104,7 @@ public class BusinessServerInitListener implements ServletContextListener{
 			
 			String nomeFornecedor = arg0.getServletContext().getInitParameter("nomeFornecedor");
 			String nomeFornecedorGrande = arg0.getServletContext().getInitParameter("nomeFornecedorGrande");
-			String bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
+			bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
 		
 			
 			@SuppressWarnings("unchecked")
@@ -251,7 +252,7 @@ public class BusinessServerInitListener implements ServletContextListener{
 			
 			String nomeFornecedor = arg0.getServletContext().getInitParameter("nomeFornecedor");
 			String nomeFornecedorGrande = arg0.getServletContext().getInitParameter("nomeFornecedorGrande");
-			String bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
+			bindingURL = "http://localhost:8080/sdstore-server-" + nomeFornecedor + "/BusinessServer" + nomeFornecedorGrande;
 			
 			
 			// Cria serviço
@@ -288,4 +289,10 @@ public class BusinessServerInitListener implements ServletContextListener{
 		}
 
 	}
+	
+	
+	public static String getUrl(){
+		return bindingURL;
+	}
+	
 }
