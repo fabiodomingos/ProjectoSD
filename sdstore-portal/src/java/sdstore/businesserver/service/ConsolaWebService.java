@@ -393,6 +393,7 @@ public class ConsolaWebService {
 				PortalWebService webService = getFornecedores(forn);
 				String resultado = webService.retiraProduto(produtosFinal, user);
 				respostas.put(forn, resultado);
+				produtosFinal.clear();
 			}
 			
 			
