@@ -56,8 +56,8 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
     	BASE64Decoder b64d = new BASE64Decoder();
     	
 //    	vai buscar a chave privada
-    	String caminhoPrivada = "C:/Users/Mimoso/workspace/ProjectoSD/sdstore-portal/src/resources/WEB-INF/keysPortal/privPortal.key";
-    	String caminhoPub = "C:/Users/Mimoso/workspace/ProjectoSD/sdstore-portal/src/resources/WEB-INF/keysPortal/pubPortal.key";
+    	String caminhoPrivada = "C:/Users/Diogo/workspace/ProjectoSD/ProjectoSD/sdstore-portal/src/resources/WEB-INF/keysPortal/privPortal.key";
+    	String caminhoPub = "C:/Users/Diogo/workspace/ProjectoSD/ProjectoSD/sdstore-portal/src/resources/WEB-INF/keysPortal/pubPortal.key";
 ////    	Key serverPublicKey = readPublicKey("C:\Users\Mimoso\workspace\ProjectoSD\sdstore-portal\src\resources\WEB-INF\keysPortal\pubPortal.key");
 //    	Key serverPublicKey = readPublicKey(caminhoPub);
     	Key privateKey = readPrivateKey(caminhoPrivada);
@@ -125,17 +125,32 @@ public class Handler implements SOAPHandler<SOAPMessageContext> {
 				plainText="".getBytes();
 			}
 			
-////			serverPublicKey - falta buscar a chave com o readKeys
-//			
-//			Key fornecedorPublicKey = readPublicKey("");
-////			verificar a assinatura
-//			cipherDigest = b64d.decodeBuffer(soapHeader.getLastChild().getFirstChild().getTextContent());
-//			soapHeader.detachNode();
-//			soapHeader.detachNode();
-//			
-//			if(!verifyDigitalSignature(cipherDigest,plainText,serverPublicKey)){
-//				return false;
-//			}
+			message.writeTo(System.out);
+			String url=null;
+			url = soapHeader.getNamespaceURI("Fornecedor");
+			System.out.println("URLLLLLL" + url);
+			
+			if(url=="http://localhost:8080/sdstore-server-fornecedor2/BusinessServerFornecedor2"){
+				Key publicKey = readPublicKey("C:/Users/Diogo/workspace/ProjectoSD/ProjectoSD/sdstore-server/src/resources/WEB-INF/keysF2/pubf2.key");
+				cipherDigest = b64d.decodeBuffer(soapHeader.getLastChild().getFirstChild().getTextContent());
+				soapHeader.detachNode();
+				soapHeader.detachNode();				
+				if(!verifyDigitalSignature(cipherDigest,plainText,publicKey)){
+					return false;
+				}
+				result = true;
+			}
+			if(url=="http://localhost:8080/sdstore-server-fornecedor1/BusinessServerFornecedor1"){
+				Key publicKey = readPublicKey("C:/Users/Diogo/workspace/ProjectoSD/ProjectoSD/sdstore-server/src/resources/WEB-INF/keysF1/pubf1.key");
+				cipherDigest = b64d.decodeBuffer(soapHeader.getLastChild().getFirstChild().getTextContent());
+				soapHeader.detachNode();
+				soapHeader.detachNode();				
+				if(!verifyDigitalSignature(cipherDigest,plainText,publicKey)){
+					return false;
+				}
+				result = true;
+			}
+			
 			
 			result = true;
 			
