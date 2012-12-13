@@ -52,7 +52,7 @@ import sdstore.stubs.QuantidadeException_Exception;
 @HandlerChain(file="handler-chain.xml")
 public class ConsolaWebService {
 	
-//	private static Map<String, String> endpointUrlMap;
+
 //	lista dos enderecos dos fornecedores
 	private Set<String> enderecos = new HashSet<String>();
 //	carrinho de compras do cliente
@@ -74,7 +74,6 @@ public class ConsolaWebService {
 	//cenas para os handlers
 	List<Handler> handlerList;
 	
-//	coisas do diabo
 	private Map<String,List<ProdutoDto>> carrinhoClientes = new HashMap<String, List<ProdutoDto>>();
 	
 	//variavel de controlo das horas a actualizar
@@ -83,8 +82,7 @@ public class ConsolaWebService {
 	private Integer controlo = 0;
 	Calendar dataAntiga;
 	Calendar dataNova;
-//	Calendar horaCanCommitAntiga;
-//	Calendar horaCanCommitNova;
+
 	boolean commit;
 	boolean abort;
 	
@@ -144,9 +142,7 @@ public class ConsolaWebService {
 				}
 			}
 			
-//			for(String url :enderecos){
-//				if
-//			}
+
 			System.out.println("ENDERECOS DOS FORNECEDORES: "+enderecos);
 		}catch(Exception e){
 			
@@ -161,17 +157,12 @@ public class ConsolaWebService {
 			if(ende.equals(endereco)){
 				BindingProvider bp = (BindingProvider)webService;
 				bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, ende);
-//				handlers
 				Binding binding = bp.getBinding();
-//				handlerList = binding.getHandlerChain();
 				sdstore.businesserver.handler.Handler handler = new sdstore.businesserver.handler.Handler();
 				List<Handler> handlerChain = new ArrayList<Handler>();
 				handlerChain.add(handler);
 				bp.getBinding().setHandlerChain(handlerChain);
 				
-//				Binding binding = bp.getBinding();
-//				List<Handler> handlerList = binding.getHandlerChain();
-//				binding.getHandlerChain();
 			}
 		}
 		return webService;
@@ -382,11 +373,6 @@ public class ConsolaWebService {
 			 carrinhoCliente = carrinhoClientes.get(user);
 		}
 		try{
-//			for(ProdutoDto prod:carrinhoCliente){
-//				PortalWebService webService = getFornecedores(prod.getFornecedor());
-//				String resultado = webService.retiraProduto(prod.getId(), prod.getQuantidade(), user);
-//				respostas.put(prod.getFornecedor(), resultado);
-//			}
 //			verifica os fornecedores envolvidos
 			for(ProdutoDto prod: carrinhoCliente){
 				fornecedoresEnvolvidos.add(prod.getFornecedor());
@@ -411,7 +397,7 @@ public class ConsolaWebService {
 			
 			
 			System.out.println("RESPOSTAS DO RETIRA PRODUTO "+respostas);
-//			respostas.clear();
+
 			if(verificaCanCommit().equals("YES")){
 				for(String chave:respostas.keySet()){
 					PortalWebService webService = getFornecedores(chave);
