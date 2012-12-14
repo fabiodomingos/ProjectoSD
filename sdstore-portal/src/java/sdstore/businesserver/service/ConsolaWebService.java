@@ -89,7 +89,9 @@ public class ConsolaWebService {
 	static{
 	}
 	
-	PortalWebService webService;
+
+	PortalWebServiceService service = new PortalWebServiceService();
+	PortalWebService webService = service.getPortalWebServicePort();
 
 	
 	private void updateEndpointUrl(){
@@ -150,9 +152,6 @@ public class ConsolaWebService {
 	}
 	
 	private PortalWebService getFornecedores(String endereco){
-		PortalWebService webService;
-		PortalWebServiceService service = new PortalWebServiceService();
-		webService = service.getPortalWebServicePort();
 		for(String ende:enderecos){
 			if(ende.equals(endereco)){
 				BindingProvider bp = (BindingProvider)webService;
